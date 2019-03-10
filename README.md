@@ -1,1 +1,1 @@
-# Admin API Spring Boot Application
+# Timesheet API Spring Boot Application

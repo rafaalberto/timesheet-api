@@ -29,7 +29,7 @@ public class UserResource {
             @RequestParam(value = "size", required = false) final Integer size,
             @RequestParam(value = "username", required = false) final String username,
             @RequestParam(value = "name", required = false) final String name,
-            @RequestParam(value = "profile", required = false) final String profile) {
+            @RequestParam(value = "typeEnum", required = false) final String profile) {
 
         final UserRequest userRequest = UserRequest.Builder.builder()
                 .withPage(page)
