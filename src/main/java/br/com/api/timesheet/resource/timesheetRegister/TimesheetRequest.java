@@ -14,6 +14,7 @@ public class TimesheetRequest {
     private String lunchStart;
     private String lunchEnd;
     private String timeOut;
+    private String hoursJourney;
 
     public Optional<Long> getId() {
         return Optional.ofNullable(id);

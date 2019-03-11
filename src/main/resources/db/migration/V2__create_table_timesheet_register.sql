@@ -6,6 +6,8 @@ create table timesheet_register (
     lunch_end timestamp without time zone,
     time_out timestamp without time zone,
     hours_worked time without time zone default '00:00:00',
+    hours_journey time without time zone default '00:00:00',
+    extra_hours time without time zone default '00:00:00',
     primary key (id)
 );
 

@@ -44,13 +44,26 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "hours_worked")
     private LocalTime hoursWorked;
 
+    @Column(name = "hours_journey")
+    private LocalTime hoursJourney;
+
+    @Column(name = "extra_hours")
+    private LocalTime extraHours;
+
     @PrePersist
     @PreUpdate
     public void calculateHoursWorked() {
         this.hoursWorked = LocalTime.ofSecondOfDay(BigInteger.ZERO.longValue());
+        this.extraHours = LocalTime.ofSecondOfDay(BigInteger.ZERO.longValue());
+
         long firstPeriod = Duration.between(timeIn, lunchStart).getSeconds();
         long secondPeriod = Duration.between(lunchEnd, timeOut).getSeconds();
+
         this.hoursWorked = LocalTime.ofSecondOfDay(firstPeriod + secondPeriod);
+
+        long extraHoursDuration = Duration.between(hoursJourney, hoursWorked).getSeconds();
+
+        this.extraHours = extraHoursDuration > 0 ? LocalTime.ofSecondOfDay(extraHoursDuration) : LocalTime.ofSecondOfDay(BigInteger.ZERO.longValue());
     }
 
 }
