@@ -1,13 +1,12 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
+import br.com.api.timesheet.utils.Constants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -50,20 +49,37 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "extra_hours")
     private LocalTime extraHours;
 
-    @PrePersist
-    @PreUpdate
-    public void calculateHoursWorked() {
-        this.hoursWorked = LocalTime.ofSecondOfDay(BigInteger.ZERO.longValue());
-        this.extraHours = LocalTime.ofSecondOfDay(BigInteger.ZERO.longValue());
+    @Column(name = "weekly_rest")
+    private LocalTime weeklyRest;
+
+    @Column(name = "sumula_90")
+    private LocalTime sumula90;
+
+    @PrePersist @PreUpdate
+    public void calculateHours() {
+        resetValues();
 
         long firstPeriod = Duration.between(timeIn, lunchStart).getSeconds();
         long secondPeriod = Duration.between(lunchEnd, timeOut).getSeconds();
-
-        this.hoursWorked = LocalTime.ofSecondOfDay(firstPeriod + secondPeriod);
+        hoursWorked = LocalTime.ofSecondOfDay(firstPeriod + secondPeriod);
 
         long extraHoursDuration = Duration.between(hoursJourney, hoursWorked).getSeconds();
+        extraHours = extraHoursDuration > Constants.ZERO ? LocalTime.ofSecondOfDay(extraHoursDuration) : LocalTime.ofSecondOfDay(Constants.ZERO);
 
-        this.extraHours = extraHoursDuration > 0 ? LocalTime.ofSecondOfDay(extraHoursDuration) : LocalTime.ofSecondOfDay(BigInteger.ZERO.longValue());
+        if(typeEnum.equals(TimesheetTypeEnum.DAY_OFF)){
+            weeklyRest = hoursJourney;
+            hoursJourney = LocalTime.ofSecondOfDay(Constants.ZERO);
+        }else if(typeEnum.equals(TimesheetTypeEnum.HOLIDAY)){
+            extraHours = hoursWorked;
+        }
+
+        //TODO(1) Holiday is a weekly rest?
+    }
+
+    private void resetValues() {
+        hoursWorked = LocalTime.ofSecondOfDay(Constants.ZERO);
+        extraHours = LocalTime.ofSecondOfDay(Constants.ZERO);
+        weeklyRest = LocalTime.ofSecondOfDay(Constants.ZERO);
     }
 
 }

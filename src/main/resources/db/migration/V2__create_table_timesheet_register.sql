@@ -8,6 +8,8 @@ create table timesheet_register (
     hours_worked time without time zone default '00:00:00',
     hours_journey time without time zone default '00:00:00',
     extra_hours time without time zone default '00:00:00',
+    weekly_rest time without time zone default '00:00:00',
+    sumula_90 time without time zone default '00:00:00',
     primary key (id)
 );
 
