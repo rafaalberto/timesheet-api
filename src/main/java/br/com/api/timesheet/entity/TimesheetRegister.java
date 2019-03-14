@@ -1,15 +1,19 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import br.com.api.timesheet.utils.Constants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.Duration;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.DAY_OFF;
+import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.HOLIDAY;
+import static java.time.Duration.between;
+import static java.time.LocalTime.ofSecondOfDay;
 
 @Entity
 @Data
@@ -59,17 +63,17 @@ public class TimesheetRegister implements Serializable {
     public void calculateHours() {
         resetValues();
 
-        long firstPeriod = Duration.between(timeIn, lunchStart).getSeconds();
-        long secondPeriod = Duration.between(lunchEnd, timeOut).getSeconds();
-        hoursWorked = LocalTime.ofSecondOfDay(firstPeriod + secondPeriod);
+        long firstPeriod = between(timeIn, lunchStart).getSeconds();
+        long secondPeriod = between(lunchEnd, timeOut).getSeconds();
+        hoursWorked = ofSecondOfDay(firstPeriod + secondPeriod);
 
-        long extraHoursDuration = Duration.between(hoursJourney, hoursWorked).getSeconds();
-        extraHours = extraHoursDuration > Constants.ZERO ? LocalTime.ofSecondOfDay(extraHoursDuration) : LocalTime.ofSecondOfDay(Constants.ZERO);
+        long extraHoursDuration = between(hoursJourney, hoursWorked).getSeconds();
+        extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSecondOfDay(extraHoursDuration) : ofSecondOfDay(BigDecimal.ZERO.intValue());
 
-        if(typeEnum.equals(TimesheetTypeEnum.DAY_OFF)){
+        if(typeEnum.equals(DAY_OFF)){
             weeklyRest = hoursJourney;
-            hoursJourney = LocalTime.ofSecondOfDay(Constants.ZERO);
-        }else if(typeEnum.equals(TimesheetTypeEnum.HOLIDAY)){
+            hoursJourney = ofSecondOfDay(BigDecimal.ZERO.intValue());
+        }else if(typeEnum.equals(HOLIDAY)){
             extraHours = hoursWorked;
         }
 
@@ -77,9 +81,9 @@ public class TimesheetRegister implements Serializable {
     }
 
     private void resetValues() {
-        hoursWorked = LocalTime.ofSecondOfDay(Constants.ZERO);
-        extraHours = LocalTime.ofSecondOfDay(Constants.ZERO);
-        weeklyRest = LocalTime.ofSecondOfDay(Constants.ZERO);
+        hoursWorked = ofSecondOfDay(BigDecimal.ZERO.intValue());
+        extraHours = ofSecondOfDay(BigDecimal.ZERO.intValue());
+        weeklyRest = ofSecondOfDay(BigDecimal.ZERO.intValue());
     }
 
 }

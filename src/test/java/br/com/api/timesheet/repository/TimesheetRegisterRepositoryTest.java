@@ -2,9 +2,8 @@ package br.com.api.timesheet.repository;
 
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import br.com.api.timesheet.utils.Constants;
+import br.com.api.timesheet.utils.DateUtils;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import static java.time.LocalDateTime.parse;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -74,38 +74,38 @@ public class TimesheetRegisterRepositoryTest {
     }
 
     private TimesheetRegister getTimesheetRegisterRegular() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister timesheetRegister = new TimesheetRegister();
         timesheetRegister.setTypeEnum(TimesheetTypeEnum.REGULAR);
-        timesheetRegister.setTimeIn(LocalDateTime.parse(TIME_IN, formatter));
-        timesheetRegister.setLunchStart(LocalDateTime.parse(LUNCH_START, formatter));
-        timesheetRegister.setLunchEnd(LocalDateTime.parse(LUNCH_END, formatter));
-        timesheetRegister.setTimeOut(LocalDateTime.parse(TIME_OUT, formatter));
-        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, DateTimeFormatter.ofPattern(Constants.TIME_FORMAT)));
+        timesheetRegister.setTimeIn(parse(TIME_IN, formatter));
+        timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
+        timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
+        timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
+        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)));
         return timesheetRegister;
     }
 
     private TimesheetRegister getTimesheetRegisterDayOff() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister timesheetRegister = new TimesheetRegister();
         timesheetRegister.setTypeEnum(TimesheetTypeEnum.DAY_OFF);
-        timesheetRegister.setTimeIn(LocalDateTime.parse(TIME_DAY_OFF, formatter));
-        timesheetRegister.setLunchStart(LocalDateTime.parse(TIME_DAY_OFF, formatter));
-        timesheetRegister.setLunchEnd(LocalDateTime.parse(TIME_DAY_OFF, formatter));
-        timesheetRegister.setTimeOut(LocalDateTime.parse(TIME_DAY_OFF, formatter));
-        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, DateTimeFormatter.ofPattern(Constants.TIME_FORMAT)));
+        timesheetRegister.setTimeIn(parse(TIME_DAY_OFF, formatter));
+        timesheetRegister.setLunchStart(parse(TIME_DAY_OFF, formatter));
+        timesheetRegister.setLunchEnd(parse(TIME_DAY_OFF, formatter));
+        timesheetRegister.setTimeOut(parse(TIME_DAY_OFF, formatter));
+        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)));
         return timesheetRegister;
     }
 
     private TimesheetRegister getTimesheetRegisterHoliday() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATE_TIME_FORMAT);
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister timesheetRegister = new TimesheetRegister();
         timesheetRegister.setTypeEnum(TimesheetTypeEnum.HOLIDAY);
-        timesheetRegister.setTimeIn(LocalDateTime.parse(TIME_IN, formatter));
-        timesheetRegister.setLunchStart(LocalDateTime.parse(LUNCH_START, formatter));
-        timesheetRegister.setLunchEnd(LocalDateTime.parse(LUNCH_END, formatter));
-        timesheetRegister.setTimeOut(LocalDateTime.parse(TIME_OUT, formatter));
-        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, DateTimeFormatter.ofPattern(Constants.TIME_FORMAT)));
+        timesheetRegister.setTimeIn(parse(TIME_IN, formatter));
+        timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
+        timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
+        timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
+        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)));
         return timesheetRegister;
     }
 
