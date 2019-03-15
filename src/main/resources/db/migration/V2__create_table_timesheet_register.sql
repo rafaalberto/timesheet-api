@@ -11,6 +11,7 @@ create table timesheet_register (
     weekly_rest time without time zone default '00:00:00',
     sumula_90 time without time zone default '00:00:00',
     night_shift time without time zone default '00:00:00',
+    paid_night_time time without time zone default '00:00:00',
     primary key (id)
 );
 

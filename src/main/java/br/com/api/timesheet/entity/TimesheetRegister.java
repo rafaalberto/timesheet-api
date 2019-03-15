@@ -1,6 +1,7 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
+import br.com.api.timesheet.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,6 +15,7 @@ import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.DAY_OFF;
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.HOLIDAY;
 import static br.com.api.timesheet.utils.DateUtils.calculateNightShift;
 import static br.com.api.timesheet.utils.DateUtils.isNightShift;
+import static br.com.api.timesheet.utils.DateUtils.calculatePaidNightTime;
 import static java.time.Duration.between;
 import static java.time.LocalTime.ofSecondOfDay;
 
@@ -64,6 +66,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "night_shift")
     private LocalTime nightShift;
 
+    @Column(name = "paid_night_time")
+    private LocalTime paidNightTime;
+
     @PrePersist @PreUpdate
     public void calculateHours() {
         resetValues();
@@ -86,6 +91,8 @@ public class TimesheetRegister implements Serializable {
         secondPeriod = isNightShift(lunchEnd, timeOut) ? calculateNightShift(lunchEnd, timeOut) : BigDecimal.ZERO.longValue();
         nightShift = ofSecondOfDay(firstPeriod + secondPeriod);
 
+        paidNightTime = nightShift.toSecondOfDay() > BigDecimal.ZERO.intValue() ? calculatePaidNightTime(nightShift) : ofSecondOfDay(BigDecimal.ZERO.intValue());
+
         //TODO(1) Holiday is a weekly rest?
     }
 
@@ -94,6 +101,7 @@ public class TimesheetRegister implements Serializable {
         extraHours = ofSecondOfDay(BigDecimal.ZERO.intValue());
         weeklyRest = ofSecondOfDay(BigDecimal.ZERO.intValue());
         nightShift = ofSecondOfDay(BigDecimal.ZERO.intValue());
+        paidNightTime = ofSecondOfDay(BigDecimal.ZERO.intValue());
     }
 
 }

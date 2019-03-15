@@ -18,6 +18,10 @@ public class DateUtils {
     public static final int START_HOUR_NIGHT_SHIFT = 22;
     public static final int END_HOUR_NIGHT_SHIFT = 5;
 
+    public static final String FULL_NIGHT_SHIFT_TIME = "07:00";
+    public static final int MINUTES = 60;
+    public static final int SECONDS = 60;
+
     public static boolean isNightShift(LocalDateTime startPeriod, LocalDateTime endPeriod) {
         LocalDateTime startNightShift = of(startPeriod.toLocalDate(), LocalTime.parse(START_TIME_NIGHT_SHIFT, ofPattern(DateUtils.TIME_FORMAT)));
         LocalDateTime endNightShift = of(startPeriod.toLocalDate(), LocalTime.parse(END_TIME_NIGHT_SHIFT, ofPattern(DateUtils.TIME_FORMAT)));
@@ -36,6 +40,12 @@ public class DateUtils {
         }
 
         return between(startDateTime, endDateTime).getSeconds();
+    }
+
+    public static LocalTime calculatePaidNightTime(LocalTime workedNightShift) {
+        LocalTime fullNightShift = LocalTime.parse(FULL_NIGHT_SHIFT_TIME, ofPattern(DateUtils.TIME_FORMAT));
+        double paidNightTime = ((double) workedNightShift.toSecondOfDay() / (double) fullNightShift.toSecondOfDay()) * MINUTES * SECONDS;
+        return LocalTime.ofSecondOfDay((long) paidNightTime);
     }
 
     private static boolean isStartOutOfNightShift(LocalDateTime startDateTime) {

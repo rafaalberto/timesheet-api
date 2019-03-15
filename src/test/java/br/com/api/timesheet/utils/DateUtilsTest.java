@@ -6,11 +6,13 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import static br.com.api.timesheet.utils.DateUtils.*;
 import static java.time.LocalDateTime.parse;
 import static java.time.LocalTime.ofSecondOfDay;
+import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -48,5 +50,23 @@ public class DateUtilsTest {
                 parse("2019-01-01 01:00", formatter), parse("2019-01-01 05:35", formatter))).toString()).isEqualTo("04:00");
         assertThat(ofSecondOfDay(calculateNightShift(
                 parse("2019-01-01 21:50", formatter), parse("2019-01-02 00:00", formatter))).toString()).isEqualTo("02:00");
+    }
+
+    @Test
+    public void shouldCalculatePaidNightTime() {
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("00:42", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("00:06");
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("01:10", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("00:10");
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("00:33", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("00:04");
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("00:35", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("00:05");
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("00:40", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("00:05");
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("07:00", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("01:00");
+        assertThat(DateTimeFormatter.ofPattern(TIME_FORMAT).format(
+                DateUtils.calculatePaidNightTime(LocalTime.parse("01:20", ofPattern(DateUtils.TIME_FORMAT))))).isEqualTo("00:11");
     }
 }

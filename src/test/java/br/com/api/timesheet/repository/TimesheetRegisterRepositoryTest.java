@@ -35,6 +35,7 @@ public class TimesheetRegisterRepositoryTest {
     public static final String HOURS_JOURNEY = "07:20";
     public static final String EXTRA_HOURS = "00:04";
     public static final String NIGHT_SHIFT = "00:42";
+    public static final String PAID_NIGHT_TIME = "00:06";
 
     @Autowired
     private TimesheetRegisterRepository timesheetRegisterRepository;
@@ -48,6 +49,7 @@ public class TimesheetRegisterRepositoryTest {
         assertThat(registerCreated.getExtraHours().toString()).isEqualTo(EXTRA_HOURS);
         assertThat(registerCreated.getWeeklyRest().toString()).isEqualTo(TIME_OFF);
         assertThat(registerCreated.getNightShift().toString()).isEqualTo(NIGHT_SHIFT);
+        assertThat(registerCreated.getPaidNightTime().toString()).isEqualTo(PAID_NIGHT_TIME);
     }
 
     @Test
@@ -59,6 +61,7 @@ public class TimesheetRegisterRepositoryTest {
         assertThat(registerCreated.getExtraHours().toString()).isEqualTo(TIME_OFF);
         assertThat(registerCreated.getWeeklyRest().toString()).isEqualTo(HOURS_JOURNEY);
         assertThat(registerCreated.getNightShift().toString()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getPaidNightTime().toString()).isEqualTo(TIME_OFF);
     }
 
     @Test
@@ -70,6 +73,7 @@ public class TimesheetRegisterRepositoryTest {
         assertThat(registerCreated.getExtraHours().toString()).isEqualTo(HOURS_WORKED);
         assertThat(registerCreated.getWeeklyRest().toString()).isEqualTo(TIME_OFF);
         assertThat(registerCreated.getNightShift().toString()).isEqualTo(NIGHT_SHIFT);
+        assertThat(registerCreated.getPaidNightTime().toString()).isEqualTo(PAID_NIGHT_TIME);
     }
 
     @After
