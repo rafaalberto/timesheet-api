@@ -35,8 +35,8 @@ public class UserCustomizedQueries extends GenericRepository {
         }
 
         if (userRequest.getProfile().isPresent()) {
-            buildOperator(builderQuery).append(" u.typeEnum = :typeEnum ");
-            params.put("typeEnum", userRequest.getProfile().get());
+            buildOperator(builderQuery).append(" u.type = :type ");
+            params.put("type", userRequest.getProfile().get());
         }
 
         Pageable pageable = PageRequest.of(userRequest.getPage().orElse(DEFAULT_PAGE),

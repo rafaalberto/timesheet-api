@@ -84,7 +84,7 @@ public class TimesheetRegisterRepositoryTest {
     private TimesheetRegister getTimesheetRegisterRegular() {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister timesheetRegister = new TimesheetRegister();
-        timesheetRegister.setTypeEnum(TimesheetTypeEnum.REGULAR);
+        timesheetRegister.setType(TimesheetTypeEnum.REGULAR);
         timesheetRegister.setTimeIn(parse(TIME_IN, formatter));
         timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
         timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
@@ -96,7 +96,7 @@ public class TimesheetRegisterRepositoryTest {
     private TimesheetRegister getTimesheetRegisterDayOff() {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister timesheetRegister = new TimesheetRegister();
-        timesheetRegister.setTypeEnum(TimesheetTypeEnum.DAY_OFF);
+        timesheetRegister.setType(TimesheetTypeEnum.DAY_OFF);
         timesheetRegister.setTimeIn(parse(TIME_DAY_OFF, formatter));
         timesheetRegister.setLunchStart(parse(TIME_DAY_OFF, formatter));
         timesheetRegister.setLunchEnd(parse(TIME_DAY_OFF, formatter));
@@ -108,7 +108,7 @@ public class TimesheetRegisterRepositoryTest {
     private TimesheetRegister getTimesheetRegisterHoliday() {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister timesheetRegister = new TimesheetRegister();
-        timesheetRegister.setTypeEnum(TimesheetTypeEnum.HOLIDAY);
+        timesheetRegister.setType(TimesheetTypeEnum.HOLIDAY);
         timesheetRegister.setTimeIn(parse(TIME_IN, formatter));
         timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
         timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));

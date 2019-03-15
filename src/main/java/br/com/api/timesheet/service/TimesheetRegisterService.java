@@ -2,6 +2,7 @@ package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
+import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.resource.timesheetRegister.TimesheetRequest;
 import br.com.api.timesheet.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -26,11 +28,15 @@ public class TimesheetRegisterService {
         return timesheetRegisterRepository.save(getTimeSheetRegister(request));
     }
 
+    public Collection<TimesheetReport> listReport() {
+        return timesheetRegisterRepository.listReport();
+    }
+
     private TimesheetRegister getTimeSheetRegister(TimesheetRequest request) {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister register = new TimesheetRegister();
         request.getId().ifPresent(id -> register.setId(id));
-        register.setTypeEnum(request.getType());
+        register.setType(request.getType());
         register.setTimeIn(parse(request.getTimeIn(), formatter));
         register.setLunchStart(parse(request.getLunchStart(), formatter));
         register.setLunchEnd(parse(request.getLunchEnd(), formatter));

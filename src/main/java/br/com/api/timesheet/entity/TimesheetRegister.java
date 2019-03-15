@@ -1,7 +1,6 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import br.com.api.timesheet.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,7 +33,7 @@ public class TimesheetRegister implements Serializable {
     private Long id;
 
     @Column(name = "type", nullable = false, length = 2)
-    private TimesheetTypeEnum typeEnum;
+    private TimesheetTypeEnum type;
 
     @Column(name = "time_in")
     private LocalDateTime timeIn;
@@ -80,10 +79,10 @@ public class TimesheetRegister implements Serializable {
         long extraHoursDuration = between(hoursJourney, hoursWorked).getSeconds();
         extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSecondOfDay(extraHoursDuration) : ofSecondOfDay(BigDecimal.ZERO.intValue());
 
-        if(typeEnum.equals(DAY_OFF)){
+        if(type.equals(DAY_OFF)){
             weeklyRest = hoursJourney;
             hoursJourney = ofSecondOfDay(BigDecimal.ZERO.intValue());
-        }else if(typeEnum.equals(HOLIDAY)){
+        }else if(type.equals(HOLIDAY)){
             extraHours = hoursWorked;
         }
 
