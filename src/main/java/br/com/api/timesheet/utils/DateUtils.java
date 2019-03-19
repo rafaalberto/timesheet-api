@@ -11,6 +11,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public class DateUtils {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+    public static final String DATE_FORMAT_PT_BR = "dd/MM/yyyy";
     public static final String TIME_FORMAT = "HH:mm";
     public static final String START_TIME_NIGHT_SHIFT = "22:00";
     public static final String END_TIME_NIGHT_SHIFT = "05:00";

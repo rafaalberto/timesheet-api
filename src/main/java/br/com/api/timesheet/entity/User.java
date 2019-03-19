@@ -44,7 +44,7 @@ public class User implements Serializable {
     private String name;
 
     @NotNull(message = "error-user-7")
-    @Column(name = "type", nullable = false, length = 2)
+    @Column(name = "profile", nullable = false, length = 2)
     private ProfileEnum profile;
 
     @JsonIgnore

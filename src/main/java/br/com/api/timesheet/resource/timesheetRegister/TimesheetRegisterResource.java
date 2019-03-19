@@ -1,5 +1,6 @@
 package br.com.api.timesheet.resource.timesheetRegister;
 
+import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.service.TimesheetRegisterService;
@@ -25,6 +26,12 @@ public class TimesheetRegisterResource {
     @GetMapping("/timesheet")
     public ResponseEntity<Collection<TimesheetReport>> listReport() {
         Collection<TimesheetReport> timesheetReports = timesheetRegisterService.listReport();
+        return ResponseEntity.ok(timesheetReports);
+    }
+
+    @GetMapping("/timesheet/daily")
+    public ResponseEntity<Collection<TimesheetDailyReport>> listDailyReport() {
+        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport();
         return ResponseEntity.ok(timesheetReports);
     }
 

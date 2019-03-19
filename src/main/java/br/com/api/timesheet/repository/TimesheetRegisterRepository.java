@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface TimesheetRegisterRepository extends JpaRepository<TimesheetRegister, Long> {
 
@@ -17,4 +18,7 @@ public interface TimesheetRegisterRepository extends JpaRepository<TimesheetRegi
             "group by reg.type ")
     @Transactional(readOnly = true)
     Collection<TimesheetReport> listReport();
+
+    @Transactional(readOnly = true)
+    List<TimesheetRegister> findAll();
 }

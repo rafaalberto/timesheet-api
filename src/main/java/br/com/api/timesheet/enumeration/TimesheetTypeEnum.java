@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TimesheetTypeEnum {
 
-    REGULAR("RG", "NORMAL"),
-    HOLIDAY("HO", "FERIADO"),
-    DAY_OFF("DO", "FOLGA");
+    REGULAR("RG", "Normal"),
+    HOLIDAY("HO", "Feriado"),
+    DAY_OFF("DO", "Folga");
 
     private final String code;
     private final String description;
