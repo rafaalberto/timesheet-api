@@ -39,7 +39,7 @@ public class TimesheetRegisterService {
 
     public Collection<TimesheetDailyReport> listDailyReport() {
         List<TimesheetDailyReport> dailyReport = new ArrayList();
-        List<TimesheetRegister> registers = timesheetRegisterRepository.findAll(new Sort(Sort.Direction.ASC,"timeIn"));
+        List<TimesheetRegister> registers = timesheetRegisterRepository.findAll(new Sort(Sort.Direction.DESC,"timeIn"));
         if(!registers.isEmpty()){
             registers.stream().forEach(register -> {
                 TimesheetDailyReport report = new TimesheetDailyReport();

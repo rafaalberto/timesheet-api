@@ -10,12 +10,12 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class TimesheetReport {
 
-    private final TimesheetTypeEnum typeEnum;
-    private final LocalTime hoursWorked;
-    private final LocalTime hoursJourney;
-    private final LocalTime weeklyRest;
-    private final LocalTime extraHours;
-    private final LocalTime sumula90;
-    private final LocalTime nightShift;
-    private final LocalTime paidNightTime;
+    private TimesheetTypeEnum typeEnum;
+    private LocalTime hoursWorked;
+    private LocalTime hoursJourney;
+    private LocalTime weeklyRest;
+    private LocalTime extraHours;
+    private LocalTime sumula90;
+    private LocalTime nightShift;
+    private LocalTime paidNightTime;
 }
