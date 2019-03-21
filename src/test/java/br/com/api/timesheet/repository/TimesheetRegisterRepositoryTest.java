@@ -3,6 +3,7 @@ package br.com.api.timesheet.repository;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +12,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Duration;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 import static java.time.LocalDateTime.parse;
@@ -43,6 +46,10 @@ public class TimesheetRegisterRepositoryTest {
     @Test
     public void shouldCreateTimesheetRegisterRegular() {
         TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterRegular());
+
+//        Duration duration = Duration.ofSeconds(115200);
+//        assertThat(DurationFormatUtils.formatDuration(duration.toMillis(), "HH:mm")).isEqualTo("32:00");
+
         assertThat(registerCreated.getId()).isNotNull();
         assertThat(registerCreated.getHoursWorked().toString()).isEqualTo(HOURS_WORKED);
         assertThat(registerCreated.getHoursJourney().toString()).isEqualTo(HOURS_JOURNEY);
