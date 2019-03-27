@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -46,13 +47,13 @@ public class TimesheetRegisterService {
                 report.setType(register.getType().getDescription());
                 report.setDate(ofPattern(DateUtils.DATE_FORMAT_PT_BR).format(register.getTimeIn()));
                 report.setEntry(fetchEntry(register));
-                report.setHoursWorked(ofPattern(DateUtils.TIME_FORMAT).format(register.getHoursWorked()));
-                report.setHoursJourney(ofPattern(DateUtils.TIME_FORMAT).format(register.getHoursJourney()));
-                report.setExtraHours(ofPattern(DateUtils.TIME_FORMAT).format(register.getExtraHours()));
-                report.setWeeklyRest(ofPattern(DateUtils.TIME_FORMAT).format(register.getWeeklyRest()));
-                report.setSumula90(ofPattern(DateUtils.TIME_FORMAT).format(register.getSumula90()));
-                report.setNightShift(ofPattern(DateUtils.TIME_FORMAT).format(register.getNightShift()));
-                report.setPaidNightTime(ofPattern(DateUtils.TIME_FORMAT).format(register.getPaidNightTime()));
+                report.setHoursWorked(register.getHoursWorked());
+                report.setHoursJourney(register.getHoursJourney());
+                report.setExtraHours(register.getExtraHours());
+                report.setWeeklyRest(register.getWeeklyRest());
+                report.setSumula90(register.getSumula90());
+                report.setNightShift(register.getNightShift());
+                report.setPaidNightTime(register.getPaidNightTime());
                 dailyReport.add(report);
             });
         }
@@ -68,8 +69,8 @@ public class TimesheetRegisterService {
         register.setLunchStart(parse(request.getLunchStart(), formatter));
         register.setLunchEnd(parse(request.getLunchEnd(), formatter));
         register.setTimeOut(parse(request.getTimeOut(), formatter));
-        register.setHoursJourney(LocalTime.parse(request.getHoursJourney(), ofPattern(DateUtils.TIME_FORMAT)));
-        register.setSumula90(LocalTime.parse(request.getSumula90(), ofPattern(DateUtils.TIME_FORMAT)));
+        register.setHoursJourney(ofSeconds(LocalTime.parse(request.getHoursJourney(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        register.setSumula90(ofSeconds(LocalTime.parse(request.getSumula90(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return register;
     }
 

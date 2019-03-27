@@ -1,6 +1,7 @@
 package br.com.api.timesheet.utils;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -43,10 +44,10 @@ public class DateUtils {
         return between(startDateTime, endDateTime).getSeconds();
     }
 
-    public static LocalTime calculatePaidNightTime(LocalTime workedNightShift) {
+    public static Duration calculatePaidNightTime(LocalTime workedNightShift) {
         LocalTime fullNightShift = LocalTime.parse(FULL_NIGHT_SHIFT_TIME, ofPattern(DateUtils.TIME_FORMAT));
         double paidNightTime = ((double) workedNightShift.toSecondOfDay() / (double) fullNightShift.toSecondOfDay()) * MINUTES * SECONDS;
-        return LocalTime.ofSecondOfDay((long) paidNightTime);
+        return Duration.ofSeconds((long) paidNightTime);
     }
 
     private static boolean isStartOutOfNightShift(LocalDateTime startDateTime) {

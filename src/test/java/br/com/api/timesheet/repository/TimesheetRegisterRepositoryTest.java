@@ -3,7 +3,6 @@ package br.com.api.timesheet.repository;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
-import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +11,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Duration;
 import java.time.LocalTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
+import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,41 +44,38 @@ public class TimesheetRegisterRepositoryTest {
     @Test
     public void shouldCreateTimesheetRegisterRegular() {
         TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterRegular());
-
-//        Duration duration = Duration.ofSeconds(115200);
-//        assertThat(DurationFormatUtils.formatDuration(duration.toMillis(), "HH:mm")).isEqualTo("32:00");
-
         assertThat(registerCreated.getId()).isNotNull();
-        assertThat(registerCreated.getHoursWorked().toString()).isEqualTo(HOURS_WORKED);
-        assertThat(registerCreated.getHoursJourney().toString()).isEqualTo(HOURS_JOURNEY);
-        assertThat(registerCreated.getExtraHours().toString()).isEqualTo(EXTRA_HOURS);
-        assertThat(registerCreated.getWeeklyRest().toString()).isEqualTo(TIME_OFF);
-        assertThat(registerCreated.getNightShift().toString()).isEqualTo(NIGHT_SHIFT);
-        assertThat(registerCreated.getPaidNightTime().toString()).isEqualTo(PAID_NIGHT_TIME);
+        assertThat(registerCreated.getHoursWorked()).isEqualTo(HOURS_WORKED);
+        assertThat(registerCreated.getHoursWorked()).isEqualTo(HOURS_WORKED);
+        assertThat(registerCreated.getHoursJourney()).isEqualTo(HOURS_JOURNEY);
+        assertThat(registerCreated.getExtraHours()).isEqualTo(EXTRA_HOURS);
+        assertThat(registerCreated.getWeeklyRest()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getNightShift()).isEqualTo(NIGHT_SHIFT);
+        assertThat(registerCreated.getPaidNightTime()).isEqualTo(PAID_NIGHT_TIME);
     }
 
     @Test
     public void shouldCreateTimesheetRegisterDayOff() {
         TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterDayOff());
         assertThat(registerCreated.getId()).isNotNull();
-        assertThat(registerCreated.getHoursWorked().toString()).isEqualTo(TIME_OFF);
-        assertThat(registerCreated.getHoursJourney().toString()).isEqualTo(TIME_OFF);
-        assertThat(registerCreated.getExtraHours().toString()).isEqualTo(TIME_OFF);
-        assertThat(registerCreated.getWeeklyRest().toString()).isEqualTo(HOURS_JOURNEY);
-        assertThat(registerCreated.getNightShift().toString()).isEqualTo(TIME_OFF);
-        assertThat(registerCreated.getPaidNightTime().toString()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getHoursWorked()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getHoursJourney()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getExtraHours()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getWeeklyRest()).isEqualTo(HOURS_JOURNEY);
+        assertThat(registerCreated.getNightShift()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getPaidNightTime()).isEqualTo(TIME_OFF);
     }
 
     @Test
     public void shouldCreateTimesheetRegisterHoliday() {
         TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterHoliday());
         assertThat(registerCreated.getId()).isNotNull();
-        assertThat(registerCreated.getHoursWorked().toString()).isEqualTo(HOURS_WORKED);
-        assertThat(registerCreated.getHoursJourney().toString()).isEqualTo(HOURS_JOURNEY);
-        assertThat(registerCreated.getExtraHours().toString()).isEqualTo(HOURS_WORKED);
-        assertThat(registerCreated.getWeeklyRest().toString()).isEqualTo(TIME_OFF);
-        assertThat(registerCreated.getNightShift().toString()).isEqualTo(NIGHT_SHIFT);
-        assertThat(registerCreated.getPaidNightTime().toString()).isEqualTo(PAID_NIGHT_TIME);
+        assertThat(registerCreated.getHoursWorked()).isEqualTo(HOURS_WORKED);
+        assertThat(registerCreated.getHoursJourney()).isEqualTo(HOURS_JOURNEY);
+        assertThat(registerCreated.getExtraHours()).isEqualTo(HOURS_WORKED);
+        assertThat(registerCreated.getWeeklyRest()).isEqualTo(TIME_OFF);
+        assertThat(registerCreated.getNightShift()).isEqualTo(NIGHT_SHIFT);
+        assertThat(registerCreated.getPaidNightTime()).isEqualTo(PAID_NIGHT_TIME);
     }
 
     @After
@@ -96,7 +91,7 @@ public class TimesheetRegisterRepositoryTest {
         timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
         timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
         timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
-        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)));
+        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -108,7 +103,7 @@ public class TimesheetRegisterRepositoryTest {
         timesheetRegister.setLunchStart(parse(TIME_DAY_OFF, formatter));
         timesheetRegister.setLunchEnd(parse(TIME_DAY_OFF, formatter));
         timesheetRegister.setTimeOut(parse(TIME_DAY_OFF, formatter));
-        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)));
+        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -120,7 +115,7 @@ public class TimesheetRegisterRepositoryTest {
         timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
         timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
         timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
-        timesheetRegister.setHoursJourney(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)));
+        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 }

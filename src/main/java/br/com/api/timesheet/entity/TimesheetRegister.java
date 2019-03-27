@@ -1,22 +1,23 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
+import br.com.api.timesheet.utils.DateUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.DAY_OFF;
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.HOLIDAY;
-import static br.com.api.timesheet.utils.DateUtils.calculateNightShift;
-import static br.com.api.timesheet.utils.DateUtils.isNightShift;
-import static br.com.api.timesheet.utils.DateUtils.calculatePaidNightTime;
+import static br.com.api.timesheet.utils.DateUtils.*;
 import static java.time.Duration.between;
+import static java.time.Duration.ofSeconds;
 import static java.time.LocalTime.ofSecondOfDay;
+import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
 @Entity
 @Data
@@ -48,25 +49,53 @@ public class TimesheetRegister implements Serializable {
     private LocalDateTime timeOut;
 
     @Column(name = "hours_worked")
-    private LocalTime hoursWorked;
+    private Duration hoursWorked;
 
     @Column(name = "hours_journey")
-    private LocalTime hoursJourney;
+    private Duration hoursJourney;
 
     @Column(name = "extra_hours")
-    private LocalTime extraHours;
+    private Duration extraHours;
 
     @Column(name = "weekly_rest")
-    private LocalTime weeklyRest;
+    private Duration weeklyRest;
 
     @Column(name = "sumula_90")
-    private LocalTime sumula90;
+    private Duration sumula90;
 
     @Column(name = "night_shift")
-    private LocalTime nightShift;
+    private Duration nightShift;
 
     @Column(name = "paid_night_time")
-    private LocalTime paidNightTime;
+    private Duration paidNightTime;
+
+    public String getHoursWorked() {
+        return formatDuration(hoursWorked.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getHoursJourney() {
+        return formatDuration(hoursJourney.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getExtraHours() {
+        return formatDuration(extraHours.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getWeeklyRest() {
+        return formatDuration(weeklyRest.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getSumula90() {
+        return formatDuration(sumula90.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getNightShift() {
+        return formatDuration(nightShift.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getPaidNightTime() {
+        return formatDuration(paidNightTime.toMillis(), DateUtils.TIME_FORMAT);
+    }
 
     @PrePersist @PreUpdate
     public void calculateHours() {
@@ -74,33 +103,34 @@ public class TimesheetRegister implements Serializable {
 
         long firstPeriod = between(timeIn, lunchStart).getSeconds();
         long secondPeriod = between(lunchEnd, timeOut).getSeconds();
-        hoursWorked = ofSecondOfDay(firstPeriod + secondPeriod);
+        hoursWorked = ofSeconds(firstPeriod + secondPeriod);
 
-        long extraHoursDuration = between(hoursJourney, hoursWorked).getSeconds();
-        extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSecondOfDay(extraHoursDuration) : ofSecondOfDay(BigDecimal.ZERO.intValue());
+        long extraHoursDuration = hoursWorked != null ? hoursWorked.getSeconds() - hoursJourney.getSeconds() : BigDecimal.ZERO.intValue();
+        extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSeconds(extraHoursDuration) : ofSeconds(BigDecimal.ZERO.intValue());
 
         if(type.equals(DAY_OFF)){
             weeklyRest = hoursJourney;
-            hoursJourney = ofSecondOfDay(BigDecimal.ZERO.intValue());
+            hoursJourney = ofSeconds(BigDecimal.ZERO.intValue());
         }else if(type.equals(HOLIDAY)){
             extraHours = hoursWorked;
         }
 
         firstPeriod = isNightShift(timeIn, lunchStart) ? calculateNightShift(timeIn, lunchStart) : BigDecimal.ZERO.longValue();
         secondPeriod = isNightShift(lunchEnd, timeOut) ? calculateNightShift(lunchEnd, timeOut) : BigDecimal.ZERO.longValue();
-        nightShift = ofSecondOfDay(firstPeriod + secondPeriod);
+        nightShift = ofSeconds(firstPeriod + secondPeriod);
 
-        paidNightTime = nightShift.toSecondOfDay() > BigDecimal.ZERO.intValue() ? calculatePaidNightTime(nightShift) : ofSecondOfDay(BigDecimal.ZERO.intValue());
+        paidNightTime = nightShift.getSeconds() > BigDecimal.ZERO.intValue() ? calculatePaidNightTime(ofSecondOfDay(nightShift.getSeconds()))
+                : ofSeconds(BigDecimal.ZERO.intValue());
 
         //TODO(1) Holiday is a weekly rest?
     }
 
     private void resetValues() {
-        hoursWorked = ofSecondOfDay(BigDecimal.ZERO.intValue());
-        extraHours = ofSecondOfDay(BigDecimal.ZERO.intValue());
-        weeklyRest = ofSecondOfDay(BigDecimal.ZERO.intValue());
-        nightShift = ofSecondOfDay(BigDecimal.ZERO.intValue());
-        paidNightTime = ofSecondOfDay(BigDecimal.ZERO.intValue());
+        hoursWorked = ofSeconds((BigDecimal.ZERO.intValue()));
+        extraHours = ofSeconds(BigDecimal.ZERO.intValue());
+        weeklyRest = ofSeconds(BigDecimal.ZERO.intValue());
+        nightShift = ofSeconds(BigDecimal.ZERO.intValue());
+        paidNightTime = ofSeconds(BigDecimal.ZERO.intValue());
     }
 
 }

@@ -5,13 +5,13 @@ create table timesheet_register (
     lunch_start timestamp without time zone,
     lunch_end timestamp without time zone,
     time_out timestamp without time zone,
-    hours_worked time without time zone default '00:00:00',
-    hours_journey time without time zone default '00:00:00',
-    extra_hours time without time zone default '00:00:00',
-    weekly_rest time without time zone default '00:00:00',
-    sumula_90 time without time zone default '00:00:00',
-    night_shift time without time zone default '00:00:00',
-    paid_night_time time without time zone default '00:00:00',
+    hours_worked bigint default 0,
+    hours_journey bigint default 0,
+    extra_hours bigint default 0,
+    weekly_rest bigint default 0,
+    sumula_90 bigint default 0,
+    night_shift bigint default 0,
+    paid_night_time bigint default 0,
     primary key (id)
 );
 
