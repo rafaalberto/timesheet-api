@@ -21,31 +21,31 @@ public class TimesheetReport {
     private long nightShift;
     private long paidNightTime;
 
-    public String getHoursWorked() {
-        return formatDuration(ofNanos(hoursWorked).toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public String getHoursJourney() {
-        return formatDuration(ofNanos(hoursJourney).toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public String getWeeklyRest() {
-        return formatDuration(ofNanos(weeklyRest).toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public String getExtraHours() {
-        return formatDuration(ofNanos(extraHours).toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public String getSumula90() {
-        return formatDuration(ofNanos(sumula90).toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public String getNightShift() {
-        return formatDuration(ofNanos(nightShift).toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public String getPaidNightTime() {
-        return formatDuration(ofNanos(paidNightTime).toMillis(), DateUtils.TIME_FORMAT);
-    }
+//    public String getHoursWorked() {
+//        return formatDuration(ofNanos(hoursWorked).toMillis(), DateUtils.TIME_FORMAT);
+//    }
+//
+//    public String getHoursJourney() {
+//        return formatDuration(ofNanos(hoursJourney).toMillis(), DateUtils.TIME_FORMAT);
+//    }
+//
+//    public String getWeeklyRest() {
+//        return formatDuration(ofNanos(weeklyRest).toMillis(), DateUtils.TIME_FORMAT);
+//    }
+//
+//    public String getExtraHours() {
+//        return formatDuration(ofNanos(extraHours).toMillis(), DateUtils.TIME_FORMAT);
+//    }
+//
+//    public String getSumula90() {
+//        return formatDuration(ofNanos(sumula90).toMillis(), DateUtils.TIME_FORMAT);
+//    }
+//
+//    public String getNightShift() {
+//        return formatDuration(ofNanos(nightShift).toMillis(), DateUtils.TIME_FORMAT);
+//    }
+//
+//    public String getPaidNightTime() {
+//        return formatDuration(ofNanos(paidNightTime).toMillis(), DateUtils.TIME_FORMAT);
+//    }
 }

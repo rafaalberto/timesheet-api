@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 @AllArgsConstructor
 public class TimesheetDocket {
 
-    private ReportTypeEnum type;
+    private String type;
     private long hoursTotal;
 
     public String getHoursTotal() {
