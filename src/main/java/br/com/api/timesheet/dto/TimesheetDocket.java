@@ -11,7 +11,8 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 @AllArgsConstructor
 public class TimesheetDocket {
 
-    private String type;
+    private String typeCode;
+    private String typeDescription;
     private long totalHours;
 
     public String getTotalHours() {
