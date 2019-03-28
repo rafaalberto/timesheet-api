@@ -4,13 +4,16 @@ import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
+import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ReportTypeEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
+import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
 import br.com.api.timesheet.resource.timesheetRegister.TimesheetRequest;
 import br.com.api.timesheet.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -18,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
 import static java.time.Duration.ofSeconds;
@@ -35,7 +39,17 @@ public class TimesheetRegisterService {
     }
 
     public TimesheetRegister save(TimesheetRequest request) {
-        return timesheetRegisterRepository.save(getTimeSheetRegister(request));
+        TimesheetRegister register = getTimeSheetRegister(request);
+        return timesheetRegisterRepository.save(register);
+    }
+
+    public TimesheetRegister findById(Long id) {
+        return timesheetRegisterRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("error-timesheet-1", HttpStatus.BAD_REQUEST));
+    }
+
+    public void delete(Long id) {
+        timesheetRegisterRepository.delete(findById(id));
     }
 
     public Collection<TimesheetReport> listReport() {
@@ -48,6 +62,7 @@ public class TimesheetRegisterService {
         if(!registers.isEmpty()){
             registers.stream().forEach(register -> {
                 TimesheetDailyReport report = new TimesheetDailyReport();
+                report.setId(register.getId());
                 report.setType(register.getType().getDescription());
                 report.setDate(ofPattern(DateUtils.DATE_FORMAT_PT_BR).format(register.getTimeIn()));
                 report.setEntry(fetchEntry(register));

@@ -2,8 +2,8 @@ package br.com.api.timesheet.resource.timesheetRegister;
 
 import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
-import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.dto.TimesheetReport;
+import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.service.TimesheetRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,6 +52,12 @@ public class TimesheetRegisterResource {
     public ResponseEntity<TimesheetRegister> update(@PathVariable Long id, @Valid @RequestBody TimesheetRequest request) {
         request.setId(id);
         return new ResponseEntity<TimesheetRegister>(timesheetRegisterService.save(request), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/timesheet/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        timesheetRegisterService.delete(id);
     }
 
 }

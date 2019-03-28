@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class TimesheetDailyReport {
 
+    private Long id;
     private String type;
     private String date;
     private String entry;
