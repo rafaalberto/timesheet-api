@@ -1,6 +1,7 @@
 package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.dto.TimesheetDailyReport;
+import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
@@ -36,6 +37,11 @@ public class TimesheetRegisterService {
 
     public Collection<TimesheetReport> listReport() {
         return timesheetRegisterRepository.listReport();
+    }
+
+    public Collection<TimesheetDocket> listDocket() {
+        //return timesheetRegisterRepository.listReport();
+        return null;
     }
 
     public Collection<TimesheetDailyReport> listDailyReport() {
