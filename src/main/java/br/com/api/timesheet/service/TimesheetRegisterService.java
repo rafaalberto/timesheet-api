@@ -12,20 +12,17 @@ import br.com.api.timesheet.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spring.web.plugins.Docket;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
-import static java.util.stream.Stream.*;
 
 @Service
 public class TimesheetRegisterService {
@@ -48,27 +45,13 @@ public class TimesheetRegisterService {
     public Collection<TimesheetDocket> listDocket() {
         Collection<TimesheetReport> report = listReport();
         Collection<TimesheetDocket> dockets = new ArrayList<>();
-
-        long hoursWorked  = report.stream()
-                .filter(r -> r.getTypeEnum().equals(TimesheetTypeEnum.REGULAR))
-                .mapToLong(r -> r.getHoursWorked()).sum();
-
-        long weeklyRest = report.stream()
-                .filter(r -> r.getTypeEnum().equals(TimesheetTypeEnum.DAY_OFF))
-                .mapToLong(r -> r.getWeeklyRest()).sum();
-
-        long extraHoursPart = report.stream()
-                .filter(r -> r.getTypeEnum().equals(TimesheetTypeEnum.REGULAR))
-                .mapToLong(r -> r.getExtraHours()).sum();
-
-        long extraHoursFull = report.stream()
-                .filter(r -> r.getTypeEnum().equals(TimesheetTypeEnum.DAY_OFF) || r.getTypeEnum().equals(TimesheetTypeEnum.HOLIDAY))
-                .mapToLong(r -> r.getExtraHours()).sum();
-
-        dockets.add(new TimesheetDocket(ReportTypeEnum.REGULAR_HOURS.getDescription(), hoursWorked));
-        dockets.add(new TimesheetDocket(ReportTypeEnum.WEEKLY_REST.getDescription(), weeklyRest));
-        dockets.add(new TimesheetDocket(ReportTypeEnum.EXTRA_HOURS_PART.getDescription(), extraHoursPart));
-        dockets.add(new TimesheetDocket(ReportTypeEnum.EXTRA_HOURS_FULL.getDescription(), extraHoursFull));
+        dockets.add(new TimesheetDocket(REGULAR_HOURS.getDescription(), getTotalHoursWorked(report)));
+        dockets.add(new TimesheetDocket(WEEKLY_REST.getDescription(), getTotalWeeklyRest(report)));
+        dockets.add(new TimesheetDocket(EXTRA_HOURS_PART.getDescription(), getTotalExtraHoursPart(report)));
+        dockets.add(new TimesheetDocket(EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report)));
+        dockets.add(new TimesheetDocket(SUMULA_90.getDescription(), getTotalSumula90(report)));
+        dockets.add(new TimesheetDocket(NIGHT_SHIFT.getDescription(), getTotalNightShift(report)));
+        dockets.add(new TimesheetDocket(PAID_NIGHT_SHIFT.getDescription(), getTotalPaidNightTime(report)));
 
         return dockets;
     }
@@ -115,6 +98,40 @@ public class TimesheetRegisterService {
             .concat(formatter.format(register.getLunchStart())).concat(SEPARATOR_CHARACTER)
             .concat(formatter.format(register.getLunchEnd())).concat(SEPARATOR_CHARACTER)
             .concat(formatter.format(register.getTimeOut()));
+    }
+
+    private long getTotalPaidNightTime(Collection<TimesheetReport> report) {
+        return report.stream().mapToLong(r -> r.getPaidNightTime()).sum();
+    }
+
+    private long getTotalNightShift(Collection<TimesheetReport> report) {
+        return report.stream().mapToLong(r -> r.getNightShift()).sum();
+    }
+
+    private long getTotalSumula90(Collection<TimesheetReport> report) {
+        return report.stream().mapToLong(r -> r.getSumula90()).sum();
+    }
+
+    private long getTotalExtraHoursFull(Collection<TimesheetReport> report) {
+        return report.stream()
+                .filter(r -> r.getType().equals(TimesheetTypeEnum.DAY_OFF) || r.getType().equals(TimesheetTypeEnum.HOLIDAY))
+                .mapToLong(r -> r.getExtraHours()).sum();
+    }
+
+    private long getTotalExtraHoursPart(Collection<TimesheetReport> report) {
+        return report.stream()
+                .filter(r -> r.getType().equals(TimesheetTypeEnum.REGULAR))
+                .mapToLong(r -> r.getExtraHours()).sum();
+    }
+
+    private long getTotalWeeklyRest(Collection<TimesheetReport> report) {
+        return report.stream().mapToLong(r -> r.getWeeklyRest()).sum();
+    }
+
+    private long getTotalHoursWorked(Collection<TimesheetReport> report) {
+        return report.stream()
+                .filter(r -> r.getType().equals(TimesheetTypeEnum.REGULAR))
+                .mapToLong(r -> r.getHoursWorked()).sum();
     }
 
 }

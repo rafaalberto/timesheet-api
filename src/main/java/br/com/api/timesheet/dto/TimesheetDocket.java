@@ -1,7 +1,5 @@
 package br.com.api.timesheet.dto;
 
-import br.com.api.timesheet.enumeration.ReportTypeEnum;
-import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,9 +12,9 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 public class TimesheetDocket {
 
     private String type;
-    private long hoursTotal;
+    private long totalHours;
 
-    public String getHoursTotal() {
-        return formatDuration(ofNanos(hoursTotal).toMillis(), DateUtils.TIME_FORMAT);
+    public String getTotalHours() {
+        return formatDuration(ofNanos(totalHours).toMillis(), DateUtils.TIME_FORMAT);
     }
 }

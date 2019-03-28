@@ -24,6 +24,12 @@ public class TimesheetRegisterResource {
         this.timesheetRegisterService = timesheetRegisterService;
     }
 
+    @GetMapping("/timesheet/daily")
+    public ResponseEntity<Collection<TimesheetDailyReport>> listDailyReport() {
+        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport();
+        return ResponseEntity.ok(timesheetReports);
+    }
+
     @GetMapping("/timesheet/report")
     public ResponseEntity<Collection<TimesheetReport>> listReport() {
         Collection<TimesheetReport> timesheetReports = timesheetRegisterService.listReport();
@@ -34,12 +40,6 @@ public class TimesheetRegisterResource {
     public ResponseEntity<Collection<TimesheetDocket>> listDocket() {
         Collection<TimesheetDocket> timesheetDocket = timesheetRegisterService.listDocket();
         return ResponseEntity.ok(timesheetDocket);
-    }
-
-    @GetMapping("/timesheet/daily")
-    public ResponseEntity<Collection<TimesheetDailyReport>> listDailyReport() {
-        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport();
-        return ResponseEntity.ok(timesheetReports);
     }
 
     @PostMapping("/timesheet")
