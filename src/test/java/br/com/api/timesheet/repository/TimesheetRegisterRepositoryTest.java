@@ -1,5 +1,6 @@
 package br.com.api.timesheet.repository;
 
+import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.parse;
@@ -78,6 +80,17 @@ public class TimesheetRegisterRepositoryTest {
         assertThat(registerCreated.getPaidNightTime()).isEqualTo(PAID_NIGHT_TIME);
     }
 
+    @Test
+    public void shoudSaveAndListReport() {
+        timesheetRegisterRepository.save(getTimesheetRegisterRegular());
+        timesheetRegisterRepository.save(getTimesheetRegisterDayOff());
+        timesheetRegisterRepository.save(getTimesheetRegisterHoliday());
+
+        Collection<TimesheetReport> report = timesheetRegisterRepository.listReport();
+        assertThat(report.stream().filter(f -> f.getType().equals(TimesheetTypeEnum.REGULAR)).findFirst().get()
+                .getHoursWorkedFormatted()).isEqualTo(HOURS_WORKED);
+    }
+
     @After
     public void tearDown() {
         timesheetRegisterRepository.deleteAll();
@@ -92,6 +105,7 @@ public class TimesheetRegisterRepositoryTest {
         timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
         timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        timesheetRegister.setSumula90(ofSeconds(0));
         return timesheetRegister;
     }
 
@@ -104,6 +118,7 @@ public class TimesheetRegisterRepositoryTest {
         timesheetRegister.setLunchEnd(parse(TIME_DAY_OFF, formatter));
         timesheetRegister.setTimeOut(parse(TIME_DAY_OFF, formatter));
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        timesheetRegister.setSumula90(ofSeconds(0));
         return timesheetRegister;
     }
 
@@ -116,6 +131,7 @@ public class TimesheetRegisterRepositoryTest {
         timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
         timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        timesheetRegister.setSumula90(ofSeconds(0));
         return timesheetRegister;
     }
 }
