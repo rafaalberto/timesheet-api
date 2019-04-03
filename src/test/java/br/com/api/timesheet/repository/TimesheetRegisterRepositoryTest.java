@@ -15,7 +15,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 
-import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.REGULAR;
+import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.*;
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -77,41 +77,57 @@ public class TimesheetRegisterRepositoryTest {
         assertThat(registerCreated.getPaidNightTime()).isEqualTo("00:42");
     }
 
-//    @Test
-//    public void shouldCreateTimesheetRegisterDayOff() {
-//        TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterDayOff1());
-//        assertThat(registerCreated.getId()).isNotNull();
-//        assertThat(registerCreated.getHoursWorked()).isEqualTo(TIME_OFF);
-//        assertThat(registerCreated.getHoursJourney()).isEqualTo(TIME_OFF);
-//        assertThat(registerCreated.getExtraHours()).isEqualTo(TIME_OFF);
-//        assertThat(registerCreated.getWeeklyRest()).isEqualTo(HOURS_JOURNEY);
-//        assertThat(registerCreated.getNightShift()).isEqualTo(TIME_OFF);
-//        assertThat(registerCreated.getPaidNightTime()).isEqualTo(TIME_OFF);
-//    }
-//
-//    @Test
-//    public void shouldCreateTimesheetRegisterHoliday() {
-//        TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterHoliday1());
-//        assertThat(registerCreated.getId()).isNotNull();
-//        assertThat(registerCreated.getHoursWorked()).isEqualTo(HOURS_WORKED);
-//        assertThat(registerCreated.getHoursJourney()).isEqualTo(HOURS_JOURNEY);
-//        assertThat(registerCreated.getExtraHours()).isEqualTo(HOURS_WORKED);
-//        assertThat(registerCreated.getWeeklyRest()).isEqualTo(TIME_OFF);
-//        assertThat(registerCreated.getNightShift()).isEqualTo(NIGHT_SHIFT);
-//        assertThat(registerCreated.getPaidNightTime()).isEqualTo(PAID_NIGHT_TIME);
-//    }
+    @Test
+    public void shouldCreateTimesheetRegisterDayOff1() {
+        TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterDayOff1());
+        assertThat(registerCreated.getId()).isNotNull();
+        assertThat(registerCreated.getHoursWorked()).isEqualTo("00:00");
+        assertThat(registerCreated.getHoursJourney()).isEqualTo("00:00");
+        assertThat(registerCreated.getExtraHours()).isEqualTo("00:00");
+        assertThat(registerCreated.getWeeklyRest()).isEqualTo("08:00");
+        assertThat(registerCreated.getNightShift()).isEqualTo("00:00");
+        assertThat(registerCreated.getPaidNightTime()).isEqualTo("00:00");
+    }
+
+    @Test
+    public void shouldCreateTimesheetRegisterDayOff2() {
+        TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterDayOff2());
+        assertThat(registerCreated.getId()).isNotNull();
+        assertThat(registerCreated.getHoursWorked()).isEqualTo("00:00");
+        assertThat(registerCreated.getHoursJourney()).isEqualTo("00:00");
+        assertThat(registerCreated.getExtraHours()).isEqualTo("00:00");
+        assertThat(registerCreated.getWeeklyRest()).isEqualTo("08:00");
+        assertThat(registerCreated.getNightShift()).isEqualTo("00:00");
+        assertThat(registerCreated.getPaidNightTime()).isEqualTo("00:00");
+    }
+
+    @Test
+    public void shouldCreateTimesheetRegisterHoliday1() {
+        TimesheetRegister registerCreated = timesheetRegisterRepository.save(getTimesheetRegisterHoliday1());
+        assertThat(registerCreated.getId()).isNotNull();
+        assertThat(registerCreated.getHoursWorked()).isEqualTo("07:00");
+        assertThat(registerCreated.getHoursJourney()).isEqualTo("08:00");
+        assertThat(registerCreated.getExtraHours()).isEqualTo("07:00");
+        assertThat(registerCreated.getWeeklyRest()).isEqualTo("00:00");
+        assertThat(registerCreated.getNightShift()).isEqualTo("06:00");
+        assertThat(registerCreated.getPaidNightTime()).isEqualTo("00:51");
+    }
 
     @Test
     public void shoudSaveAndListReport() {
         timesheetRegisterRepository.save(getTimesheetRegisterRegular1());
-//        timesheetRegisterRepository.save(getTimesheetRegisterDayOff1());
-//        timesheetRegisterRepository.save(getTimesheetRegisterHoliday1());
+        timesheetRegisterRepository.save(getTimesheetRegisterRegular2());
+        timesheetRegisterRepository.save(getTimesheetRegisterRegular3());
+        timesheetRegisterRepository.save(getTimesheetRegisterRegular4());
+        timesheetRegisterRepository.save(getTimesheetRegisterDayOff1());
+        timesheetRegisterRepository.save(getTimesheetRegisterDayOff2());
+        timesheetRegisterRepository.save(getTimesheetRegisterHoliday1());
 
         Collection<TimesheetReport> reports = timesheetRegisterRepository.listReport();
 
         assertRegularTimesheet(reports);
-//        assertDayOffTimesheet(reports);
-//        assertHolidayTimesheet(reports);
+        assertDayOffTimesheet(reports);
+        assertHolidayTimesheet(reports);
     }
 
     @After
@@ -171,63 +187,76 @@ public class TimesheetRegisterRepositoryTest {
         return timesheetRegister;
     }
 
-//    private TimesheetRegister getTimesheetRegisterDayOff1() {
-//        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
-//        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setType(DAY_OFF);
-//        timesheetRegister.setTimeIn(parse(TIME_DAY_OFF, formatter));
-//        timesheetRegister.setLunchStart(parse(TIME_DAY_OFF, formatter));
-//        timesheetRegister.setLunchEnd(parse(TIME_DAY_OFF, formatter));
-//        timesheetRegister.setTimeOut(parse(TIME_DAY_OFF, formatter));
-//        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
-//        timesheetRegister.setSumula90(ofSeconds(0));
-//        return timesheetRegister;
-//    }
-//
-//    private TimesheetRegister getTimesheetRegisterHoliday1() {
-//        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
-//        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setType(HOLIDAY);
-//        timesheetRegister.setTimeIn(parse(TIME_IN, formatter));
-//        timesheetRegister.setLunchStart(parse(LUNCH_START, formatter));
-//        timesheetRegister.setLunchEnd(parse(LUNCH_END, formatter));
-//        timesheetRegister.setTimeOut(parse(TIME_OUT, formatter));
-//        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse(HOURS_JOURNEY, ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
-//        timesheetRegister.setSumula90(ofSeconds(0));
-//        return timesheetRegister;
-//    }
-//
+    private TimesheetRegister getTimesheetRegisterDayOff1() {
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
+        TimesheetRegister timesheetRegister = new TimesheetRegister();
+        timesheetRegister.setType(DAY_OFF);
+        timesheetRegister.setTimeIn(parse("2019-01-05 00:00", formatter));
+        timesheetRegister.setLunchStart(parse("2019-01-05 00:00", formatter));
+        timesheetRegister.setLunchEnd(parse("2019-01-05 00:00", formatter));
+        timesheetRegister.setTimeOut(parse("2019-01-05 00:00", formatter));
+        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        timesheetRegister.setSumula90(ofSeconds(0));
+        return timesheetRegister;
+    }
+
+    private TimesheetRegister getTimesheetRegisterDayOff2() {
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
+        TimesheetRegister timesheetRegister = new TimesheetRegister();
+        timesheetRegister.setType(DAY_OFF);
+        timesheetRegister.setTimeIn(parse("2019-01-06 00:00", formatter));
+        timesheetRegister.setLunchStart(parse("2019-01-06 00:00", formatter));
+        timesheetRegister.setLunchEnd(parse("2019-01-06 00:00", formatter));
+        timesheetRegister.setTimeOut(parse("2019-01-06 00:00", formatter));
+        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        timesheetRegister.setSumula90(ofSeconds(0));
+        return timesheetRegister;
+    }
+
+    private TimesheetRegister getTimesheetRegisterHoliday1() {
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
+        TimesheetRegister timesheetRegister = new TimesheetRegister();
+        timesheetRegister.setType(HOLIDAY);
+        timesheetRegister.setTimeIn(parse("2019-01-07 22:00", formatter));
+        timesheetRegister.setLunchStart(parse("2019-01-08 02:00", formatter));
+        timesheetRegister.setLunchEnd(parse("2019-01-08 03:00", formatter));
+        timesheetRegister.setTimeOut(parse("2019-01-08 06:00", formatter));
+        timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        timesheetRegister.setSumula90(ofSeconds(LocalTime.parse("01:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        return timesheetRegister;
+    }
+
     private void assertRegularTimesheet(Collection<TimesheetReport> reports) {
         TimesheetReport regular = reports.stream().filter(f -> f.getType().equals(REGULAR)).findFirst().get();
-        assertThat(regular.getHoursWorkedFormatted()).isEqualTo("08:00");
-        assertThat(regular.getHoursJourneyFormatted()).isEqualTo("12:00");
-        assertThat(regular.getWeeklyRestFormatted()).isEqualTo("13:00");
-        assertThat(regular.getExtraHoursFormatted()).isEqualTo("");
-        assertThat(regular.getSumula90Formatted()).isEqualTo("");
-        assertThat(regular.getNightShiftFormatted()).isEqualTo("");
-        assertThat(regular.getPaidNightTimeFormatted()).isEqualTo("");
+        assertThat(regular.getHoursWorkedFormatted()).isEqualTo("31:30");
+        assertThat(regular.getHoursJourneyFormatted()).isEqualTo("32:00");
+        assertThat(regular.getWeeklyRestFormatted()).isEqualTo("00:00");
+        assertThat(regular.getExtraHoursFormatted()).isEqualTo("02:30");
+        assertThat(regular.getSumula90Formatted()).isEqualTo("04:00");
+        assertThat(regular.getNightShiftFormatted()).isEqualTo("12:30");
+        assertThat(regular.getPaidNightTimeFormatted()).isEqualTo("01:47");
     }
-//
-//    private void assertDayOffTimesheet(Collection<TimesheetReport> reports) {
-//        TimesheetReport dayOff = reports.stream().filter(f -> f.getType().equals(DAY_OFF)).findFirst().get();
-//        assertThat(dayOff.getHoursWorkedFormatted()).isEqualTo("08:00");
-//        assertThat(dayOff.getHoursJourneyFormatted()).isEqualTo("12:00");
-//        assertThat(dayOff.getWeeklyRestFormatted()).isEqualTo("13:00");
-//        assertThat(dayOff.getExtraHoursFormatted()).isEqualTo("");
-//        assertThat(dayOff.getSumula90Formatted()).isEqualTo("");
-//        assertThat(dayOff.getNightShiftFormatted()).isEqualTo("");
-//        assertThat(dayOff.getPaidNightTimeFormatted()).isEqualTo("");
-//    }
-//
-//    private void assertHolidayTimesheet(Collection<TimesheetReport> reports) {
-//        TimesheetReport holiday = reports.stream().filter(f -> f.getType().equals(HOLIDAY)).findFirst().get();
-//        assertThat(holiday.getHoursWorkedFormatted()).isEqualTo("08:00");
-//        assertThat(holiday.getHoursJourneyFormatted()).isEqualTo("12:00");
-//        assertThat(holiday.getWeeklyRestFormatted()).isEqualTo("13:00");
-//        assertThat(holiday.getExtraHoursFormatted()).isEqualTo("");
-//        assertThat(holiday.getSumula90Formatted()).isEqualTo("");
-//        assertThat(holiday.getNightShiftFormatted()).isEqualTo("");
-//        assertThat(holiday.getPaidNightTimeFormatted()).isEqualTo("");
-//    }
+
+    private void assertDayOffTimesheet(Collection<TimesheetReport> reports) {
+        TimesheetReport dayOff = reports.stream().filter(f -> f.getType().equals(DAY_OFF)).findFirst().get();
+        assertThat(dayOff.getHoursWorkedFormatted()).isEqualTo("00:00");
+        assertThat(dayOff.getHoursJourneyFormatted()).isEqualTo("00:00");
+        assertThat(dayOff.getWeeklyRestFormatted()).isEqualTo("16:00");
+        assertThat(dayOff.getExtraHoursFormatted()).isEqualTo("00:00");
+        assertThat(dayOff.getSumula90Formatted()).isEqualTo("00:00");
+        assertThat(dayOff.getNightShiftFormatted()).isEqualTo("00:00");
+        assertThat(dayOff.getPaidNightTimeFormatted()).isEqualTo("00:00");
+    }
+
+    private void assertHolidayTimesheet(Collection<TimesheetReport> reports) {
+        TimesheetReport holiday = reports.stream().filter(f -> f.getType().equals(HOLIDAY)).findFirst().get();
+        assertThat(holiday.getHoursWorkedFormatted()).isEqualTo("07:00");
+        assertThat(holiday.getHoursJourneyFormatted()).isEqualTo("08:00");
+        assertThat(holiday.getWeeklyRestFormatted()).isEqualTo("00:00");
+        assertThat(holiday.getExtraHoursFormatted()).isEqualTo("07:00");
+        assertThat(holiday.getSumula90Formatted()).isEqualTo("01:00");
+        assertThat(holiday.getNightShiftFormatted()).isEqualTo("06:00");
+        assertThat(holiday.getPaidNightTimeFormatted()).isEqualTo("00:51");
+    }
 
 }
