@@ -84,7 +84,7 @@ public class TimesheetRegisterService {
         Collection<TimesheetDocket> dockets = new ArrayList<>();
         dockets.add(new TimesheetDocket(REGULAR_HOURS.getCode(), REGULAR_HOURS.getDescription(), getTotalHoursWorked(report)));
         dockets.add(new TimesheetDocket(WEEKLY_REST.getCode(), WEEKLY_REST.getDescription(), getTotalWeeklyRest(report)));
-        dockets.add(new TimesheetDocket(WEEKLY_REST.getCode(), EXTRA_HOURS_PART.getDescription(), getTotalExtraHoursPart(report)));
+        dockets.add(new TimesheetDocket(EXTRA_HOURS_PART.getCode(), EXTRA_HOURS_PART.getDescription(), getTotalExtraHoursPart(report)));
         dockets.add(new TimesheetDocket(EXTRA_HOURS_FULL.getCode(), EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report)));
         dockets.add(new TimesheetDocket(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report)));
         dockets.add(new TimesheetDocket(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report)));
