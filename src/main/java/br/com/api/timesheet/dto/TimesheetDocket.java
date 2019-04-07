@@ -14,6 +14,7 @@ public class TimesheetDocket {
     private String typeCode;
     private String typeDescription;
     private long totalHours;
+    private String totalCost;
 
     public String getTotalHours() {
         return formatDuration(ofNanos(totalHours).toMillis(), DateUtils.TIME_FORMAT);

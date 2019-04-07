@@ -97,6 +97,10 @@ public class TimesheetRegister implements Serializable {
         return formatDuration(paidNightTime.toMillis(), DateUtils.TIME_FORMAT);
     }
 
+    public void setHoursWorked(Duration hoursWorked) {
+        this.hoursJourney = hoursWorked;
+    }
+
     @PrePersist @PreUpdate
     public void calculateHours() {
         resetValues();

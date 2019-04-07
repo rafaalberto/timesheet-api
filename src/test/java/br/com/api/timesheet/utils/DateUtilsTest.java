@@ -1,5 +1,6 @@
 package br.com.api.timesheet.utils;
 
+import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -7,8 +8,12 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.concurrent.TimeUnit;
 
 import static br.com.api.timesheet.utils.DateUtils.*;
 import static java.time.LocalDateTime.parse;
@@ -16,6 +21,7 @@ import static java.time.LocalTime.ofSecondOfDay;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -23,6 +29,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 public class DateUtilsTest {
+
+    private static final double TIME_IN_MINUTES = 60.0;
 
     private DateTimeFormatter formatter;
 
@@ -60,5 +68,14 @@ public class DateUtilsTest {
         assertThat(formatDuration(calculatePaidNightTime(LocalTime.parse("00:40", ofPattern(TIME_FORMAT))).toMillis(), TIME_FORMAT)).isEqualTo("00:05");
         assertThat(formatDuration(calculatePaidNightTime(LocalTime.parse("07:00", ofPattern(TIME_FORMAT))).toMillis(), TIME_FORMAT)).isEqualTo("01:00");
         assertThat(formatDuration(calculatePaidNightTime(LocalTime.parse("01:20", ofPattern(TIME_FORMAT))).toMillis(), TIME_FORMAT)).isEqualTo("00:11");
+    }
+
+    @Test
+    public void shouldConvertNanosecondsToDecimalHours() {
+        BigInteger timeInNanoseconds = new BigInteger("27180000000000");
+        long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanoseconds.longValue());
+        double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
+        BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
+        MatcherAssert.assertThat(decimalHoursRounded.doubleValue(), equalTo(7.55));
     }
 }
