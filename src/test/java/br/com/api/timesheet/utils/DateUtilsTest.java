@@ -1,8 +1,6 @@
 package br.com.api.timesheet.utils;
 
-import org.hamcrest.MatcherAssert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
@@ -11,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
@@ -21,11 +20,9 @@ import static java.time.LocalTime.ofSecondOfDay;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-@Ignore
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
 public class DateUtilsTest {
@@ -76,6 +73,13 @@ public class DateUtilsTest {
         long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanoseconds.longValue());
         double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
         BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
-        MatcherAssert.assertThat(decimalHoursRounded.doubleValue(), equalTo(7.55));
+        assertThat(decimalHoursRounded.doubleValue()).isEqualTo(7.55);
+    }
+
+    @Test
+    public void shouldConvertStringToDuration() {
+        String time = "PT01H05M";
+        Duration duration = Duration.parse(time);
+        assertThat(duration.toMinutes()).isEqualTo(65);
     }
 }
