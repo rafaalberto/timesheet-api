@@ -33,11 +33,11 @@ public class DateUtils {
     }
 
     public static long calculateNightShift(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if(isStartOutOfNightShift(startDateTime)) {
+        if (isStartOutOfNightShift(startDateTime)) {
             startDateTime = startDateTime.withHour(START_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue());
         }
 
-        if(isEndOutOfNightShift(endDateTime)) {
+        if (isEndOutOfNightShift(endDateTime)) {
             endDateTime = endDateTime.withHour(END_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue());
         }
 
@@ -50,6 +50,13 @@ public class DateUtils {
         return Duration.ofSeconds((long) paidNightTime);
     }
 
+    public static long convertStringtoNanos(String timeInString) {
+        String timeArray[] = timeInString.split(":");
+        String time = "PT" + timeArray[0] + "H" + timeArray[1] + "M";
+        Duration duration = Duration.parse(time);
+        return duration.toNanos();
+    }
+
     private static boolean isStartOutOfNightShift(LocalDateTime startDateTime) {
         return !startDateTime.isBefore(startDateTime.withHour(END_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue()))
                 && startDateTime.isBefore(startDateTime.withHour(START_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue()));
@@ -59,4 +66,5 @@ public class DateUtils {
         return endDateTime.isAfter(endDateTime.withHour(END_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue()))
                 && !endDateTime.isAfter(endDateTime.withHour(START_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue()));
     }
+
 }

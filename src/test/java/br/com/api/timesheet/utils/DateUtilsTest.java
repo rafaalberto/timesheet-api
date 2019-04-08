@@ -6,13 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.TimeUnit;
 
 import static br.com.api.timesheet.utils.DateUtils.*;
 import static java.time.LocalDateTime.parse;
@@ -68,18 +64,16 @@ public class DateUtilsTest {
     }
 
     @Test
-    public void shouldConvertNanosecondsToDecimalHours() {
-        BigInteger timeInNanoseconds = new BigInteger("27180000000000");
-        long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanoseconds.longValue());
-        double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
-        BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
-        assertThat(decimalHoursRounded.doubleValue()).isEqualTo(7.55);
+    public void shouldConvertStringToDuration() {
+        assertThat(convertStringtoNanos("07:33")).isEqualTo(new BigInteger("27180000000000").longValue());
     }
 
-    @Test
-    public void shouldConvertStringToDuration() {
-        String time = "PT01H05M";
-        Duration duration = Duration.parse(time);
-        assertThat(duration.toMinutes()).isEqualTo(65);
-    }
+//    @Test
+//    public void shouldConvertNanosecondsToDecimalHours() {
+//        BigInteger timeInNanoseconds = new BigInteger("27180000000000");
+//        long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanoseconds.longValue());
+//        double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
+//        BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
+//        assertThat(decimalHoursRounded.doubleValue()).isEqualTo(7.55);
+//    }
 }

@@ -5,6 +5,7 @@ import br.com.api.timesheet.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import static br.com.api.timesheet.utils.DateUtils.*;
 import static java.time.Duration.ofNanos;
@@ -12,6 +13,7 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class TimesheetReport {
 
     private TimesheetTypeEnum type;

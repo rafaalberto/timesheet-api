@@ -13,7 +13,7 @@ public enum ReportTypeEnum {
     EXTRA_HOURS_FULL("14", "Horas Extras (100%)"),
     SUMULA_90("18", "Sumula 90"),
     NIGHT_SHIFT("19", "Adicional Noturno (20%)"),
-    PAID_NIGHT_SHIFT("20", "H.N.R. (50%)");
+    PAID_NIGHT_TIME("20", "H.N.R. (50%)");
 
     private final String code;
     private final String description;

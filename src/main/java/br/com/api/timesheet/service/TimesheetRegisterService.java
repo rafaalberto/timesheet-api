@@ -4,8 +4,6 @@ import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
-import br.com.api.timesheet.entity.User;
-import br.com.api.timesheet.enumeration.ReportTypeEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
@@ -21,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
 import static java.time.Duration.ofSeconds;
@@ -88,7 +85,7 @@ public class TimesheetRegisterService {
         dockets.add(new TimesheetDocket(EXTRA_HOURS_FULL.getCode(), EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report), "0,00"));
         dockets.add(new TimesheetDocket(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), "0,00"));
         dockets.add(new TimesheetDocket(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report), "0,00"));
-        dockets.add(new TimesheetDocket(PAID_NIGHT_SHIFT.getCode(), PAID_NIGHT_SHIFT.getDescription(), getTotalPaidNightTime(report), "0,00"));
+        dockets.add(new TimesheetDocket(PAID_NIGHT_TIME.getCode(), PAID_NIGHT_TIME.getDescription(), getTotalPaidNightTime(report), "0,00"));
         return dockets;
     }
 
