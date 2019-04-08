@@ -1,9 +1,11 @@
 package br.com.api.timesheet.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.concurrent.TimeUnit;
 
 import static java.time.Duration.between;
 import static java.time.LocalDateTime.of;
@@ -23,6 +25,8 @@ public class DateUtils {
     public static final String FULL_NIGHT_SHIFT_TIME = "07:00";
     public static final int MINUTES = 60;
     public static final int SECONDS = 60;
+
+    private static final double TIME_IN_MINUTES = 60.0;
 
     public static boolean isNightShift(LocalDateTime startPeriod, LocalDateTime endPeriod) {
         LocalDateTime startNightShift = of(startPeriod.toLocalDate(), LocalTime.parse(START_TIME_NIGHT_SHIFT, ofPattern(DateUtils.TIME_FORMAT)));
@@ -55,6 +59,13 @@ public class DateUtils {
         String time = "PT" + timeArray[0] + "H" + timeArray[1] + "M";
         Duration duration = Duration.parse(time);
         return duration.toNanos();
+    }
+
+    public static double convertNanostoDecimalHours(long timeInNanos) {
+        long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanos);
+        double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
+        BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
+        return decimalHoursRounded.doubleValue();
     }
 
     private static boolean isStartOutOfNightShift(LocalDateTime startDateTime) {

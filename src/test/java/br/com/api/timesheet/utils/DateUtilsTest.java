@@ -68,12 +68,9 @@ public class DateUtilsTest {
         assertThat(convertStringtoNanos("07:33")).isEqualTo(new BigInteger("27180000000000").longValue());
     }
 
-//    @Test
-//    public void shouldConvertNanosecondsToDecimalHours() {
-//        BigInteger timeInNanoseconds = new BigInteger("27180000000000");
-//        long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanoseconds.longValue());
-//        double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
-//        BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
-//        assertThat(decimalHoursRounded.doubleValue()).isEqualTo(7.55);
-//    }
+    @Test
+    public void shouldConvertNanosecondsToDecimalHours() {
+        BigInteger timeInNanoseconds = new BigInteger("27180000000000");
+        assertThat(convertNanostoDecimalHours(timeInNanoseconds.longValue())).isEqualTo(7.55);
+    }
 }
