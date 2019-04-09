@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import static br.com.api.timesheet.utils.DateUtils.*;
+import static java.text.NumberFormat.*;
 import static java.time.Duration.ofNanos;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
@@ -25,11 +30,11 @@ public class TimesheetDocket {
     }
 
     public String getTotalHoursFormatted() {
-        return formatDuration(ofNanos(totalHours).toMillis(), DateUtils.TIME_FORMAT);
+        return formatDuration(ofNanos(totalHours).toMillis(), TIME_FORMAT);
     }
 
     public String getTotalCost() {
-        return "" + totalHours * costPerHour;
+        return getCurrencyInstance(new Locale("pt", "BR")).format(convertNanostoDecimalHours(totalHours) * costPerHour);
     }
 
 }

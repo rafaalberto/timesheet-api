@@ -41,6 +41,7 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetDocket regular = listDocket.stream().filter(f -> f.getTypeCode().equals(REGULAR_HOURS.getCode())).findFirst().get();
         assertThat(regular.getTotalHoursFormatted()).isEqualTo("31:30");
+        assertThat(regular.getTotalCost()).isEqualTo("R$ 220,50");
 
         TimesheetDocket weeklyRest = listDocket.stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST.getCode())).findFirst().get();
         assertThat(weeklyRest.getTotalHoursFormatted()).isEqualTo("16:00");
