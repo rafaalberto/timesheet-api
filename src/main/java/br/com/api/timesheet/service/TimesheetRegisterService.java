@@ -81,11 +81,11 @@ public class TimesheetRegisterService {
         Collection<TimesheetDocket> dockets = new ArrayList<>();
         dockets.add(new TimesheetDocket(REGULAR_HOURS.getCode(), REGULAR_HOURS.getDescription(), getTotalHoursWorked(report), 7.00));
         dockets.add(new TimesheetDocket(WEEKLY_REST.getCode(), WEEKLY_REST.getDescription(), getTotalWeeklyRest(report), 7.00));
-        dockets.add(new TimesheetDocket(EXTRA_HOURS_PART.getCode(), EXTRA_HOURS_PART.getDescription(), getTotalExtraHoursPart(report), 7.00));
-        dockets.add(new TimesheetDocket(EXTRA_HOURS_FULL.getCode(), EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report), 7.00));
-        dockets.add(new TimesheetDocket(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), 7.00));
-        dockets.add(new TimesheetDocket(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report), 7.00));
-        dockets.add(new TimesheetDocket(PAID_NIGHT_TIME.getCode(), PAID_NIGHT_TIME.getDescription(), getTotalPaidNightTime(report), 7.00));
+        dockets.add(new TimesheetDocket(EXTRA_HOURS_PART.getCode(), EXTRA_HOURS_PART.getDescription(), getTotalExtraHoursPart(report), 0.00));
+        dockets.add(new TimesheetDocket(EXTRA_HOURS_FULL.getCode(), EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report), 0.00));
+        dockets.add(new TimesheetDocket(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), 0.00));
+        dockets.add(new TimesheetDocket(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report), 0.00));
+        dockets.add(new TimesheetDocket(PAID_NIGHT_TIME.getCode(), PAID_NIGHT_TIME.getDescription(), getTotalPaidNightTime(report), 0.00));
         return dockets;
     }
 
