@@ -42,11 +42,6 @@ public class CompanyService {
         companyRepository.delete(findById(id));
     }
 
-    public Company findByDocument(String document) {
-        return companyRepository.findByDocument(document)
-                .orElseThrow(() -> new BusinessException("error-company-9", HttpStatus.BAD_REQUEST));
-    }
-
     private void verifyIfCompanyExist(final Company company) {
         Optional<Company> companyDB = companyRepository.findByDocument(company.getDocument());
         if (companyDB.isPresent() && companyDB.get().getId() != company.getId()) {
