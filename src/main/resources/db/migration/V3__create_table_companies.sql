@@ -1,8 +1,8 @@
 create table companies (
-    id int8 not null,
+    id bigint not null,
     document varchar(18) not null,
     name varchar(50) not null,
-    primary key (id)
+    constraint companies_pkey primary key (id)
 );
 
 alter table companies

@@ -1,5 +1,5 @@
 create table timesheet_register (
-    id int8 not null,
+    id bigint not null,
     type varchar(2) not null,
     time_in timestamp without time zone,
     lunch_start timestamp without time zone,
@@ -12,10 +12,10 @@ create table timesheet_register (
     sumula_90 bigint default 0,
     night_shift bigint default 0,
     paid_night_time bigint default 0,
-    primary key (id)
+    constraint timesheet_register_pkey primary key (id)
 );
 
 alter table timesheet_register
-drop constraint if exists UK_r43af9ap4edm43mmtq01oddj6;
+drop constraint if exists UK_timesheet_register;
 
 create sequence seq_timesheet_register start 1 increment 1;

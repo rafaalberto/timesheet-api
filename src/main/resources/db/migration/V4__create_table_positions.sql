@@ -1,7 +1,7 @@
 create table positions (
-    id int8 not null,
+    id bigint not null,
     title varchar(50) not null,
-    primary key (id)
+    constraint positions_pkey primary key (id)
 );
 
 alter table positions
