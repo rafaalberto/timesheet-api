@@ -6,7 +6,6 @@ public class EmployeeRequest {
 
     private Integer page;
     private Integer size;
-
     private Long id;
     private String name;
     private String recordNumber;
@@ -14,6 +13,10 @@ public class EmployeeRequest {
     private Long companyId;
     private String costCenter;
     private Double costHour;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Optional<Integer> getPage() {
         return Optional.ofNullable(page);

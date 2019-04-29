@@ -52,6 +52,7 @@ public class EmployeeResource {
 
     @PutMapping("/employees/{id}")
     public ResponseEntity<Employee> update(@PathVariable Long id, @Valid @RequestBody EmployeeRequest employeeRequest) {
+        employeeRequest.setId(id);
         return new ResponseEntity<Employee>(employeeService.save(employeeRequest), HttpStatus.OK);
     }
 
