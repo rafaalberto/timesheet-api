@@ -41,31 +41,31 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetDocket regular = listDocket.stream().filter(f -> f.getTypeCode().equals(REGULAR_HOURS.getCode())).findFirst().get();
         assertThat(regular.getTotalHoursFormatted()).isEqualTo("31:30");
-        assertThat(regular.getTotalCost()).isEqualTo("R$ 220,50");
+        assertThat(regular.getTotalCost()).isEqualTo("R$220,50");
 
         TimesheetDocket weeklyRest = listDocket.stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST.getCode())).findFirst().get();
         assertThat(weeklyRest.getTotalHoursFormatted()).isEqualTo("16:00");
-        assertThat(weeklyRest.getTotalCost()).isEqualTo("R$ 112,00");
+        assertThat(weeklyRest.getTotalCost()).isEqualTo("R$112,00");
 
         TimesheetDocket extraHoursPart = listDocket.stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_PART.getCode())).findFirst().get();
         assertThat(extraHoursPart.getTotalHoursFormatted()).isEqualTo("02:30");
-        assertThat(extraHoursPart.getTotalCost()).isEqualTo("R$ 0,00");
+        assertThat(extraHoursPart.getTotalCost()).isEqualTo("R$0,00");
 
         TimesheetDocket extraHoursFull = listDocket.stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_FULL.getCode())).findFirst().get();
         assertThat(extraHoursFull.getTotalHoursFormatted()).isEqualTo("07:00");
-        assertThat(extraHoursFull.getTotalCost()).isEqualTo("R$ 0,00");
+        assertThat(extraHoursFull.getTotalCost()).isEqualTo("R$0,00");
 
         TimesheetDocket sumula90 = listDocket.stream().filter(f -> f.getTypeCode().equals(SUMULA_90.getCode())).findFirst().get();
         assertThat(sumula90.getTotalHoursFormatted()).isEqualTo("05:00");
-        assertThat(sumula90.getTotalCost()).isEqualTo("R$ 0,00");
+        assertThat(sumula90.getTotalCost()).isEqualTo("R$0,00");
 
         TimesheetDocket nightShift = listDocket.stream().filter(f -> f.getTypeCode().equals(NIGHT_SHIFT.getCode())).findFirst().get();
         assertThat(nightShift.getTotalHoursFormatted()).isEqualTo("18:30");
-        assertThat(nightShift.getTotalCost()).isEqualTo("R$ 0,00");
+        assertThat(nightShift.getTotalCost()).isEqualTo("R$0,00");
 
         TimesheetDocket paidNightTime = listDocket.stream().filter(f -> f.getTypeCode().equals(PAID_NIGHT_TIME.getCode())).findFirst().get();
         assertThat(paidNightTime.getTotalHoursFormatted()).isEqualTo("02:38");
-        assertThat(paidNightTime.getTotalCost()).isEqualTo("R$ 0,00");
+        assertThat(paidNightTime.getTotalCost()).isEqualTo("R$0,00");
 
     }
 
