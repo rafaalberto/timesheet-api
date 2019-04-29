@@ -19,9 +19,18 @@ public class EmployeeService {
 
     private EmployeeCustomizedQueries employeeCustomizedQueries;
 
-    public EmployeeService(@Autowired EmployeeRepository employeeRepository, @Autowired EmployeeCustomizedQueries employeeCustomizedQueries) {
+    private CompanyService companyService;
+
+    private PositionService positionService;
+
+    public EmployeeService(@Autowired EmployeeRepository employeeRepository,
+                           @Autowired EmployeeCustomizedQueries employeeCustomizedQueries,
+                           @Autowired CompanyService companyService,
+                           @Autowired PositionService positionService ) {
         this.employeeRepository = employeeRepository;
         this.employeeCustomizedQueries = employeeCustomizedQueries;
+        this.companyService = companyService;
+        this.positionService = positionService;
     }
 
     public Page<Employee> findAll(EmployeeRequest employeeRequest) {
@@ -33,7 +42,15 @@ public class EmployeeService {
                 .orElseThrow(() -> new BusinessException("error-employee-9", HttpStatus.BAD_REQUEST));
     }
 
-    public Employee save(Employee employee) {
+    public Employee save(EmployeeRequest employeeRequest) {
+        Employee employee = new Employee();
+        employeeRequest.getId().ifPresent(id -> employee.setId(id));
+        employee.setName(employeeRequest.getName().get());
+        employee.setRecordNumber(employeeRequest.getRecordNumber().get());
+        employee.setCostCenter(employeeRequest.getCostCenter().get());
+        employee.setCostHour(employeeRequest.getCostHour().get());
+        employee.setCompany(companyService.findById(employeeRequest.getCompanyId().get()));
+        employee.setPosition(positionService.findById(employeeRequest.getPositionId().get()));
         verifyIfEmployeeExist(employee);
         return employeeRepository.save(employee);
     }
