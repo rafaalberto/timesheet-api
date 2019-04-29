@@ -1,12 +1,28 @@
 package br.com.api.timesheet.resource.employee;
 
+import br.com.api.timesheet.entity.Company;
+import br.com.api.timesheet.entity.Position;
+
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 public class EmployeeRequest {
 
     private Integer page;
     private Integer size;
+
+    private Long id;
     private String name;
+    private String recordNumber;
+    private Long positionId;
+    private Long companyId;
+    private String costCenter;
+    private Double costHour;
 
     public Optional<Integer> getPage() {
         return Optional.ofNullable(page);
