@@ -6,6 +6,7 @@ create table employees (
     company_id bigint not null,
     cost_center varchar(20),
     cost_hour numeric(10,2) default 0,
+    status varchar(1) not null,
     constraint employees_pkey primary key (id),
     constraint employees_fkey_position_id FOREIGN KEY (position_id)
         references positions (id),

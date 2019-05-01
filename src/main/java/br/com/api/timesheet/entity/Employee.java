@@ -1,5 +1,6 @@
 package br.com.api.timesheet.entity;
 
+import br.com.api.timesheet.enumeration.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,5 +49,8 @@ public class Employee implements Serializable {
 
     @Column(name = "cost_hour", precision = 10, scale = 2)
     private Double costHour;
+
+    @Column(name = "status", nullable = false, length = 1)
+    private StatusEnum status;
 
 }

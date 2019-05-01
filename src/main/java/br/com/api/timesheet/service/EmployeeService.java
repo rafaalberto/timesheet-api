@@ -43,14 +43,6 @@ public class EmployeeService {
     }
 
     public Employee save(Employee employee) {
-//        Employee employee = new Employee();
-//        employeeRequest.getId().ifPresent(id -> employee.setId(id));
-//        employee.setName(employeeRequest.getName().get());
-//        employee.setRecordNumber(employeeRequest.getRecordNumber().get());
-//        employee.setCostCenter(employeeRequest.getCostCenter().get());
-//        employee.setCostHour(employeeRequest.getCostHour().get());
-//        employee.setCompany(companyService.findById(employeeRequest.getCompanyId().get()));
-//        employee.setPosition(positionService.findById(employeeRequest.getPositionId().get()));
         verifyIfEmployeeExist(employee);
         return employeeRepository.save(employee);
     }

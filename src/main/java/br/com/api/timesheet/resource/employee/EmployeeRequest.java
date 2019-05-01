@@ -1,5 +1,7 @@
 package br.com.api.timesheet.resource.employee;
 
+import br.com.api.timesheet.enumeration.StatusEnum;
+
 import java.util.Optional;
 
 public class EmployeeRequest {
@@ -7,6 +9,7 @@ public class EmployeeRequest {
     private Integer page;
     private Integer size;
     private String name;
+    private StatusEnum status;
 
     public Optional<Integer> getPage() {
         return Optional.ofNullable(page);
@@ -20,10 +23,13 @@ public class EmployeeRequest {
         return Optional.ofNullable(name);
     }
 
+    public Optional<StatusEnum> getStatus() { return Optional.ofNullable(status); }
+
     public static final class Builder {
         private Integer page;
         private Integer size;
         private String name;
+        private StatusEnum status;
 
         private Builder() {
         }
@@ -47,11 +53,17 @@ public class EmployeeRequest {
             return this;
         }
 
+        public Builder withStatus(StatusEnum status) {
+            this.status = status;
+            return this;
+        }
+
         public EmployeeRequest build() {
             EmployeeRequest positionRequest = new EmployeeRequest();
             positionRequest.page = this.page;
             positionRequest.size = this.size;
             positionRequest.name = this.name;
+            positionRequest.status = this.status;
             return positionRequest;
         }
     }

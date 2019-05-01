@@ -1,7 +1,9 @@
 package br.com.api.timesheet.resource.employee;
 
 import br.com.api.timesheet.entity.Employee;
+import br.com.api.timesheet.enumeration.StatusEnum;
 import br.com.api.timesheet.service.EmployeeService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -25,12 +27,14 @@ public class EmployeeResource {
     public ResponseEntity<Page<Employee>> findAll(
             @RequestParam(value = "page", required = false) final Integer page,
             @RequestParam(value = "size", required = false) final Integer size,
-            @RequestParam(value = "name", required = false) final String name) {
+            @RequestParam(value = "name", required = false) final String name,
+            @RequestParam(value = "status", required = false) final String status) {
 
         final EmployeeRequest employeeRequest = EmployeeRequest.Builder.builder()
                 .withPage(page)
                 .withSize(size)
                 .withName(name)
+                .withStatus(StringUtils.isNotBlank(status) ? StatusEnum.valueOf(status) : null)
                 .build();
 
         Page<Employee> employees = employeeService.findAll(employeeRequest);

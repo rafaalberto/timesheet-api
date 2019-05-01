@@ -29,6 +29,11 @@ public class EmployeeCustomizedQueries extends GenericRepository {
             params.put("name", employeeRequest.getName().get());
         }
 
+        if (employeeRequest.getStatus().isPresent()) {
+            buildOperator(builderQuery).append(" e.status = :status ");
+            params.put("status", employeeRequest.getStatus().get());
+        }
+
         Pageable pageable = PageRequest.of(employeeRequest.getPage().orElse(DEFAULT_PAGE),
                 employeeRequest.getSize().orElse(DEFAULT_SIZE));
 
