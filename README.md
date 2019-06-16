@@ -14,3 +14,4 @@ The main technologies are: <br/>
 - JWT (Security)
 - Flyway (Migration)
 - Swagger (Documentation)
+- Unit Tests and TDD
