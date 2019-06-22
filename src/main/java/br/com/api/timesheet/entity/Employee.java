@@ -53,4 +53,6 @@ public class Employee implements Serializable {
     @Column(name = "status", nullable = false, length = 1)
     private StatusEnum status;
 
+    public Employee() {}
+
 }

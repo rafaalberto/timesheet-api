@@ -54,13 +54,14 @@ public class TimesheetRegisterService {
         timesheetRegisterRepository.delete(findById(id));
     }
 
-    public Collection<TimesheetReport> listReport() {
-        return timesheetRegisterRepository.listReport();
+    public Collection<TimesheetReport> listReport(Long employee, Integer year, Integer month) {
+        return timesheetRegisterRepository.listReport(employee, year, month);
     }
 
-    public Collection<TimesheetDailyReport> listDailyReport() {
+    public Collection<TimesheetDailyReport> listDailyReport(Long employee, Integer year, Integer month) {
+        System.out.println(employee);
         List<TimesheetDailyReport> dailyReport = new ArrayList();
-        List<TimesheetRegister> registers = timesheetRegisterRepository.findAll(new Sort(Sort.Direction.DESC,"timeIn"));
+        List<TimesheetRegister> registers = timesheetRegisterRepository.findByEmployeeAndPeriod(employee, year, month);
         if(!registers.isEmpty()){
             registers.stream().forEach(register -> {
                 TimesheetDailyReport report = new TimesheetDailyReport();
@@ -81,8 +82,8 @@ public class TimesheetRegisterService {
         return dailyReport;
     }
 
-    public Collection<TimesheetDocket> listDocket() {
-        Collection<TimesheetReport> report = listReport();
+    public Collection<TimesheetDocket> listDocket(Long employee, Integer year, Integer month) {
+        Collection<TimesheetReport> report = listReport(employee, year, month);
         Collection<TimesheetDocket> dockets = new ArrayList<>();
         dockets.add(new TimesheetDocket(REGULAR_HOURS.getCode(), REGULAR_HOURS.getDescription(), getTotalHoursWorked(report), 7.00));
         dockets.add(new TimesheetDocket(WEEKLY_REST.getCode(), WEEKLY_REST.getDescription(), getTotalWeeklyRest(report), 7.00));

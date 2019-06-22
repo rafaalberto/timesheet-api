@@ -40,8 +40,8 @@ public class TimesheetRegisterServiceTest {
 
     @Test
     public void shouldListReportDocket(){
-        when(timesheetRegisterRepository.listReport()).thenReturn(listReport());
-        Collection<TimesheetDocket> listDocket = timesheetRegisterService.listDocket();
+        when(timesheetRegisterRepository.listReport(1L, 2019, 6)).thenReturn(listReport());
+        Collection<TimesheetDocket> listDocket = timesheetRegisterService.listDocket(1L, 2019, 6);
         assertThat(listDocket.size()).isEqualTo(REPORT_SIZE);
 
         TimesheetDocket regular = listDocket.stream().filter(f -> f.getTypeCode().equals(REGULAR_HOURS.getCode())).findFirst().get();

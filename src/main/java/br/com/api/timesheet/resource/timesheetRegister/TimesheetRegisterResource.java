@@ -24,21 +24,24 @@ public class TimesheetRegisterResource {
         this.timesheetRegisterService = timesheetRegisterService;
     }
 
-    @GetMapping("/timesheet/daily")
-    public ResponseEntity<Collection<TimesheetDailyReport>> listDailyReport() {
-        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport();
+    @GetMapping("/timesheet/report/{employee}/{year}/{month}")
+    public ResponseEntity<Collection<TimesheetReport>> listReport(
+            @PathVariable Long employee, @PathVariable Integer year, @PathVariable Integer month) {
+        Collection<TimesheetReport> timesheetReports = timesheetRegisterService.listReport(employee, year, month);
         return ResponseEntity.ok(timesheetReports);
     }
 
-    @GetMapping("/timesheet/report")
-    public ResponseEntity<Collection<TimesheetReport>> listReport() {
-        Collection<TimesheetReport> timesheetReports = timesheetRegisterService.listReport();
+    @GetMapping("/timesheet/daily/{employee}/{year}/{month}")
+    public ResponseEntity<Collection<TimesheetDailyReport>> listDailyReport(
+            @PathVariable Long employee, @PathVariable Integer year, @PathVariable Integer month) {
+        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport(employee, year, month);
         return ResponseEntity.ok(timesheetReports);
     }
 
-    @GetMapping("/timesheet/docket")
-    public ResponseEntity<Collection<TimesheetDocket>> listDocket() {
-        Collection<TimesheetDocket> timesheetDocket = timesheetRegisterService.listDocket();
+    @GetMapping("/timesheet/docket/{employee}/{year}/{month}")
+    public ResponseEntity<Collection<TimesheetDocket>> listDocket(
+            @PathVariable Long employee, @PathVariable Integer year, @PathVariable Integer month) {
+        Collection<TimesheetDocket> timesheetDocket = timesheetRegisterService.listDocket(employee, year, month);
         return ResponseEntity.ok(timesheetDocket);
     }
 
