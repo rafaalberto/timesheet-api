@@ -3,6 +3,7 @@ package br.com.api.timesheet.service;
 import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
+import br.com.api.timesheet.entity.Employee;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.exception.BusinessException;
@@ -29,10 +30,14 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 public class TimesheetRegisterService {
 
     public static final String SEPARATOR_CHARACTER = "-";
-    private TimesheetRegisterRepository timesheetRegisterRepository;
 
-    public TimesheetRegisterService(@Autowired TimesheetRegisterRepository timesheetRegisterRepository) {
+    private TimesheetRegisterRepository timesheetRegisterRepository;
+    private EmployeeService employeeService;
+
+    public TimesheetRegisterService(@Autowired TimesheetRegisterRepository timesheetRegisterRepository,
+                                    @Autowired EmployeeService employeeService) {
         this.timesheetRegisterRepository = timesheetRegisterRepository;
+        this.employeeService = employeeService;
     }
 
     public TimesheetRegister save(TimesheetRequest request) {
@@ -93,6 +98,12 @@ public class TimesheetRegisterService {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister register = new TimesheetRegister();
         request.getId().ifPresent(id -> register.setId(id));
+        if(request.getEmployeeId().isPresent()) {
+            Employee employee = employeeService.findById(request.getEmployeeId().get());
+            register.setEmployee(employee);
+        }
+        register.setMonthReference(request.getMonthReference());
+        register.setYearReference(request.getYearReference());
         register.setType(request.getType());
         register.setTimeIn(parse(request.getTimeIn(), formatter));
         register.setLunchStart(parse(request.getLunchStart(), formatter));

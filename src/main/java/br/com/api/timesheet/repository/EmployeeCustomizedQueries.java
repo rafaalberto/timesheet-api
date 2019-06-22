@@ -29,6 +29,16 @@ public class EmployeeCustomizedQueries extends GenericRepository {
             params.put("name", employeeRequest.getName().get());
         }
 
+        if (employeeRequest.getRecordNumber().isPresent()) {
+            buildOperator(builderQuery).append(" lower(e.recordNumber) like lower (concat('%', :recordNumber, '%'))");
+            params.put("recordNumber", employeeRequest.getRecordNumber().get());
+        }
+
+        if (employeeRequest.getCompanyId().isPresent()) {
+            buildOperator(builderQuery).append(" e.company.id = :companyId ");
+            params.put("companyId", employeeRequest.getCompanyId().get());
+        }
+
         if (employeeRequest.getStatus().isPresent()) {
             buildOperator(builderQuery).append(" e.status = :status ");
             params.put("status", employeeRequest.getStatus().get());

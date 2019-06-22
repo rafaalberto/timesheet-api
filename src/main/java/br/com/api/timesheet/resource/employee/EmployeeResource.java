@@ -28,12 +28,16 @@ public class EmployeeResource {
             @RequestParam(value = "page", required = false) final Integer page,
             @RequestParam(value = "size", required = false) final Integer size,
             @RequestParam(value = "name", required = false) final String name,
+            @RequestParam(value = "recordNumber", required = false) final String recordNumber,
+            @RequestParam(value = "companyId", required = false) final Long companyId,
             @RequestParam(value = "status", required = false) final String status) {
 
         final EmployeeRequest employeeRequest = EmployeeRequest.Builder.builder()
                 .withPage(page)
                 .withSize(size)
                 .withName(name)
+                .withRecordNumber(recordNumber)
+                .withCompanyId(companyId)
                 .withStatus(StringUtils.isNotBlank(status) ? StatusEnum.valueOf(status) : null)
                 .build();
 

@@ -9,6 +9,9 @@ import java.util.Optional;
 public class TimesheetRequest {
 
     private Long id;
+    private Long employeeId;
+    private Integer monthReference;
+    private Integer yearReference;
     private TimesheetTypeEnum type;
     private String timeIn;
     private String lunchStart;
@@ -20,5 +23,6 @@ public class TimesheetRequest {
     public Optional<Long> getId() {
         return Optional.ofNullable(id);
     }
+    public Optional<Long> getEmployeeId() { return Optional.ofNullable(employeeId); }
 
 }

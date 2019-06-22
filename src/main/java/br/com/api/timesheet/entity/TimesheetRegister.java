@@ -2,6 +2,7 @@ package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -32,6 +33,17 @@ public class TimesheetRegister implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCE_NAME)
     @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long id;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    @Column(name = "month_reference", length = 2)
+    private Integer monthReference;
+
+    @Column(name = "year_reference", length = 4)
+    private Integer yearReference;
 
     @Column(name = "type", nullable = false, length = 2)
     private TimesheetTypeEnum type;
@@ -95,10 +107,6 @@ public class TimesheetRegister implements Serializable {
 
     public String getPaidNightTime() {
         return formatDuration(paidNightTime.toMillis(), DateUtils.TIME_FORMAT);
-    }
-
-    public void setHoursWorked(Duration hoursWorked) {
-        this.hoursJourney = hoursWorked;
     }
 
     @PrePersist @PreUpdate
