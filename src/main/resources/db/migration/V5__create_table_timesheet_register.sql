@@ -17,7 +17,7 @@ create table timesheet_register (
     paid_night_time bigint default 0,
     constraint timesheet_register_pkey primary key (id),
     constraint timesheet_register_fkey_employee_id FOREIGN KEY (employee_id)
-        references positions (id)
+        references employees (id)
 );
 
 alter table timesheet_register

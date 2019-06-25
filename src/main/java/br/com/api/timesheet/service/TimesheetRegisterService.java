@@ -82,11 +82,13 @@ public class TimesheetRegisterService {
         return dailyReport;
     }
 
-    public Collection<TimesheetDocket> listDocket(Long employee, Integer year, Integer month) {
-        Collection<TimesheetReport> report = listReport(employee, year, month);
+    public Collection<TimesheetDocket> listDocket(Long employeeId, Integer year, Integer month) {
+        Employee employee = employeeService.findById(employeeId);
+        double costPerHour = employee != null ? employee.getCostHour() : Double.valueOf(0);
+        Collection<TimesheetReport> report = listReport(employeeId, year, month);
         Collection<TimesheetDocket> dockets = new ArrayList<>();
-        dockets.add(new TimesheetDocket(REGULAR_HOURS.getCode(), REGULAR_HOURS.getDescription(), getTotalHoursWorked(report), 7.00));
-        dockets.add(new TimesheetDocket(WEEKLY_REST.getCode(), WEEKLY_REST.getDescription(), getTotalWeeklyRest(report), 7.00));
+        dockets.add(new TimesheetDocket(REGULAR_HOURS.getCode(), REGULAR_HOURS.getDescription(), getTotalHoursWorked(report), costPerHour));
+        dockets.add(new TimesheetDocket(WEEKLY_REST.getCode(), WEEKLY_REST.getDescription(), getTotalWeeklyRest(report), costPerHour));
         dockets.add(new TimesheetDocket(EXTRA_HOURS_PART.getCode(), EXTRA_HOURS_PART.getDescription(), getTotalExtraHoursPart(report), 0.00));
         dockets.add(new TimesheetDocket(EXTRA_HOURS_FULL.getCode(), EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report), 0.00));
         dockets.add(new TimesheetDocket(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), 0.00));

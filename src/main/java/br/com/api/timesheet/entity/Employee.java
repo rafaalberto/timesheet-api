@@ -9,6 +9,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Locale;
+
+import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
+import static java.text.NumberFormat.getCurrencyInstance;
 
 @Entity
 @Data
@@ -53,6 +57,8 @@ public class Employee implements Serializable {
     @Column(name = "status", nullable = false, length = 1)
     private StatusEnum status;
 
-    public Employee() {}
+    public String getCostHourFormatted() {
+        return getCurrencyInstance(new Locale("pt", "BR")).format(costHour);
+    }
 
 }

@@ -2,6 +2,8 @@ package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
+import br.com.api.timesheet.entity.Employee;
+import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.repository.EmployeeRepository;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
 import org.junit.Before;
@@ -40,6 +42,9 @@ public class TimesheetRegisterServiceTest {
 
     @Test
     public void shouldListReportDocket(){
+        Employee employee = new Employee();
+        employee.setCostHour(7.00);
+        when(employeeService.findById(1L)).thenReturn(employee);
         when(timesheetRegisterRepository.listReport(1L, 2019, 6)).thenReturn(listReport());
         Collection<TimesheetDocket> listDocket = timesheetRegisterService.listDocket(1L, 2019, 6);
         assertThat(listDocket.size()).isEqualTo(REPORT_SIZE);
