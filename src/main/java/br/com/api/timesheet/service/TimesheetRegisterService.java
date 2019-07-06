@@ -59,7 +59,6 @@ public class TimesheetRegisterService {
     }
 
     public Collection<TimesheetDailyReport> listDailyReport(Long employee, Integer year, Integer month) {
-        System.out.println(employee);
         List<TimesheetDailyReport> dailyReport = new ArrayList();
         List<TimesheetRegister> registers = timesheetRegisterRepository.findByEmployeeAndPeriod(employee, year, month);
         if(!registers.isEmpty()){
