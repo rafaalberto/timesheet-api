@@ -11,6 +11,7 @@ public class BonusRequest {
     private Long employeeId;
     private Integer monthReference;
     private Integer yearReference;
+    private String code;
     private String description;
     private Double cost;
 

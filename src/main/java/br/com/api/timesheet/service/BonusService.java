@@ -41,6 +41,7 @@ public class BonusService {
         }
         bonus.setMonthReference(request.getMonthReference());
         bonus.setYearReference(request.getYearReference());
+        bonus.setCode(request.getCode());
         bonus.setDescription(request.getDescription());
         bonus.setCost(request.getCost());
         return bonusRepository.save(bonus);

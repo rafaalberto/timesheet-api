@@ -32,6 +32,9 @@ public class Bonus implements Serializable {
     @Column(name = "year_reference", length = 4)
     private Integer yearReference;
 
+    @Column(name = "code", length = 5)
+    private String code;
+
     @Column(name = "description", length = 50)
     private String description;
 

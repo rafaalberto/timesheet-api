@@ -1,15 +1,12 @@
 package br.com.api.timesheet.dto;
 
-import br.com.api.timesheet.utils.DateUtils;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import java.text.NumberFormat;
 import java.util.Locale;
 
-import static br.com.api.timesheet.utils.DateUtils.*;
-import static java.text.NumberFormat.*;
+import static br.com.api.timesheet.utils.DateUtils.TIME_FORMAT;
+import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
+import static java.text.NumberFormat.getCurrencyInstance;
 import static java.time.Duration.ofNanos;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 

@@ -3,6 +3,7 @@ create table bonuses (
     employee_id bigint not null,
     month_reference numeric(4) not null,
     year_reference numeric(4) not null,
+    code varchar(5),
     description varchar(50) not null,
     cost numeric(10,2) default 0,
     constraint bonuses_pkey primary key (id),
