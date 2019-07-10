@@ -3,6 +3,7 @@ package br.com.api.timesheet.service;
 import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
+import br.com.api.timesheet.entity.Bonus;
 import br.com.api.timesheet.entity.Employee;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
@@ -11,7 +12,6 @@ import br.com.api.timesheet.repository.TimesheetRegisterRepository;
 import br.com.api.timesheet.resource.timesheetRegister.TimesheetRequest;
 import br.com.api.timesheet.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -33,11 +33,14 @@ public class TimesheetRegisterService {
 
     private TimesheetRegisterRepository timesheetRegisterRepository;
     private EmployeeService employeeService;
+    private BonusService bonusService;
 
     public TimesheetRegisterService(@Autowired TimesheetRegisterRepository timesheetRegisterRepository,
-                                    @Autowired EmployeeService employeeService) {
+                                    @Autowired EmployeeService employeeService,
+                                    @Autowired BonusService bonusService) {
         this.timesheetRegisterRepository = timesheetRegisterRepository;
         this.employeeService = employeeService;
+        this.bonusService = bonusService;
     }
 
     public TimesheetRegister save(TimesheetRequest request) {
@@ -93,6 +96,7 @@ public class TimesheetRegisterService {
         dockets.add(new TimesheetDocket(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), 0.00));
         dockets.add(new TimesheetDocket(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report), 0.00));
         dockets.add(new TimesheetDocket(PAID_NIGHT_TIME.getCode(), PAID_NIGHT_TIME.getDescription(), getTotalPaidNightTime(report), 0.00));
+        addBonuses(employeeId, year, month, dockets);
         return dockets;
     }
 
@@ -156,6 +160,15 @@ public class TimesheetRegisterService {
         return report.stream()
                 .filter(r -> r.getType().equals(TimesheetTypeEnum.REGULAR))
                 .mapToLong(r -> r.getHoursWorked()).sum();
+    }
+
+    private void addBonuses(Long employeeId, Integer year, Integer month, Collection<TimesheetDocket> dockets) {
+        Collection<Bonus> bonuses = bonusService.findByEmployeeAndPeriod(employeeId, year, month);
+        if(!bonuses.isEmpty()){
+            bonuses.stream().forEach(bonus -> {
+                dockets.add(new TimesheetDocket(bonus.getCode(), bonus.getDescription(), bonus.getCost()));
+            });
+        }
     }
 
 }

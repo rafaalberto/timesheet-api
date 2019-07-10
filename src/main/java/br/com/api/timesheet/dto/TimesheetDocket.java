@@ -17,21 +17,28 @@ public class TimesheetDocket {
     private String typeDescription;
     private long totalHours;
     private double costPerHour;
-    private String totalCost;
+    private double totalCost;
 
     public TimesheetDocket(String typeCode, String typeDescription, long totalHours, double costPerHour) {
         this.typeCode = typeCode;
         this.typeDescription = typeDescription;
         this.totalHours = totalHours;
         this.costPerHour = costPerHour;
+        this.totalCost = convertNanostoDecimalHours(totalHours) * costPerHour;
+    }
+
+    public TimesheetDocket(String typeCode, String typeDescription, double totalCost) {
+        this.typeCode = typeCode;
+        this.typeDescription = typeDescription;
+        this.totalCost = totalCost;
     }
 
     public String getTotalHoursFormatted() {
         return formatDuration(ofNanos(totalHours).toMillis(), TIME_FORMAT);
     }
 
-    public String getTotalCost() {
-        return getCurrencyInstance(new Locale("pt", "BR")).format(convertNanostoDecimalHours(totalHours) * costPerHour);
+    public String getTotalCostFormatted() {
+        return getCurrencyInstance(new Locale("pt", "BR")).format(getTotalCost());
     }
 
 }
