@@ -48,6 +48,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "type", nullable = false, length = 2)
     private TimesheetTypeEnum type;
 
+    @Column(name = "cost_hour", precision = 10, scale = 2)
+    private Double costHour;
+
     @Column(name = "time_in")
     private LocalDateTime timeIn;
 

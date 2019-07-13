@@ -1,10 +1,9 @@
 package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.dto.TimesheetDocket;
+import br.com.api.timesheet.dto.TimesheetDocketItem;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.Employee;
-import br.com.api.timesheet.entity.TimesheetRegister;
-import br.com.api.timesheet.repository.EmployeeRepository;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 public class TimesheetRegisterServiceTest {
 
-    public static final int REPORT_SIZE = 7;
+    public static final int REPORT_SIZE = 8;
 
     private TimesheetRegisterService timesheetRegisterService;
 
@@ -46,39 +45,38 @@ public class TimesheetRegisterServiceTest {
     @Test
     public void shouldListReportDocket(){
         Employee employee = new Employee();
-        employee.setCostHour(7.00);
         when(employeeService.findById(1L)).thenReturn(employee);
         when(timesheetRegisterRepository.listReport(1L, 2019, 6)).thenReturn(listReport());
-        Collection<TimesheetDocket> listDocket = timesheetRegisterService.listDocket(1L, 2019, 6);
-        assertThat(listDocket.size()).isEqualTo(REPORT_SIZE);
+        TimesheetDocket docket = timesheetRegisterService.listDocket(1L, 2019, 6);
+        assertThat(docket.getItems().size()).isEqualTo(REPORT_SIZE);
 
-        TimesheetDocket regular = listDocket.stream().filter(f -> f.getTypeCode().equals(REGULAR_HOURS.getCode())).findFirst().get();
+        TimesheetDocketItem regular = docket.getItems().stream().filter(f -> f.getTypeCode().equals(REGULAR_HOURS.getCode())).findFirst().get();
         assertThat(regular.getTotalHoursFormatted()).isEqualTo("31:30");
         assertThat(regular.getTotalCostFormatted()).isEqualTo("R$ 220,50");
 
-        TimesheetDocket weeklyRest = listDocket.stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST.getCode())).findFirst().get();
+        TimesheetDocketItem weeklyRest = docket.getItems().stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST.getCode())).findFirst().get();
         assertThat(weeklyRest.getTotalHoursFormatted()).isEqualTo("16:00");
         assertThat(weeklyRest.getTotalCostFormatted()).isEqualTo("R$ 112,00");
 
-        TimesheetDocket extraHoursPart = listDocket.stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_PART.getCode())).findFirst().get();
+        TimesheetDocketItem extraHoursPart = docket.getItems().stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_PART.getCode())).findFirst().get();
         assertThat(extraHoursPart.getTotalHoursFormatted()).isEqualTo("02:30");
-        assertThat(extraHoursPart.getTotalCostFormatted()).isEqualTo("R$ 0,00");
+        assertThat(extraHoursPart.getTotalCostFormatted()).isEqualTo("R$ 17,50");
 
-        TimesheetDocket extraHoursFull = listDocket.stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_FULL.getCode())).findFirst().get();
+        TimesheetDocketItem extraHoursFull = docket.getItems().stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_FULL.getCode())).findFirst().get();
         assertThat(extraHoursFull.getTotalHoursFormatted()).isEqualTo("07:00");
-        assertThat(extraHoursFull.getTotalCostFormatted()).isEqualTo("R$ 0,00");
+        assertThat(extraHoursFull.getTotalCostFormatted()).isEqualTo("R$ 98,00");
 
-        TimesheetDocket sumula90 = listDocket.stream().filter(f -> f.getTypeCode().equals(SUMULA_90.getCode())).findFirst().get();
+        TimesheetDocketItem sumula90 = docket.getItems().stream().filter(f -> f.getTypeCode().equals(SUMULA_90.getCode())).findFirst().get();
         assertThat(sumula90.getTotalHoursFormatted()).isEqualTo("05:00");
-        assertThat(sumula90.getTotalCostFormatted()).isEqualTo("R$ 0,00");
+        assertThat(sumula90.getTotalCostFormatted()).isEqualTo("R$ 35,00");
 
-        TimesheetDocket nightShift = listDocket.stream().filter(f -> f.getTypeCode().equals(NIGHT_SHIFT.getCode())).findFirst().get();
+        TimesheetDocketItem nightShift = docket.getItems().stream().filter(f -> f.getTypeCode().equals(NIGHT_SHIFT.getCode())).findFirst().get();
         assertThat(nightShift.getTotalHoursFormatted()).isEqualTo("18:30");
-        assertThat(nightShift.getTotalCostFormatted()).isEqualTo("R$ 0,00");
+        assertThat(nightShift.getTotalCostFormatted()).isEqualTo("R$ 51,80");
 
-        TimesheetDocket paidNightTime = listDocket.stream().filter(f -> f.getTypeCode().equals(PAID_NIGHT_TIME.getCode())).findFirst().get();
+        TimesheetDocketItem paidNightTime = docket.getItems().stream().filter(f -> f.getTypeCode().equals(PAID_NIGHT_TIME.getCode())).findFirst().get();
         assertThat(paidNightTime.getTotalHoursFormatted()).isEqualTo("02:38");
-        assertThat(paidNightTime.getTotalCostFormatted()).isEqualTo("R$ 0,00");
+        assertThat(paidNightTime.getTotalCostFormatted()).isEqualTo("R$ 27,62");
 
     }
 
@@ -87,6 +85,7 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetReport regularReport = new TimesheetReport();
         regularReport.setType(REGULAR);
+        regularReport.setCostHour(7.00);
         regularReport.setHoursWorked(convertStringtoNanos("31:30"));
         regularReport.setHoursJourney(convertStringtoNanos("32:00"));
         regularReport.setWeeklyRest(convertStringtoNanos("00:00"));
@@ -98,6 +97,7 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetReport dayOffReport = new TimesheetReport();
         dayOffReport.setType(DAY_OFF);
+        dayOffReport.setCostHour(7.00);
         dayOffReport.setHoursWorked(convertStringtoNanos("00:00"));
         dayOffReport.setHoursJourney(convertStringtoNanos("00:00"));
         dayOffReport.setWeeklyRest(convertStringtoNanos("16:00"));
@@ -109,6 +109,7 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetReport holidayReport = new TimesheetReport();
         holidayReport.setType(HOLIDAY);
+        holidayReport.setCostHour(7.00);
         holidayReport.setHoursWorked(convertStringtoNanos("07:00"));
         holidayReport.setHoursJourney(convertStringtoNanos("08:00"));
         holidayReport.setWeeklyRest(convertStringtoNanos("00:00"));

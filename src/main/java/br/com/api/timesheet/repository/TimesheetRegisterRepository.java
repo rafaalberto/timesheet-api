@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface TimesheetRegisterRepository extends JpaRepository<TimesheetRegister, Long> {
 
-    @Query("select new br.com.api.timesheet.dto.TimesheetReport (reg.type, sum(reg.hoursWorked), sum(reg.hoursJourney), " +
+    @Query("select new br.com.api.timesheet.dto.TimesheetReport (reg.type, max(reg.costHour), sum(reg.hoursWorked), sum(reg.hoursJourney), " +
             "sum(reg.weeklyRest), sum(reg.extraHours), sum(reg.sumula90), " +
             "sum(reg.nightShift), sum(reg.paidNightTime)) " +
             "from TimesheetRegister reg " +

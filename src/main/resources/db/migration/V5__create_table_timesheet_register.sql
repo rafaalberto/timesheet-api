@@ -4,6 +4,7 @@ create table timesheet_register (
     month_reference numeric(4) not null,
     year_reference numeric(4) not null,
     type varchar(2) not null,
+    cost_hour numeric(10,2) default 0,
     time_in timestamp without time zone,
     lunch_start timestamp without time zone,
     lunch_end timestamp without time zone,

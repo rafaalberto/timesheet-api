@@ -12,6 +12,7 @@ public class TimesheetRequest {
     private Long employeeId;
     private Integer monthReference;
     private Integer yearReference;
+    private String costHour;
     private TimesheetTypeEnum type;
     private String timeIn;
     private String lunchStart;
