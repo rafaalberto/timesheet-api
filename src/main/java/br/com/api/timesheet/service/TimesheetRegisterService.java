@@ -100,22 +100,11 @@ public class TimesheetRegisterService {
         Collection<TimesheetDocketItem> docketItems = new ArrayList<>();
         setExtraHoursCost(report, timesheetDocket, docketItems);
         setBonuses(docketItems, bonuses);
-
-        double totalWeeklyRestComplement =
-                docketItems.stream().filter(item ->
-                        !item.getTypeCode().equals(REGULAR_HOURS.getCode()) &&
-                        !item.getTypeCode().equals(WEEKLY_REST.getCode()) &&
-                        !item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode()))
-                .mapToDouble(item -> item.getTotalCost()).sum();
-
-        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
-        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
-
-        totalWeeklyRestComplement = totalWeeklyRestComplement * regularHours / weeklyRest;
-
-        docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode())).findFirst().get().setTotalCost(totalWeeklyRestComplement);
+        setWeeklyRestComplement(docketItems);
 
         timesheetDocket.setItems(docketItems);
+
+        timesheetDocket.setTotal(timesheetDocket.getItems().stream().mapToDouble(items -> items.getTotalCost()).sum());
 
         return timesheetDocket;
     }
@@ -129,6 +118,25 @@ public class TimesheetRegisterService {
         docketItems.add(new TimesheetDocketItem(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), docket.getFiftyPercent()));
         docketItems.add(new TimesheetDocketItem(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report), docket.getTwentyPercent()));
         setPaidNightTimeCost(report, docket, docketItems);
+    }
+
+    private void setWeeklyRestComplement(Collection<TimesheetDocketItem> docketItems) {
+        double totalWeeklyRestComplement =
+                docketItems.stream().filter(item ->
+                        !item.getTypeCode().equals(REGULAR_HOURS.getCode())
+                                && !item.getTypeCode().equals(WEEKLY_REST.getCode())
+                                && !item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode()))
+                        .mapToDouble(item -> item.getTotalCost()).sum();
+
+        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
+        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
+
+        if(weeklyRest > BigInteger.ZERO.intValue()){
+            totalWeeklyRestComplement = totalWeeklyRestComplement * regularHours / weeklyRest;
+
+            docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode()))
+                    .findFirst().get().setTotalCost(totalWeeklyRestComplement);
+        }
     }
 
     private void setPaidNightTimeCost(Collection<TimesheetReport> report, TimesheetDocket docket, Collection<TimesheetDocketItem> docketItems) {

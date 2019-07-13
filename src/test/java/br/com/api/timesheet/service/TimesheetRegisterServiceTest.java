@@ -44,8 +44,6 @@ public class TimesheetRegisterServiceTest {
 
     @Test
     public void shouldListReportDocket(){
-        Employee employee = new Employee();
-        when(employeeService.findById(1L)).thenReturn(employee);
         when(timesheetRegisterRepository.listReport(1L, 2019, 6)).thenReturn(listReport());
         TimesheetDocket docket = timesheetRegisterService.listDocket(1L, 2019, 6);
         assertThat(docket.getItems().size()).isEqualTo(REPORT_SIZE);
@@ -57,6 +55,10 @@ public class TimesheetRegisterServiceTest {
         TimesheetDocketItem weeklyRest = docket.getItems().stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST.getCode())).findFirst().get();
         assertThat(weeklyRest.getTotalHoursFormatted()).isEqualTo("16:00");
         assertThat(weeklyRest.getTotalCostFormatted()).isEqualTo("R$ 112,00");
+
+        TimesheetDocketItem weeklyRestComplement = docket.getItems().stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode())).findFirst().get();
+        assertThat(weeklyRestComplement.getTotalHoursFormatted()).isEqualTo("00:00");
+        assertThat(weeklyRestComplement.getTotalCostFormatted()).isEqualTo("R$ 452,65");
 
         TimesheetDocketItem extraHoursPart = docket.getItems().stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_PART.getCode())).findFirst().get();
         assertThat(extraHoursPart.getTotalHoursFormatted()).isEqualTo("02:30");
@@ -78,6 +80,9 @@ public class TimesheetRegisterServiceTest {
         assertThat(paidNightTime.getTotalHoursFormatted()).isEqualTo("02:38");
         assertThat(paidNightTime.getTotalCostFormatted()).isEqualTo("R$ 27,62");
 
+        TimesheetDocket timesheetDocket = new TimesheetDocket();
+        timesheetDocket.setTotal(docket.getItems().stream().mapToDouble(item -> item.getTotalCost()).sum());
+        assertThat(timesheetDocket.getTotalFormatted()).isEqualTo("R$ 1.015,06");
     }
 
     private List<TimesheetReport> listReport() {
