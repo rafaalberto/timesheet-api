@@ -50,13 +50,13 @@ public class CompanyResource {
     @PostMapping("/companies")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Company> create(@Valid @RequestBody Company company) {
-        return new ResponseEntity<Company>(companyService.save(company), HttpStatus.CREATED);
+        return new ResponseEntity<>(companyService.save(company), HttpStatus.CREATED);
     }
 
     @PutMapping("/companies/{id}")
     public ResponseEntity<Company> update(@PathVariable Long id, @Valid @RequestBody Company company) {
         company.setId(id);
-        return new ResponseEntity<Company>(companyService.save(company), HttpStatus.OK);
+        return new ResponseEntity<>(companyService.save(company), HttpStatus.OK);
     }
 
     @DeleteMapping("/companies/{id}")

@@ -55,7 +55,7 @@ public class TimesheetRegisterRepositoryDocketTest {
 
     private void setCompany() {
         Company company = new Company();
-        company.setDocument("123");
+        company.setDocument("31.749.356/0001-56");
         company.setName("Company 1");
         companyRepository.save(company);
     }
@@ -63,7 +63,7 @@ public class TimesheetRegisterRepositoryDocketTest {
     private void setEmployee() {
         Employee employee = new Employee();
         employee.setId(1L);
-        employee.setCompany(companyRepository.findByDocument("123").get());
+        employee.setCompany(companyRepository.findByDocument("31.749.356/0001-56").get());
         employee.setPosition(positionRepository.findByTitle("Driver").get());
         employee.setName("Rafael");
         employee.setRecordNumber("1703");

@@ -2,6 +2,7 @@ package br.com.api.timesheet.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,14 +25,18 @@ public class Company implements Serializable {
     @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long id;
 
-    @NotBlank
+    @CNPJ(message = "error-company-4")
+    @NotBlank(message = "error-company-1")
     @Size(max = 18)
     @Column(name = "document", unique = true, nullable = false, length = 18)
     private String document;
 
-    @NotBlank
-    @Size(min = 3, max = 50)
+    @NotBlank(message = "error-company-2")
+    @Size(min = 3, max = 50, message = "error-company-3")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    public void setName(String name) {
+        this.name = name.toUpperCase();
+    }
 }
