@@ -49,12 +49,14 @@ public class TimesheetRegisterRepositoryDocketTest {
 
     private void setPosition() {
         Position position = new Position();
+        position.setId(1L);
         position.setTitle("Driver");
         positionRepository.save(position);
     }
 
     private void setCompany() {
         Company company = new Company();
+        company.setId(1L);
         company.setDocument("31.749.356/0001-56");
         company.setName("Company 1");
         companyRepository.save(company);
@@ -64,9 +66,10 @@ public class TimesheetRegisterRepositoryDocketTest {
         Employee employee = new Employee();
         employee.setId(1L);
         employee.setCompany(companyRepository.findByDocument("31.749.356/0001-56").get());
-        employee.setPosition(positionRepository.findByTitle("Driver").get());
+        employee.setPosition(positionRepository.findById(1L).get());
         employee.setName("Rafael");
         employee.setRecordNumber("1703");
+        employee.setCostHour(7.00);
         employee.setStatus(StatusEnum.ACTIVE);
         employeeRepository.save(employee);
     }

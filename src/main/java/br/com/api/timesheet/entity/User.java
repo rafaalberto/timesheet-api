@@ -34,7 +34,7 @@ public class User implements Serializable {
     private String username;
 
     @NotBlank(message = "error-user-3")
-    @Size(min = 6, max = 100, message = "error-user-4")
+    @Size(min = 5, max = 100, message = "error-user-4")
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 

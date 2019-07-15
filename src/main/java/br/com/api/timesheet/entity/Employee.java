@@ -29,12 +29,12 @@ public class Employee implements Serializable {
     @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long id;
 
-    @NotBlank
-    @Size(min = 5, max = 50)
+    @NotBlank(message = "error-employee-1")
+    @Size(min = 5, max = 50, message = "error-employee-2")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "error-employee-3")
     @Column(name = "record_number", nullable = false, length = 10)
     private String recordNumber;
 
@@ -61,4 +61,7 @@ public class Employee implements Serializable {
         return getCurrencyInstance(new Locale("pt", "BR")).format(costHour);
     }
 
+    public void setName(String name) {
+        this.name = name.toUpperCase();
+    }
 }
