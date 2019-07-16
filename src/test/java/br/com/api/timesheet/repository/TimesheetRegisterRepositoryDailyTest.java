@@ -8,7 +8,6 @@
 //import br.com.api.timesheet.utils.DateUtils;
 //import org.junit.After;
 //import org.junit.Before;
-//import org.junit.Ignore;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@
 //import static java.time.LocalDateTime.parse;
 //import static java.time.format.DateTimeFormatter.ofPattern;
 //import static org.assertj.core.api.Assertions.assertThat;
-//
 //
 //@RunWith(SpringRunner.class)
 //@DataJpaTest
@@ -48,46 +46,39 @@
 //    private EmployeeRepository employeeRepository;
 //
 //    @Before
-//    public void setUp() {
+//    public void clearDatabase(){
+//        timesheetRegisterRepository.findAll().stream().forEach(r -> timesheetRegisterRepository.delete(r));
+//        employeeRepository.findAll().stream().forEach(r -> employeeRepository.delete(r));
+//        positionRepository.findAll().forEach(r -> positionRepository.delete(r));
+//        companyRepository.findAll().forEach(r -> companyRepository.delete(r));
+//
 //        setPosition();
 //        setCompany();
-////        setEmployee();
+//        setEmployee();
 //    }
 //
 //    private void setPosition() {
 //        Position position = new Position();
-//        position.setId(1L);
-//        position.setTitle("Assistent");
+//        position.setTitle("Driver");
 //        positionRepository.save(position);
 //    }
 //
 //    private void setCompany() {
 //        Company company = new Company();
-//        company.setId(1L);
 //        company.setDocument("31.749.356/0001-56");
 //        company.setName("Company 1");
 //        companyRepository.save(company);
 //    }
 //
-////    private void setEmployee() {
-////        Employee employee = getEmployee();
-////        employeeRepository.save(employee);
-////    }
-//
-//    private Employee getEmployee() {
+//    private void setEmployee() {
 //        Employee employee = new Employee();
 //        employee.setId(1L);
 //        employee.setCompany(companyRepository.findByDocument("31.749.356/0001-56").get());
-//
-//        Position position = new Position();
-//        position.setId(1L);
-//        position.setTitle("Assistent");
-//
-//        employee.setPosition(position);
+//        employee.setPosition(positionRepository.findByTitle("Driver").get());
 //        employee.setName("Rafael");
-//        employee.setRecordNumber(RECORD_NUMBER);
+//        employee.setRecordNumber("1703");
 //        employee.setStatus(StatusEnum.ACTIVE);
-//        return employee;
+//        employeeRepository.save(employee);
 //    }
 //
 //    @Test
@@ -174,18 +165,10 @@
 //        assertThat(registerCreated.getPaidNightTime()).isEqualTo("00:51");
 //    }
 //
-//    @After
-//    public void tearDown(){
-//        timesheetRegisterRepository.findAll().stream().forEach(r -> timesheetRegisterRepository.delete(r));
-////        employeeRepository.findAll().stream().forEach(r -> employeeRepository.delete(r));
-//        positionRepository.findAll().forEach(r -> positionRepository.delete(r));
-//        companyRepository.findAll().forEach(r -> companyRepository.delete(r));
-//    }
-//
 //    private TimesheetRegister getTimesheetRegisterRegular1() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(REGULAR);
@@ -201,7 +184,7 @@
 //    private TimesheetRegister getTimesheetRegisterRegular2() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(REGULAR);
@@ -217,7 +200,7 @@
 //    private TimesheetRegister getTimesheetRegisterRegular3() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(REGULAR);
@@ -233,7 +216,7 @@
 //    private TimesheetRegister getTimesheetRegisterRegular4() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(REGULAR);
@@ -249,7 +232,7 @@
 //    private TimesheetRegister getTimesheetRegisterDayOff1() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(DAY_OFF);
@@ -265,7 +248,7 @@
 //    private TimesheetRegister getTimesheetRegisterDayOff2() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(DAY_OFF);
@@ -281,7 +264,7 @@
 //    private TimesheetRegister getTimesheetRegisterHoliday1() {
 //        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
 //        TimesheetRegister timesheetRegister = new TimesheetRegister();
-//        timesheetRegister.setEmployee(getEmployee());
+//        timesheetRegister.setEmployee(employeeRepository.findByRecordNumber(RECORD_NUMBER).get());
 //        timesheetRegister.setYearReference(YEAR_REFERENCE);
 //        timesheetRegister.setMonthReference(MONTH_REFERENCE);
 //        timesheetRegister.setType(HOLIDAY);

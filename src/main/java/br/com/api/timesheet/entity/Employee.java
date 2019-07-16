@@ -11,7 +11,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Locale;
 
-import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
 import static java.text.NumberFormat.getCurrencyInstance;
 
 @Entity

@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Locale;
+
+import static java.text.NumberFormat.getCurrencyInstance;
 
 @Entity
 @Data
@@ -40,6 +43,10 @@ public class Bonus implements Serializable {
 
     @Column(name = "cost", precision = 10, scale = 2)
     private Double cost;
+
+    public String getCostFormatted() {
+        return getCurrencyInstance(new Locale("pt", "BR")).format(cost);
+    }
 
 }
 
