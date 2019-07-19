@@ -27,7 +27,7 @@ public interface TimesheetRegisterRepository extends JpaRepository<TimesheetRegi
             "where reg.employee.id = :employee " +
             "and reg.yearReference = :year " +
             "and reg.monthReference = :month " +
-            "order by timeIn desc")
+            "order by timeIn asc")
     @Transactional(readOnly = true)
     List<TimesheetRegister> findByEmployeeAndPeriod(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
 }
