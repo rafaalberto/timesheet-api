@@ -66,9 +66,15 @@ public class TimesheetRegisterService {
         return timesheetRegisterRepository.listReport(employee, year, month);
     }
 
-    public Collection<TimesheetDailyReport> listDailyReport(Long employee, Integer year, Integer month) {
+    public Collection<TimesheetDailyReport> listDailyReport(Long employee, Integer year, Integer month, boolean asc) {
         List<TimesheetDailyReport> dailyReport = new ArrayList();
-        List<TimesheetRegister> registers = timesheetRegisterRepository.findByEmployeeAndPeriod(employee, year, month);
+        List<TimesheetRegister> registers = asc ? timesheetRegisterRepository.findByEmployeeAndPeriodAsc(employee, year, month) :
+                timesheetRegisterRepository.findByEmployeeAndPeriodDesc(employee, year, month);
+        setReport(dailyReport, registers);
+        return dailyReport;
+    }
+
+    private void setReport(List<TimesheetDailyReport> dailyReport, List<TimesheetRegister> registers) {
         if(!registers.isEmpty()){
             registers.stream().forEach(register -> {
                 TimesheetDailyReport report = new TimesheetDailyReport();
@@ -86,7 +92,6 @@ public class TimesheetRegisterService {
                 dailyReport.add(report);
             });
         }
-        return dailyReport;
     }
 
     public TimesheetDocket listDocket(Long employeeId, Integer year, Integer month) {
@@ -131,8 +136,8 @@ public class TimesheetRegisterService {
         double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
         double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
 
-        if(weeklyRest > BigInteger.ZERO.intValue()){
-            totalWeeklyRestComplement = totalWeeklyRestComplement * regularHours / weeklyRest;
+        if(regularHours > BigInteger.ZERO.intValue()){
+            totalWeeklyRestComplement = totalWeeklyRestComplement / regularHours * weeklyRest;
 
             docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode()))
                     .findFirst().get().setTotalCost(totalWeeklyRestComplement);

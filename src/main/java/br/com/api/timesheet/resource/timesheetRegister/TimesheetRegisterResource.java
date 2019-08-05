@@ -32,10 +32,10 @@ public class TimesheetRegisterResource {
         return ResponseEntity.ok(timesheetReports);
     }
 
-    @GetMapping("/timesheet/daily/{employee}/{year}/{month}")
+    @GetMapping("/timesheet/daily/{employee}/{year}/{month}/{asc}")
     public ResponseEntity<Collection<TimesheetDailyReport>> listDailyReport(
-            @PathVariable Long employee, @PathVariable Integer year, @PathVariable Integer month) {
-        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport(employee, year, month);
+            @PathVariable Long employee, @PathVariable Integer year, @PathVariable Integer month, @PathVariable boolean asc) {
+        Collection<TimesheetDailyReport> timesheetReports = timesheetRegisterService.listDailyReport(employee, year, month, asc);
         return ResponseEntity.ok(timesheetReports);
     }
 

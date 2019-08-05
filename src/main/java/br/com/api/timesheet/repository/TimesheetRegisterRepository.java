@@ -29,5 +29,13 @@ public interface TimesheetRegisterRepository extends JpaRepository<TimesheetRegi
             "and reg.monthReference = :month " +
             "order by timeIn asc")
     @Transactional(readOnly = true)
-    List<TimesheetRegister> findByEmployeeAndPeriod(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
+    List<TimesheetRegister> findByEmployeeAndPeriodAsc(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
+
+    @Query("select reg FROM TimesheetRegister reg " +
+            "where reg.employee.id = :employee " +
+            "and reg.yearReference = :year " +
+            "and reg.monthReference = :month " +
+            "order by timeIn desc")
+    @Transactional(readOnly = true)
+    List<TimesheetRegister> findByEmployeeAndPeriodDesc(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
 }
