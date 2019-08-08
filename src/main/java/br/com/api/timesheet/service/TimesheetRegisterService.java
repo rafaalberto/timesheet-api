@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.OptionalDouble;
 import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
 import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
 import static java.time.Duration.ofSeconds;
+import static java.time.LocalDateTime.*;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -49,8 +51,21 @@ public class TimesheetRegisterService {
     }
 
     public TimesheetRegister save(TimesheetRequest request) {
+        verifyIfRegisterExists(request);
         TimesheetRegister register = getTimeSheetRegister(request);
         return timesheetRegisterRepository.save(register);
+    }
+
+    private void verifyIfRegisterExists(TimesheetRequest request) {
+        DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
+        LocalDateTime startDate = parse(request.getTimeIn(), formatter).withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime endDate = startDate.withHour(23).withMinute(59).withSecond(59);
+        List<TimesheetRegister> registers = timesheetRegisterRepository.findByEmployeeAndTimeIn(request.getEmployeeId().get(), request.getYearReference(), request.getMonthReference(),
+                startDate, endDate);
+
+        if(!registers.isEmpty()) {
+            throw new BusinessException("error-timesheet-2", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public TimesheetRegister findById(Long id) {
