@@ -51,9 +51,16 @@ public class TimesheetRegisterService {
     }
 
     public TimesheetRegister save(TimesheetRequest request) {
+        verifyIfHourIsTyped(request);
         verifyIfRegisterExists(request);
         TimesheetRegister register = getTimeSheetRegister(request);
         return timesheetRegisterRepository.save(register);
+    }
+
+    private void verifyIfHourIsTyped(TimesheetRequest request) {
+        if(request.getType().equals(TimesheetTypeEnum.REGULAR) && request.getTimeIn().endsWith("00:00")) {
+            throw new BusinessException("error-timesheet-3", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private void verifyIfRegisterExists(TimesheetRequest request) {
