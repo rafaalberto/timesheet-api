@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,5 +30,22 @@ public interface TimesheetRegisterRepository extends JpaRepository<TimesheetRegi
             "and reg.monthReference = :month " +
             "order by timeIn asc")
     @Transactional(readOnly = true)
-    List<TimesheetRegister> findByEmployeeAndPeriod(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
+    List<TimesheetRegister> findByEmployeeAndPeriodAsc(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
+
+    @Query("select reg FROM TimesheetRegister reg " +
+            "where reg.employee.id = :employee " +
+            "and reg.yearReference = :year " +
+            "and reg.monthReference = :month " +
+            "order by timeIn desc")
+    @Transactional(readOnly = true)
+    List<TimesheetRegister> findByEmployeeAndPeriodDesc(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
+
+    @Query("select reg FROM TimesheetRegister reg " +
+            "where reg.employee.id = :employee " +
+            "and reg.yearReference = :year " +
+            "and reg.monthReference = :month " +
+            "and reg.timeIn BETWEEN :startDate AND :endDate ")
+    @Transactional(readOnly = true)
+    List<TimesheetRegister> findByEmployeeAndTimeIn(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month,
+                                                    @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

@@ -58,7 +58,7 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetDocketItem weeklyRestComplement = docket.getItems().stream().filter(f -> f.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode())).findFirst().get();
         assertThat(weeklyRestComplement.getTotalHoursFormatted()).isEqualTo("00:00");
-        assertThat(weeklyRestComplement.getTotalCostFormatted()).isEqualTo("R$ 452,65");
+        assertThat(weeklyRestComplement.getTotalCostFormatted()).isEqualTo("R$ 116,78");
 
         TimesheetDocketItem extraHoursPart = docket.getItems().stream().filter(f -> f.getTypeCode().equals(EXTRA_HOURS_PART.getCode())).findFirst().get();
         assertThat(extraHoursPart.getTotalHoursFormatted()).isEqualTo("02:30");
@@ -82,7 +82,7 @@ public class TimesheetRegisterServiceTest {
 
         TimesheetDocket timesheetDocket = new TimesheetDocket();
         timesheetDocket.setTotal(docket.getItems().stream().mapToDouble(item -> item.getTotalCost()).sum());
-        assertThat(timesheetDocket.getTotalFormatted()).isEqualTo("R$ 1.015,06");
+        assertThat(timesheetDocket.getTotalFormatted()).isEqualTo("R$ 679,20");
     }
 
     private List<TimesheetReport> listReport() {
