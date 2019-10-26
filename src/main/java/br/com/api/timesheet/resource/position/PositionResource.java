@@ -27,10 +27,10 @@ public class PositionResource {
             @RequestParam(value = "size", required = false) final Integer size,
             @RequestParam(value = "title", required = false) final String title) {
 
-        final PositionRequest positionRequest = PositionRequest.Builder.builder()
-                .withPage(page)
-                .withSize(size)
-                .withTitle(title)
+        final PositionRequest positionRequest = PositionRequest.builder()
+                .page(page)
+                .size(size)
+                .title(title)
                 .build();
 
         Page<Position> positions = positionService.findAll(positionRequest);

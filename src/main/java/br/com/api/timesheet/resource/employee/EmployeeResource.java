@@ -32,13 +32,13 @@ public class EmployeeResource {
             @RequestParam(value = "companyId", required = false) final Long companyId,
             @RequestParam(value = "status", required = false) final String status) {
 
-        final EmployeeRequest employeeRequest = EmployeeRequest.Builder.builder()
-                .withPage(page)
-                .withSize(size)
-                .withName(name)
-                .withRecordNumber(recordNumber)
-                .withCompanyId(companyId)
-                .withStatus(StringUtils.isNotBlank(status) ? StatusEnum.valueOf(status) : null)
+        final EmployeeRequest employeeRequest = EmployeeRequest.builder()
+                .page(page)
+                .size(size)
+                .name(name)
+                .recordNumber(recordNumber)
+                .companyId(companyId)
+                .status(StringUtils.isNotBlank(status) ? StatusEnum.valueOf(status) : null)
                 .build();
 
         Page<Employee> employees = employeeService.findAll(employeeRequest);
