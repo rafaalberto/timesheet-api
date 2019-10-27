@@ -8,6 +8,7 @@ import org.junit.Ignore;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Ignore
 public class PositionStepDefinitions extends HttpRequestStepDefinitions {
@@ -16,7 +17,8 @@ public class PositionStepDefinitions extends HttpRequestStepDefinitions {
     public void i_post_position_data() throws Throwable {
         mvcPerform(post("/positions")
         .contentType(APPLICATION_JSON)
-        .content(gson.toJson(buildRequest())));
+        .content(gson.toJson(buildRequest())))
+        .andExpect(jsonPath("$.title").value("NEW POSITION"));
     }
 
     @Then("I should to receive status {string}")
