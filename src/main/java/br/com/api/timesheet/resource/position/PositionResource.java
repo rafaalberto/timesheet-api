@@ -2,15 +2,16 @@ package br.com.api.timesheet.resource.position;
 
 import br.com.api.timesheet.entity.Position;
 import br.com.api.timesheet.service.PositionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @CrossOrigin(origins = "*")
 @RestController
 public class PositionResource {
@@ -38,22 +39,23 @@ public class PositionResource {
     }
 
     @GetMapping("/positions/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Position> findById(@PathVariable Long id) {
+        log.info("findById request");
         Position position = positionService.findById(id);
         return ResponseEntity.ok(position);
     }
 
-    @PostMapping("/positions")
+    @PostMapping(value = "/positions", produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Position> create(@Valid @RequestBody Position position) {
-        return new ResponseEntity<Position>(positionService.save(position), HttpStatus.CREATED);
+        log.info("create request");
+        return new ResponseEntity<>(positionService.save(position), HttpStatus.CREATED);
     }
 
     @PutMapping("/positions/{id}")
     public ResponseEntity<Position> update(@PathVariable Long id, @Valid @RequestBody Position position) {
         position.setId(id);
-        return new ResponseEntity<Position>(positionService.save(position), HttpStatus.OK);
+        return new ResponseEntity<>(positionService.save(position), HttpStatus.OK);
     }
 
     @DeleteMapping("/positions/{id}")

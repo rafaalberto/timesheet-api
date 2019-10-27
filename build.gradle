@@ -43,9 +43,11 @@ dependencies {
 	implementation("org.flywaydb:flyway-core:${flywayVersion}")
 	implementation("io.jsonwebtoken:jjwt:${jjwtVersion}")
 	implementation("org.apache.commons:commons-lang3:${commonsLangVersion}")
+	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
 	compileOnly('org.projectlombok:lombok')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation("org.springframework.security:spring-security-test:${springSecurityTest}")
 	testImplementation("io.cucumber:cucumber-java:${cucumberVersion}")
 	testImplementation("io.cucumber:cucumber-junit:${cucumberVersion}")
+	testImplementation("io.cucumber:cucumber-spring:${cucumberVersion}")
 }

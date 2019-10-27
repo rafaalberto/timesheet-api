@@ -53,7 +53,7 @@ public class EmployeeService {
     
     private void verifyIfEmployeeExist(final Employee employee) {
         Optional<Employee> employeeDB = employeeRepository.findByRecordNumber(employee.getRecordNumber());
-        if (employeeDB.isPresent() && employeeDB.get().getId() != employee.getId()) {
+        if (employeeDB.isPresent() && !employeeDB.get().getId().equals(employee.getId())) {
             throw new BusinessException("error-employee-8", HttpStatus.BAD_REQUEST);
         }
     }

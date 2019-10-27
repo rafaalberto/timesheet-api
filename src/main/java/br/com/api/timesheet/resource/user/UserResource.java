@@ -1,20 +1,17 @@
 package br.com.api.timesheet.resource.user;
 
 import br.com.api.timesheet.entity.User;
-import br.com.api.timesheet.enumeration.ProfileEnum;
 import br.com.api.timesheet.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static br.com.api.timesheet.enumeration.ProfileEnum.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static br.com.api.timesheet.enumeration.ProfileEnum.valueOf;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -47,7 +44,6 @@ public class UserResource {
     }
 
     @GetMapping("/users/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> findById(@PathVariable Long id) {
         User user = userService.findById(id);
         return ResponseEntity.ok(user);

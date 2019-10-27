@@ -26,9 +26,8 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
-import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
+import static br.com.api.timesheet.utils.DateUtils.convertNanosToDecimalHours;
 import static java.time.Duration.ofSeconds;
-import static java.time.LocalDateTime.*;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -168,7 +167,7 @@ public class TimesheetRegisterService {
 
     private void setPaidNightTimeCost(Collection<TimesheetReport> report, TimesheetDocket docket, Collection<TimesheetDocketItem> docketItems) {
         long totalPaidNightTime = getTotalPaidNightTime(report);
-        Double paidNightTimeDecimal = convertNanostoDecimalHours(totalPaidNightTime);
+        Double paidNightTimeDecimal = convertNanosToDecimalHours(totalPaidNightTime);
         Double paidNightTimeCost = (paidNightTimeDecimal * docket.getRegularPrice()) + (paidNightTimeDecimal * docket.getFiftyPercent() * 0.5);
         docketItems.add(new TimesheetDocketItem(PAID_NIGHT_TIME.getCode(), PAID_NIGHT_TIME.getDescription(), paidNightTimeCost, totalPaidNightTime));
     }
