@@ -1,5 +1,6 @@
 package br.com.api.timesheet.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

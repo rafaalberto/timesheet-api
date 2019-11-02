@@ -1,6 +1,9 @@
 Feature: Position
-    Test Cases in Order to Create, Update, Delete and Find Positions
+    These are tests cases in order to create, update, delete and find positions
 
-    Scenario: Attempt to create a new position successfully
-        When I post position data
+    Scenario: Create a new position successfully
+        Given the following position data
+        | Title    |
+        | Analyst  |
+        When I attempt to create a new one
         Then I should to receive status "201"
