@@ -23,7 +23,7 @@ public abstract class HttpRequestStepDefinitions extends CucumberConfig {
 
     public ResultActions mvcPerform(MockHttpServletRequestBuilder request) throws Exception {
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(getWebApplicationContext()).build();
-        this.resultActions = mockMvc.perform(request);
+        setResultActions(mockMvc.perform(request));
         return resultActions;
     }
 
@@ -37,5 +37,13 @@ public abstract class HttpRequestStepDefinitions extends CucumberConfig {
 
     public WebApplicationContext getWebApplicationContext() {
         return webApplicationContext;
+    }
+
+    public ResultActions getResultActions() {
+        return resultActions;
+    }
+
+    public void setResultActions(ResultActions resultActions) {
+        this.resultActions = resultActions;
     }
 }

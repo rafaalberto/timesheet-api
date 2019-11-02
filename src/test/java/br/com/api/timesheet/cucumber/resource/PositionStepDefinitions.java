@@ -12,9 +12,9 @@ import org.junit.Ignore;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @Ignore
 public class PositionStepDefinitions extends HttpRequestStepDefinitions {
@@ -31,25 +31,17 @@ public class PositionStepDefinitions extends HttpRequestStepDefinitions {
         });
     }
 
-    @When("I attempt to create a new one")
-    public void i_attempt_to_create_a_new_one() throws Exception {
+    @When("I attempt to create a new position")
+    public void i_attempt_to_create_a_new_position() throws Throwable {
         mvcPerform(post("/positions")
         .contentType(APPLICATION_JSON)
-        .content(gson.toJson(buildRequest(getPosition()))))
-        .andExpect(jsonPath("$.title").value(position.getTitle()));
+        .content(gson.toJson(buildRequest(getPosition()))));
     }
 
-    @Then("I should to receive status {string}")
-    public void i_should_to_receive_status(final String status) throws Throwable {
+    @Then("I should receive status {string} and message {string}")
+    public void i_should_receive_status_and_message(final String status, final String message) throws Throwable {
         super.http_status_must_be(status);
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Position getPosition() {
-        return position;
+        assertTrue(getResultActions().andReturn().getResponse().getContentAsString().contains(message));
     }
 
     private static JsonObject buildRequest(final Position position) {
@@ -58,4 +50,11 @@ public class PositionStepDefinitions extends HttpRequestStepDefinitions {
         return request;
     }
 
+    private void setPosition(Position position) {
+        this.position = position;
+    }
+
+    private Position getPosition() {
+        return position;
+    }
 }
