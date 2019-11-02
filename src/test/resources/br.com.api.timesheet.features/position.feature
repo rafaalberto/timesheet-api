@@ -28,3 +28,10 @@ Feature: Position
         | Analystaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa |
         When I attempt to create a new position
         Then I should receive status "400" and message "Título do cargo deve ter entre 3 a 50 caracteres"
+
+    Scenario: Creating a new position with invalid data - position already exists
+        Given the following position data
+        | Title    |
+        | Analyst  |
+        When I attempt to create a new position
+        Then I should receive status "400" and message "Cargo já cadastrado"
