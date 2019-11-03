@@ -43,15 +43,8 @@ public class PositionService {
     }
     
     private void verifyIfPositionExist(final Position position) {
-        //TODO(1) - Refactor
-        Optional<Position> positionDB;
-        if(position.getId() != null) {
-            positionDB = positionRepository.findById(position.getId());
-            if(!positionDB.isPresent()) {
-                throw new BusinessException("error-position-9", HttpStatus.BAD_REQUEST);
-            }
-        }
-        positionDB = positionRepository.findByTitle(position.getTitle());
+        if(position.getId() != null) findById(position.getId());
+        Optional<Position> positionDB = positionRepository.findByTitle(position.getTitle());
         if (positionDB.isPresent() && !positionDB.get().getId().equals(position.getId())) {
             throw new BusinessException("error-position-8", HttpStatus.BAD_REQUEST);
         }
