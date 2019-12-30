@@ -51,6 +51,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "cost_hour", precision = 10, scale = 2)
     private Double costHour;
 
+    @Column(name = "dangerousness", nullable = false, length = 1)
+    private boolean dangerousness;
+
     @Column(name = "time_in")
     private LocalDateTime timeIn;
 

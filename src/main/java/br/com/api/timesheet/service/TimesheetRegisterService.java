@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +29,6 @@ import java.util.OptionalDouble;
 import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
 import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
 import static java.time.Duration.ofSeconds;
-import static java.time.LocalDateTime.*;
 import static java.time.LocalDateTime.parse;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
@@ -54,7 +54,14 @@ public class TimesheetRegisterService {
         verifyIfHourIsTyped(request);
         verifyIfRegisterExists(request);
         TimesheetRegister register = getTimeSheetRegister(request);
+        verifySumula90(request, register);
         return timesheetRegisterRepository.save(register);
+    }
+
+    private void verifySumula90(TimesheetRequest request, TimesheetRegister register) {
+        if(request.getTimeIn().endsWith("00:00")) {
+           register.setSumula90(Duration.ofSeconds(0));
+        }
     }
 
     private void verifyIfHourIsTyped(TimesheetRequest request) {
@@ -122,10 +129,11 @@ public class TimesheetRegisterService {
 
         double costPerHour = fetchCostPerHour(report);
         Collection<Bonus> bonuses = fetchBonuses(employeeId, year, month);
+        boolean isDangerousness = fetchDangerousness(report);
         setPricesTable(timesheetDocket, costPerHour, bonuses);
 
         Collection<TimesheetDocketItem> docketItems = new ArrayList<>();
-        setExtraHoursCost(report, timesheetDocket, docketItems);
+        setExtraHoursCost(report, timesheetDocket, docketItems, isDangerousness);
         setBonuses(docketItems, bonuses);
         setWeeklyRestComplement(docketItems);
 
@@ -136,7 +144,7 @@ public class TimesheetRegisterService {
         return timesheetDocket;
     }
 
-    private void setExtraHoursCost(Collection<TimesheetReport> report, TimesheetDocket docket, Collection<TimesheetDocketItem> docketItems) {
+    private void setExtraHoursCost(Collection<TimesheetReport> report, TimesheetDocket docket, Collection<TimesheetDocketItem> docketItems, boolean isDangerousness) {
         docketItems.add(new TimesheetDocketItem(REGULAR_HOURS.getCode(), REGULAR_HOURS.getDescription(), getTotalHoursWorked(report), docket.getRegularPrice()));
         docketItems.add(new TimesheetDocketItem(WEEKLY_REST.getCode(), WEEKLY_REST.getDescription(), getTotalWeeklyRest(report), docket.getRegularPrice()));
         docketItems.add(new TimesheetDocketItem(WEEKLY_REST_COMPLEMENT.getCode(), WEEKLY_REST_COMPLEMENT.getDescription(), 0.00, 0));
@@ -144,8 +152,13 @@ public class TimesheetRegisterService {
         docketItems.add(new TimesheetDocketItem(EXTRA_HOURS_FULL.getCode(), EXTRA_HOURS_FULL.getDescription(), getTotalExtraHoursFull(report), docket.getHundredPercent()));
         docketItems.add(new TimesheetDocketItem(SUMULA_90.getCode(), SUMULA_90.getDescription(), getTotalSumula90(report), docket.getFiftyPercent()));
         docketItems.add(new TimesheetDocketItem(NIGHT_SHIFT.getCode(), NIGHT_SHIFT.getDescription(), getTotalNightShift(report), docket.getTwentyPercent()));
+        if(isDangerousness) {
+            docketItems.add(new TimesheetDocketItem(DANGEROUSNESS.getCode(), DANGEROUSNESS.getDescription(), getTotalDangerousness(docketItems)));
+        }
         setPaidNightTimeCost(report, docket, docketItems);
     }
+
+
 
     private void setWeeklyRestComplement(Collection<TimesheetDocketItem> docketItems) {
         double totalWeeklyRestComplement =
@@ -203,6 +216,7 @@ public class TimesheetRegisterService {
         register.setTimeOut(parse(request.getTimeOut(), formatter));
         register.setHoursJourney(ofSeconds(LocalTime.parse(request.getHoursJourney(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         register.setSumula90(ofSeconds(LocalTime.parse(request.getSumula90(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
+        register.setDangerousness(request.isDangerousness());
         return register;
     }
 
@@ -217,6 +231,13 @@ public class TimesheetRegisterService {
     private double fetchCostPerHour(Collection<TimesheetReport> report) {
         OptionalDouble optionalDouble = report.stream().mapToDouble(r -> r.getCostHour()).max();
         return optionalDouble.isPresent() ? optionalDouble.getAsDouble() : Double.valueOf(0);
+    }
+
+    private boolean fetchDangerousness(Collection<TimesheetReport> report) {
+        if(!report.isEmpty()) {
+            return report.stream().findFirst().get().isDangerousness();
+        }
+        return false;
     }
 
     private long getTotalPaidNightTime(Collection<TimesheetReport> report) {
@@ -262,6 +283,12 @@ public class TimesheetRegisterService {
             bonuses.stream().forEach(bonus ->
                     dockets.add(new TimesheetDocketItem(bonus.getCode(), bonus.getDescription(), bonus.getCost())));
         }
+    }
+
+    private double getTotalDangerousness(Collection<TimesheetDocketItem> docketItems) {
+        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
+        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
+        return (regularHours + weeklyRest) * 0.30;
     }
 
 }

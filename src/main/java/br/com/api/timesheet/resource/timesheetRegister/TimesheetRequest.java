@@ -20,6 +20,7 @@ public class TimesheetRequest {
     private String timeOut;
     private String hoursJourney;
     private String sumula90;
+    private boolean dangerousness;
 
     public Optional<Long> getId() {
         return Optional.ofNullable(id);

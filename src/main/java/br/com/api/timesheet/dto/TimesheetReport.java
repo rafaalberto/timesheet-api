@@ -18,6 +18,9 @@ public class TimesheetReport {
     private TimesheetTypeEnum type;
 
     @JsonIgnore
+    private boolean dangerousness;
+
+    @JsonIgnore
     private Double costHour;
 
     @JsonIgnore

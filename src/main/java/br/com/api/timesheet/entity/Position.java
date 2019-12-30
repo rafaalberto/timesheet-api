@@ -29,6 +29,9 @@ public class Position implements Serializable {
     @Column(name = "title", nullable = false, length = 50)
     private String title;
 
+    @Column(name = "dangerousness", nullable = false, length = 1)
+    private boolean dangerousness;
+
     public void setTitle(String title) {
         this.title = title.toUpperCase();
     }
