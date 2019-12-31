@@ -10,7 +10,8 @@ public enum TimesheetTypeEnum {
     REGULAR("RG", "Normal"),
     HOLIDAY("HO", "Feriado"),
     DAY_OFF("DO", "Folga"),
-    VACATION("VC", "Férias");
+    VACATION("VC", "Férias"),
+    OCCURRENCE("OC", "Ocorrência");
 
     private final String code;
     private final String description;

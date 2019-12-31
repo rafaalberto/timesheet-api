@@ -12,6 +12,7 @@ import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
 import br.com.api.timesheet.resource.timesheetRegister.TimesheetRequest;
 import br.com.api.timesheet.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -108,7 +109,7 @@ public class TimesheetRegisterService {
             registers.stream().forEach(register -> {
                 TimesheetDailyReport report = new TimesheetDailyReport();
                 report.setId(register.getId());
-                report.setType(register.getType().getDescription());
+                report.setType(getDescription(register));
                 report.setDate(ofPattern(DateUtils.DATE_FORMAT_PT_BR).format(register.getTimeIn()));
                 report.setEntry(fetchEntry(register));
                 report.setHoursWorked(register.getHoursWorked());
@@ -121,6 +122,13 @@ public class TimesheetRegisterService {
                 dailyReport.add(report);
             });
         }
+    }
+
+    private String getDescription(TimesheetRegister register) {
+        if(StringUtils.isNotBlank(register.getNotes())) {
+            return register.getNotes();
+        }
+        return register.getType().getDescription();
     }
 
     public TimesheetDocket listDocket(Long employeeId, Integer year, Integer month) {
@@ -217,6 +225,7 @@ public class TimesheetRegisterService {
         register.setHoursJourney(ofSeconds(LocalTime.parse(request.getHoursJourney(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         register.setSumula90(ofSeconds(LocalTime.parse(request.getSumula90(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         register.setDangerousness(request.isDangerousness());
+        register.setNotes(request.getNotes());
         return register;
     }
 

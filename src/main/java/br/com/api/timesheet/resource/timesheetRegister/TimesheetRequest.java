@@ -21,6 +21,7 @@ public class TimesheetRequest {
     private String hoursJourney;
     private String sumula90;
     private boolean dangerousness;
+    private String notes;
 
     public Optional<Long> getId() {
         return Optional.ofNullable(id);

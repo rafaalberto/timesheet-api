@@ -87,6 +87,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "paid_night_time")
     private Duration paidNightTime;
 
+    @Column(name = "notes")
+    private String notes;
+
     public String getHoursWorked() {
         return formatDuration(hoursWorked.toMillis(), DateUtils.TIME_FORMAT);
     }
@@ -139,8 +142,6 @@ public class TimesheetRegister implements Serializable {
 
         paidNightTime = nightShift.getSeconds() > BigDecimal.ZERO.intValue() ? calculatePaidNightTime(ofSecondOfDay(nightShift.getSeconds()))
                 : ofSeconds(BigDecimal.ZERO.intValue());
-
-        //TODO(1) Holiday is a weekly rest?
     }
 
     private void resetValues() {
