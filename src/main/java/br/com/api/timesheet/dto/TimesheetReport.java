@@ -1,5 +1,6 @@
 package br.com.api.timesheet.dto;
 
+import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,9 @@ public class TimesheetReport {
 
     @JsonIgnore
     private boolean dangerousness;
+
+    @JsonIgnore
+    private PeriodEnum period;
 
     @JsonIgnore
     private Double costHour;

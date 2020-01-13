@@ -1,5 +1,7 @@
 package br.com.api.timesheet.entity;
 
+import br.com.api.timesheet.enumeration.PeriodEnum;
+import br.com.api.timesheet.enumeration.StatusEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -89,6 +91,9 @@ public class TimesheetRegister implements Serializable {
 
     @Column(name = "notes")
     private String notes;
+
+    @Column(name = "period", nullable = false, length = 1)
+    private PeriodEnum period;
 
     public String getHoursWorked() {
         return formatDuration(hoursWorked.toMillis(), DateUtils.TIME_FORMAT);

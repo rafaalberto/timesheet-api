@@ -226,6 +226,7 @@ public class TimesheetRegisterService {
         register.setSumula90(ofSeconds(LocalTime.parse(request.getSumula90(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         register.setDangerousness(request.isDangerousness());
         register.setNotes(request.getNotes());
+        register.setPeriod(request.getPeriod());
         return register;
     }
 
