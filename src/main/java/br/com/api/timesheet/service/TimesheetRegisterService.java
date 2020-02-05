@@ -114,6 +114,7 @@ public class TimesheetRegisterService {
                 report.setEntry(fetchEntry(register));
                 report.setHoursWorked(register.getHoursWorked());
                 report.setHoursJourney(register.getHoursJourney());
+                report.setHoursAdjustment(register.getHoursAdjustment());
                 report.setExtraHours(register.getExtraHours());
                 report.setWeeklyRest(register.getWeeklyRest());
                 report.setSumula90(register.getSumula90());
@@ -227,6 +228,7 @@ public class TimesheetRegisterService {
         register.setDangerousness(request.isDangerousness());
         register.setNotes(request.getNotes());
         register.setPeriod(request.getPeriod());
+        register.setHoursAdjustment(ofSeconds(LocalTime.parse(request.getHoursAdjustment(), ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return register;
     }
 

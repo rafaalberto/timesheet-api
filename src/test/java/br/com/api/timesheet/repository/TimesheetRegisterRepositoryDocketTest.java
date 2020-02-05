@@ -117,6 +117,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(LocalTime.parse("01:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -134,6 +135,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(LocalTime.parse("01:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -151,6 +153,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(LocalTime.parse("01:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -168,6 +171,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(LocalTime.parse("01:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -185,6 +189,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(0));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -202,6 +207,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(0));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 
@@ -219,6 +225,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         timesheetRegister.setHoursJourney(ofSeconds(LocalTime.parse("08:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setSumula90(ofSeconds(LocalTime.parse("01:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         timesheetRegister.setPeriod(PeriodEnum.SAFRA);
+        timesheetRegister.setHoursAdjustment(ofSeconds(LocalTime.parse("00:00", ofPattern(DateUtils.TIME_FORMAT)).toSecondOfDay()));
         return timesheetRegister;
     }
 

@@ -20,6 +20,7 @@ public class TimesheetRequest {
     private String lunchEnd;
     private String timeOut;
     private String hoursJourney;
+    private String hoursAdjustment;
     private String sumula90;
     private boolean dangerousness;
     private String notes;

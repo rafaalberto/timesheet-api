@@ -34,6 +34,9 @@ public class TimesheetReport {
     private long hoursJourney;
 
     @JsonIgnore
+    private long hoursAdjustment;
+
+    @JsonIgnore
     private long weeklyRest;
 
     @JsonIgnore
@@ -55,6 +58,8 @@ public class TimesheetReport {
     public String getHoursJourneyFormatted() {
         return formatDuration(ofNanos(hoursJourney).toMillis(), TIME_FORMAT);
     }
+
+    public String getHoursAdjustmentFormatted() { return formatDuration(ofNanos(hoursAdjustment).toMillis(), TIME_FORMAT); }
 
     public String getWeeklyRestFormatted() {
         return formatDuration(ofNanos(weeklyRest).toMillis(), TIME_FORMAT);

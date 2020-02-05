@@ -74,6 +74,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "hours_journey")
     private Duration hoursJourney;
 
+    @Column(name = "hours_adjustment")
+    private Duration hoursAdjustment;
+
     @Column(name = "extra_hours")
     private Duration extraHours;
 
@@ -101,6 +104,10 @@ public class TimesheetRegister implements Serializable {
 
     public String getHoursJourney() {
         return formatDuration(hoursJourney.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getHoursAdjustment() {
+        return formatDuration(hoursAdjustment.toMillis(), DateUtils.TIME_FORMAT);
     }
 
     public String getExtraHours() {
