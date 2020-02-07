@@ -14,13 +14,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static br.com.api.timesheet.repository.PositionRepositorySpecification.*;
+import static br.com.api.timesheet.utils.Constants.DEFAULT_PAGE;
+import static br.com.api.timesheet.utils.Constants.DEFAULT_SIZE;
 
 @Service
 public class PositionService {
-
-    private static final int DEFAULT_PAGE = 0;
-    private static final int DEFAULT_SIZE = 10;
 
     private PositionRepository positionRepository;
 
@@ -30,7 +28,7 @@ public class PositionService {
 
     public Page<Position> findAll(PositionRequest request) {
         final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
-        return positionRepository.findAll(criteriaSpecification(request), pageable);
+        return positionRepository.findAll(PositionRepositorySpecification.criteriaSpecification(request), pageable);
     }
 
     public Position findById(Long id) {

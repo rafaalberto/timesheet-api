@@ -2,30 +2,33 @@ package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.entity.Company;
 import br.com.api.timesheet.exception.BusinessException;
-import br.com.api.timesheet.repository.CompanyCustomizedQueries;
 import br.com.api.timesheet.repository.CompanyRepository;
+import br.com.api.timesheet.repository.CompanyRepositorySpecification;
 import br.com.api.timesheet.resource.company.CompanyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static br.com.api.timesheet.utils.Constants.DEFAULT_PAGE;
+import static br.com.api.timesheet.utils.Constants.DEFAULT_SIZE;
 
 @Service
 public class CompanyService {
 
     private CompanyRepository companyRepository;
 
-    private CompanyCustomizedQueries companyCustomizedQueries;
-
-    public CompanyService(@Autowired CompanyRepository companyRepository, @Autowired CompanyCustomizedQueries companyCustomizedQueries) {
+    public CompanyService(@Autowired CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
-        this.companyCustomizedQueries = companyCustomizedQueries;
     }
 
-    public Page<Company> findAll(CompanyRequest companyRequest) {
-        return companyCustomizedQueries.findAll(companyRequest);
+    public Page<Company> findAll(CompanyRequest request) {
+        final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
+        return companyRepository.findAll(CompanyRepositorySpecification.criteriaSpecification(request), pageable);
     }
 
     public Company findById(Long id) {
