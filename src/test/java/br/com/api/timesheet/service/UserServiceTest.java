@@ -3,7 +3,6 @@ package br.com.api.timesheet.service;
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ProfileEnum;
 import br.com.api.timesheet.exception.BusinessException;
-import br.com.api.timesheet.repository.UserCustomizedQueries;
 import br.com.api.timesheet.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,13 +24,10 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private UserCustomizedQueries userCustomizedQueries;
-
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        userService = new UserService(userRepository, userCustomizedQueries);
+        userService = new UserService(userRepository);
         userInDB = new User();
         userInDB.setId(1L);
         userInDB.setName("Rafael");
