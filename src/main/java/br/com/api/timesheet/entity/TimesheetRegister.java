@@ -141,6 +141,10 @@ public class TimesheetRegister implements Serializable {
         long extraHoursDuration = hoursWorked != null ? hoursWorked.getSeconds() - hoursJourney.getSeconds() : BigDecimal.ZERO.intValue();
         extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSeconds(extraHoursDuration) : ofSeconds(BigDecimal.ZERO.intValue());
 
+        if(extraHours.compareTo(hoursAdjustment) >= BigDecimal.ZERO.intValue()) {
+            extraHours = extraHours.minus(hoursAdjustment);
+        }
+
         if(type.equals(DAY_OFF)){
             weeklyRest = hoursJourney;
             hoursJourney = ofSeconds(BigDecimal.ZERO.intValue());
