@@ -1,6 +1,7 @@
 package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.entity.Employee;
+import br.com.api.timesheet.enumeration.OfficeHoursEnum;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.EmployeeRepository;
 import br.com.api.timesheet.repository.EmployeeRepositorySpecification;
@@ -40,8 +41,10 @@ public class EmployeeService {
     }
 
     public Employee findById(Long id) {
-        return employeeRepository.findById(id)
+        Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("error-employee-9", HttpStatus.BAD_REQUEST));
+        employee.setOfficeHourDescription(employee.getOfficeHour().getDescription());
+        return employee;
     }
 
     public Employee save(Employee employee) {

@@ -61,6 +61,9 @@ public class Employee implements Serializable {
     @Column(name = "office_hour", nullable = false, length = 1)
     private OfficeHoursEnum officeHour;
 
+    @Transient
+    private String officeHourDescription;
+
     public String getCostHourFormatted() {
         return getCurrencyInstance(new Locale("pt", "BR")).format(costHour);
     }
