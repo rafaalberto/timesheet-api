@@ -5,6 +5,7 @@ import br.com.api.timesheet.entity.Company;
 import br.com.api.timesheet.entity.Employee;
 import br.com.api.timesheet.entity.Position;
 import br.com.api.timesheet.entity.TimesheetRegister;
+import br.com.api.timesheet.enumeration.OfficeHoursEnum;
 import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.StatusEnum;
 import br.com.api.timesheet.utils.DateUtils;
@@ -71,6 +72,7 @@ public class TimesheetRegisterRepositoryDocketTest {
         employee.setRecordNumber("1703");
         employee.setCostHour(7.00);
         employee.setStatus(StatusEnum.ACTIVE);
+        employee.setOfficeHour(OfficeHoursEnum.HOUR_A);
         employeeRepository.save(employee);
     }
 

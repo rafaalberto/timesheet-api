@@ -1,6 +1,9 @@
 package br.com.api.timesheet.resource.position;
 
+import br.com.api.timesheet.dto.OfficeHours;
 import br.com.api.timesheet.entity.Position;
+import br.com.api.timesheet.enumeration.OfficeHoursEnum;
+import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,4 +66,8 @@ public class PositionResource {
         positionService.delete(id);
     }
 
+    @GetMapping("/positions/officeHours/{period}")
+    public ResponseEntity<List<OfficeHours>> findByPeriod(@PathVariable String period) {
+        return ResponseEntity.ok(OfficeHoursEnum.fetchByPeriod(PeriodEnum.valueOf(period)));
+    }
 }
