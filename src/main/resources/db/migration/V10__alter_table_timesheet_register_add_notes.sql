@@ -1,0 +1,1 @@
+alter table timesheet_register add column notes varchar(30);

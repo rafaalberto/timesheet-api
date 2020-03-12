@@ -1,6 +1,9 @@
 package br.com.api.timesheet.resource.position;
 
+import br.com.api.timesheet.dto.OfficeHours;
 import br.com.api.timesheet.entity.Position;
+import br.com.api.timesheet.enumeration.OfficeHoursEnum;
+import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.service.PositionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -27,10 +31,10 @@ public class PositionResource {
             @RequestParam(value = "size", required = false) final Integer size,
             @RequestParam(value = "title", required = false) final String title) {
 
-        final PositionRequest positionRequest = PositionRequest.Builder.builder()
-                .withPage(page)
-                .withSize(size)
-                .withTitle(title)
+        final PositionRequest positionRequest = PositionRequest.builder()
+                .page(page)
+                .size(size)
+                .title(title)
                 .build();
 
         Page<Position> positions = positionService.findAll(positionRequest);
@@ -62,4 +66,8 @@ public class PositionResource {
         positionService.delete(id);
     }
 
+    @GetMapping("/positions/officeHours/{period}")
+    public ResponseEntity<List<OfficeHours>> findByPeriod(@PathVariable String period) {
+        return ResponseEntity.ok(OfficeHoursEnum.fetchByPeriod(PeriodEnum.valueOf(period)));
+    }
 }

@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import static br.com.api.timesheet.enumeration.ProfileEnum.*;
+import static org.apache.commons.lang3.StringUtils.*;
+
 @CrossOrigin(origins = "*")
 @RestController
 public class UserResource {
@@ -31,12 +34,12 @@ public class UserResource {
             @RequestParam(value = "name", required = false) final String name,
             @RequestParam(value = "profile", required = false) final String profile) {
 
-        final UserRequest userRequest = UserRequest.Builder.builder()
-                .withPage(page)
-                .withSize(size)
-                .withUsername(username)
-                .withName(name)
-                .withProfile(StringUtils.isNotBlank(profile) ? ProfileEnum.valueOf(profile) : null)
+        final UserRequest userRequest = UserRequest.builder()
+                .page(page)
+                .size(size)
+                .username(username)
+                .name(name)
+                .profile(isNotBlank(profile) ? valueOf(profile) : null)
                 .build();
 
         Page<User> users = userService.findAll(userRequest);

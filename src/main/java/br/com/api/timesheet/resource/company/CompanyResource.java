@@ -29,11 +29,11 @@ public class CompanyResource {
             @RequestParam(value = "name", required = false) final String name,
             @RequestParam(value = "profile", required = false) final String profile) {
 
-        final CompanyRequest companyRequest = CompanyRequest.Builder.builder()
-                .withPage(page)
-                .withSize(size)
-                .withDocument(document)
-                .withName(name)
+        final CompanyRequest companyRequest = CompanyRequest.builder()
+                .page(page)
+                .size(size)
+                .document(document)
+                .name(name)
                 .build();
 
         Page<Company> companies = companyService.findAll(companyRequest);

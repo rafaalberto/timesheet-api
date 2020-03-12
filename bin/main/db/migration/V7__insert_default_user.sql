@@ -1,0 +1,1 @@
+insert into users(id, name, password, profile, username) values (nextval('seq_users'), 'Administrador', '$2a$10$UMuVMXRYpjdyg/tHa5IvvubD0t53VtU1XuGtnPg1GzPFVWwNeWXDS', 'AD', 'admin');

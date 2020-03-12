@@ -11,6 +11,7 @@ public class TimesheetDailyReport {
     private String entry;
     private String hoursWorked;
     private String hoursJourney;
+    private String hoursAdjustment;
     private String weeklyRest;
     private String extraHours;
     private String sumula90;

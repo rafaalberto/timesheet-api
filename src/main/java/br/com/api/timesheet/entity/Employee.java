@@ -1,5 +1,7 @@
 package br.com.api.timesheet.entity;
 
+import br.com.api.timesheet.enumeration.OfficeHoursEnum;
+import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
@@ -55,6 +57,12 @@ public class Employee implements Serializable {
 
     @Column(name = "status", nullable = false, length = 1)
     private StatusEnum status;
+
+    @Column(name = "office_hour", nullable = false, length = 1)
+    private OfficeHoursEnum officeHour;
+
+    @Transient
+    private String officeHourDescription;
 
     public String getCostHourFormatted() {
         return getCurrencyInstance(new Locale("pt", "BR")).format(costHour);

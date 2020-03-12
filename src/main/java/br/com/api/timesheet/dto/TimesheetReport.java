@@ -1,13 +1,13 @@
 package br.com.api.timesheet.dto;
 
+import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import br.com.api.timesheet.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static br.com.api.timesheet.utils.DateUtils.*;
+import static br.com.api.timesheet.utils.DateUtils.TIME_FORMAT;
 import static java.time.Duration.ofNanos;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
@@ -19,6 +19,12 @@ public class TimesheetReport {
     private TimesheetTypeEnum type;
 
     @JsonIgnore
+    private boolean dangerousness;
+
+    @JsonIgnore
+    private PeriodEnum period;
+
+    @JsonIgnore
     private Double costHour;
 
     @JsonIgnore
@@ -26,6 +32,9 @@ public class TimesheetReport {
 
     @JsonIgnore
     private long hoursJourney;
+
+    @JsonIgnore
+    private long hoursAdjustment;
 
     @JsonIgnore
     private long weeklyRest;
@@ -49,6 +58,8 @@ public class TimesheetReport {
     public String getHoursJourneyFormatted() {
         return formatDuration(ofNanos(hoursJourney).toMillis(), TIME_FORMAT);
     }
+
+    public String getHoursAdjustmentFormatted() { return formatDuration(ofNanos(hoursAdjustment).toMillis(), TIME_FORMAT); }
 
     public String getWeeklyRestFormatted() {
         return formatDuration(ofNanos(weeklyRest).toMillis(), TIME_FORMAT);

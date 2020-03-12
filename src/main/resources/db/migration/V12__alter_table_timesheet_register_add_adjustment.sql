@@ -1,0 +1,1 @@
+alter table timesheet_register add column hours_adjustment bigint default 0;

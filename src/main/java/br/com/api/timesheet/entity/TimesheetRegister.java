@@ -1,5 +1,7 @@
 package br.com.api.timesheet.entity;
 
+import br.com.api.timesheet.enumeration.PeriodEnum;
+import br.com.api.timesheet.enumeration.StatusEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -51,6 +53,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "cost_hour", precision = 10, scale = 2)
     private Double costHour;
 
+    @Column(name = "dangerousness", nullable = false, length = 1)
+    private boolean dangerousness;
+
     @Column(name = "time_in")
     private LocalDateTime timeIn;
 
@@ -69,6 +74,9 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "hours_journey")
     private Duration hoursJourney;
 
+    @Column(name = "hours_adjustment")
+    private Duration hoursAdjustment;
+
     @Column(name = "extra_hours")
     private Duration extraHours;
 
@@ -84,12 +92,22 @@ public class TimesheetRegister implements Serializable {
     @Column(name = "paid_night_time")
     private Duration paidNightTime;
 
+    @Column(name = "notes")
+    private String notes;
+
+    @Column(name = "period", nullable = false, length = 1)
+    private PeriodEnum period;
+
     public String getHoursWorked() {
         return formatDuration(hoursWorked.toMillis(), DateUtils.TIME_FORMAT);
     }
 
     public String getHoursJourney() {
         return formatDuration(hoursJourney.toMillis(), DateUtils.TIME_FORMAT);
+    }
+
+    public String getHoursAdjustment() {
+        return formatDuration(hoursAdjustment.toMillis(), DateUtils.TIME_FORMAT);
     }
 
     public String getExtraHours() {
@@ -123,6 +141,10 @@ public class TimesheetRegister implements Serializable {
         long extraHoursDuration = hoursWorked != null ? hoursWorked.getSeconds() - hoursJourney.getSeconds() : BigDecimal.ZERO.intValue();
         extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSeconds(extraHoursDuration) : ofSeconds(BigDecimal.ZERO.intValue());
 
+        if(extraHours.compareTo(hoursAdjustment) >= BigDecimal.ZERO.intValue()) {
+            extraHours = extraHours.minus(hoursAdjustment);
+        }
+
         if(type.equals(DAY_OFF)){
             weeklyRest = hoursJourney;
             hoursJourney = ofSeconds(BigDecimal.ZERO.intValue());
@@ -136,8 +158,6 @@ public class TimesheetRegister implements Serializable {
 
         paidNightTime = nightShift.getSeconds() > BigDecimal.ZERO.intValue() ? calculatePaidNightTime(ofSecondOfDay(nightShift.getSeconds()))
                 : ofSeconds(BigDecimal.ZERO.intValue());
-
-        //TODO(1) Holiday is a weekly rest?
     }
 
     private void resetValues() {

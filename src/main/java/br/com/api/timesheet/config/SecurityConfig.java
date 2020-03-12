@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/auth/**",
             "/users/**",
             "/timesheet/**",
+            "/positions/**",
     };
 
     @Override
