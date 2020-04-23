@@ -23,8 +23,6 @@ import static org.junit.Assert.assertTrue;
 @ActiveProfiles("test")
 public class DateUtilsTest {
 
-    private static final double TIME_IN_MINUTES = 60.0;
-
     private DateTimeFormatter formatter;
 
     @Before
@@ -65,12 +63,12 @@ public class DateUtilsTest {
 
     @Test
     public void shouldConvertStringToDuration() {
-        assertThat(convertStringtoNanos("07:33")).isEqualTo(new BigInteger("27180000000000").longValue());
+        assertThat(convertStringToNanos("07:33")).isEqualTo(new BigInteger("27180000000000").longValue());
     }
 
     @Test
     public void shouldConvertNanosecondsToDecimalHours() {
         BigInteger timeInNanoseconds = new BigInteger("27180000000000");
-        assertThat(convertNanostoDecimalHours(timeInNanoseconds.longValue())).isEqualTo(7.55);
+        assertThat(convertNanosToDecimalHours(timeInNanoseconds.longValue())).isEqualTo(7.55);
     }
 }

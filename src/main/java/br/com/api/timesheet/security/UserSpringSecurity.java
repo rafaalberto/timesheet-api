@@ -6,8 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 public class UserSpringSecurity implements UserDetails {
@@ -21,7 +21,7 @@ public class UserSpringSecurity implements UserDetails {
         this.username = username;
         this.password = password;
         this.name = name;
-        this.authorities = Arrays.asList(new SimpleGrantedAuthority(profile.toString()));
+        this.authorities = Collections.singletonList(new SimpleGrantedAuthority(profile.toString()));
     }
 
     @Override

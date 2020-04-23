@@ -47,7 +47,7 @@ public class CompanyService {
 
     private void verifyIfCompanyExist(final Company company) {
         Optional<Company> companyDB = companyRepository.findByDocument(company.getDocument());
-        if (companyDB.isPresent() && companyDB.get().getId() != company.getId()) {
+        if (companyDB.isPresent() && !companyDB.get().getId().equals(company.getId())) {
             throw new BusinessException("error-company-8", HttpStatus.BAD_REQUEST);
         }
     }

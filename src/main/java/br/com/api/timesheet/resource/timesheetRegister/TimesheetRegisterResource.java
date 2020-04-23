@@ -2,7 +2,6 @@ package br.com.api.timesheet.resource.timesheetRegister;
 
 import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
-import br.com.api.timesheet.dto.TimesheetDocketItem;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.service.TimesheetRegisterService;

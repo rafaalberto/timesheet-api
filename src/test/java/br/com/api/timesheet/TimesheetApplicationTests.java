@@ -1,17 +1,15 @@
 package br.com.api.timesheet;
 
-import org.junit.Test;
+import io.cucumber.junit.Cucumber;
+import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        glue = "br.com.api.timesheet.cucumber",
+        plugin = {"pretty"},
+//        tags = {"@test"},
+        features = "src/test/resources")
 public class TimesheetApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
-
 }
-

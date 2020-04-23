@@ -5,6 +5,7 @@ import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.utils.JwtUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,11 +16,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 
 import static br.com.api.timesheet.exception.ErrorResponse.ApiError;
@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         String username = ((UserSpringSecurity) authResult.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
         String name = ((UserSpringSecurity) authResult.getPrincipal()).getName();
@@ -59,20 +59,20 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
 
-        Object json = new ObjectMapper().writeValueAsString(Arrays.asList(
+        Object json = new ObjectMapper().writeValueAsString(Collections.singletonList(
                 new ApiError(String.valueOf(HttpStatus.UNAUTHORIZED.value()),
                         ApiErrorConfig.apiErrorMessageSource().getMessage("error-user-10", null, Locale.getDefault()))));
 
         response.getWriter().append(json.toString());
     }
 
-    @RequiredArgsConstructor
+    @RequiredArgsConstructor @Getter
     @JsonAutoDetect(fieldVisibility = ANY)
-    public static class UserResponse {
+    private static class UserResponse {
 
         private final String username;
         private final String token;
