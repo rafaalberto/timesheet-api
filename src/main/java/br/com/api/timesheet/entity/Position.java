@@ -1,7 +1,6 @@
 package br.com.api.timesheet.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
-@Data
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = Position.TABLE_NAME)
 public class Position implements Serializable {
@@ -35,5 +34,4 @@ public class Position implements Serializable {
     public void setTitle(String title) {
         this.title = title.toUpperCase();
     }
-
 }

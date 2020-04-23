@@ -28,7 +28,7 @@ public abstract class HttpRequestStepDefinitions extends CucumberConfig {
     }
 
     public void http_status_must_be(final String httpStatus) throws Throwable {
-        resultActions.andExpect(status().is(Integer.valueOf(httpStatus)));
+        resultActions.andExpect(status().is(Integer.parseInt(httpStatus)));
     }
 
     public void setWebApplicationContext(WebApplicationContext webApplicationContext) {
