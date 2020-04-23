@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Locale;
 
 import static br.com.api.timesheet.utils.DateUtils.TIME_FORMAT;
-import static br.com.api.timesheet.utils.DateUtils.convertNanostoDecimalHours;
+import static br.com.api.timesheet.utils.DateUtils.convertNanosToDecimalHours;
 import static java.text.NumberFormat.getCurrencyInstance;
 import static java.time.Duration.ofNanos;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
@@ -24,7 +24,7 @@ public class TimesheetDocketItem {
         this.typeDescription = typeDescription;
         this.totalHours = totalHours;
         this.costPerHour = costPerHour;
-        this.totalCost = convertNanostoDecimalHours(totalHours) * costPerHour;
+        this.totalCost = convertNanosToDecimalHours(totalHours) * costPerHour;
     }
 
     public TimesheetDocketItem(String typeCode, String typeDescription, double totalCost, long totalHours) {

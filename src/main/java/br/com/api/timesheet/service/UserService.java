@@ -47,7 +47,7 @@ public class UserService {
         userRepository.delete(findById(id));
     }
 
-    public User findByUsername(String username) {
+    User findByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new BusinessException("error-user-9", HttpStatus.BAD_REQUEST));
     }

@@ -46,6 +46,9 @@ public class PositionService {
     }
     
     private void verifyIfPositionExist(final Position position) {
+        if(Optional.ofNullable(position.getId()).isPresent()) {
+            findById(position.getId());
+        }
         Optional<Position> positionDB = positionRepository.findByTitle(position.getTitle());
         if (positionDB.isPresent() && !positionDB.get().getId().equals(position.getId())) {
             throw new BusinessException("error-position-8", HttpStatus.BAD_REQUEST);

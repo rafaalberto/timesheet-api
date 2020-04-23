@@ -16,15 +16,16 @@ public class DateUtils {
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String DATE_FORMAT_PT_BR = "dd/MM/yyyy";
     public static final String TIME_FORMAT = "HH:mm";
-    public static final String START_TIME_NIGHT_SHIFT = "22:00";
-    public static final String END_TIME_NIGHT_SHIFT = "05:00";
 
-    public static final int START_HOUR_NIGHT_SHIFT = 22;
-    public static final int END_HOUR_NIGHT_SHIFT = 5;
+    private static final String START_TIME_NIGHT_SHIFT = "22:00";
+    private static final String END_TIME_NIGHT_SHIFT = "05:00";
 
-    public static final String FULL_NIGHT_SHIFT_TIME = "07:00";
-    public static final int MINUTES = 60;
-    public static final int SECONDS = 60;
+    private static final int START_HOUR_NIGHT_SHIFT = 22;
+    private static final int END_HOUR_NIGHT_SHIFT = 5;
+
+    private static final String FULL_NIGHT_SHIFT_TIME = "07:00";
+    private static final int MINUTES = 60;
+    private static final int SECONDS = 60;
 
     private static final double TIME_IN_MINUTES = 60.0;
 
@@ -54,18 +55,18 @@ public class DateUtils {
         return Duration.ofSeconds((long) paidNightTime);
     }
 
-    public static long convertStringtoNanos(String timeInString) {
-        String timeArray[] = timeInString.split(":");
-        String time = "PT" + timeArray[0] + "H" + timeArray[1] + "M";
-        Duration duration = Duration.parse(time);
-        return duration.toNanos();
-    }
-
-    public static double convertNanostoDecimalHours(long timeInNanos) {
+    public static double convertNanosToDecimalHours(long timeInNanos) {
         long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanos);
         double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
         BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
         return decimalHoursRounded.doubleValue();
+    }
+
+    public static long convertStringToNanos(String timeInString) {
+        String[] timeArray = timeInString.split(":");
+        String time = "PT" + timeArray[0] + "H" + timeArray[1] + "M";
+        Duration duration = Duration.parse(time);
+        return duration.toNanos();
     }
 
     private static boolean isStartOutOfNightShift(LocalDateTime startDateTime) {
@@ -77,5 +78,4 @@ public class DateUtils {
         return endDateTime.isAfter(endDateTime.withHour(END_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue()))
                 && !endDateTime.isAfter(endDateTime.withHour(START_HOUR_NIGHT_SHIFT).withMinute(BigDecimal.ZERO.intValue()));
     }
-
 }

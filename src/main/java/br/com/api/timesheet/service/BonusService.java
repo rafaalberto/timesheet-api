@@ -34,7 +34,7 @@ public class BonusService {
 
     public Bonus save(BonusRequest request) {
         Bonus bonus = new Bonus();
-        request.getId().ifPresent(id -> bonus.setId(id));
+        request.getId().ifPresent(bonus::setId);
         if(request.getEmployeeId().isPresent()) {
             Employee employee = employeeService.findById(request.getEmployeeId().get());
             bonus.setEmployee(employee);
