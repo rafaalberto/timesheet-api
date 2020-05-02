@@ -18,7 +18,7 @@ pipeline {
 def runFile(filename) {
     try {
         def pwd = pwd()
-        sh "${pwd}/pipeline/${filename}"
+        sh "bash ${pwd}/pipeline/${filename}"
     } catch (exception) {
         echo "Error to execute ${filename}"
         throw exception
