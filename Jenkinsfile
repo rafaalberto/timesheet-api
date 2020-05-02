@@ -4,15 +4,23 @@ pipeline {
     stages {
         stage("Build") {
             steps {
-                echo "building project..."
-                sh "./gradlew clean build -x test"
+                runFile("build.sh")
             }
         }
         stage("Test") {
             steps {
-                echo "testing project..."
-                sh "./gradlew test --info --stacktrace"
+                runFile("test.sh")
             }
         }
+    }
+}
+
+def runFile(filename) {
+    try {
+        def pwd = pwd()
+        sh "${pwd}/pipeline/${filename}"
+    } catch (exception) {
+        echo "Error to execute ${filename}"
+        throw exception
     }
 }
