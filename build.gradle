@@ -13,7 +13,18 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.postgresql:postgresql:42.2.5")
 	}
+}
+
+plugins {
+	id "org.flywaydb.flyway" version "5.2.4"
+}
+
+flyway {
+	url = 'jdbc:postgresql://localhost:5432/timesheet'
+	user = 'postgres'
+	password = 'postgres'
 }
 
 apply plugin: 'java'
@@ -23,7 +34,6 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'br.com.timesheet'
 version = '1.0.0-SNAPSHOT'
-sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()

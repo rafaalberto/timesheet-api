@@ -12,6 +12,9 @@ pipeline {
                 runFile("test.sh")
             }
         }
+        stage("Migration") {
+
+        }
     }
 }
 
