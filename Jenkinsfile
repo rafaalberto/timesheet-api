@@ -13,7 +13,9 @@ pipeline {
             }
         }
         stage("Migration") {
-
+            steps {
+                runFile("migration.sh")
+            }
         }
     }
 }
