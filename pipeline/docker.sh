@@ -1,18 +1,18 @@
-#echo "*** Delete container if exists ***"
-#docker ps -q -f name=timesheet-api
-#if [ $? -eq 0 ];
-#then
-#     echo "*** Remove container ***"
-#     docker rm -f timesheet-api
-#fi
-#
-#echo "*** Delete image if exists ***"
-#docker images -q timesheet-api
-#if [ $? -eq 0 ];
-#then
-#     echo "*** Remove image ***"
-#     docker rmi -f timesheet-api
-#fi
+echo "*** Delete container if exists ***"
+docker ps -q -f name=timesheet-api
+if [ $? -eq 0 ];
+then
+     echo "*** Remove container ***"
+     docker rm -f timesheet-api
+fi
+
+echo "*** Delete image if exists ***"
+docker images -q timesheet-api
+if [ $? -eq 0 ];
+then
+     echo "*** Remove image ***"
+     docker rmi -f timesheet-api
+fi
 
 docker login --username rafaalberto17 --password 'dockertest'
 
