@@ -1,8 +1,8 @@
 echo "*** Delete container if exists ***"
-docker rm timesheet-api
+docker rm -f timesheet-api
 
 echo "*** Delete image if exists ***"
-docker rmi timesheet-api
+docker rmi -f timesheet-api
 
 echo "*** Docker create image ***"
 docker build -t timesheet-api .
