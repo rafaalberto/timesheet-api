@@ -1,11 +1,10 @@
 pipeline {
     agent any
 
-    deleteDir()
-
     stages {
         stage("Build") {
             steps {
+                deleteDir()
                 runFile("build.sh")
             }
         }
