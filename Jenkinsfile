@@ -17,6 +17,11 @@ pipeline {
                 runFile("migration.sh")
             }
         }
+        stage("Deploy") {
+            steps {
+                runFile("docker.sh")
+            }
+        }
     }
 }
 
