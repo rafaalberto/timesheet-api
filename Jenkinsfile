@@ -19,7 +19,8 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                runFile("docker.sh")
+                sh "sudo docker build -t timesheet-api ."
+//                 runFile("docker.sh")
             }
         }
     }
