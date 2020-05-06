@@ -17,9 +17,9 @@
 #docker login --username rafaalberto17 --password 'dockertest'
 
 echo "*** Docker create image ***"
-docker build -t timesheet-api .
+sudo docker build -t timesheet-api .
 
 echo "*** Docker create container ***"
-docker run -d --name timesheet-api -e APP_OPTIONS='--spring.datasource.url=jdbc:postgresql://localhost:5432/timesheet' -p 8080:8080 --network=host timesheet-api
+sudo docker run -d --name timesheet-api -e APP_OPTIONS='--spring.datasource.url=jdbc:postgresql://localhost:5432/timesheet' -p 8080:8080 --network=host timesheet-api
 
 #docker logout
