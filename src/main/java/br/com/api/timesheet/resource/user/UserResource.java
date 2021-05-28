@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import static br.com.api.timesheet.enumeration.ProfileEnum.valueOf;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class UserResource {
 
@@ -51,14 +51,14 @@ public class UserResource {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> create(@Valid @RequestBody User user) {
-        return new ResponseEntity<User>(userService.save(user), HttpStatus.CREATED);
+    public ResponseEntity<User> create(@Valid @RequestBody UserRequest userRequest) {
+        return new ResponseEntity<>(userService.save(userRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody User user) {
-        user.setId(id);
-        return new ResponseEntity<User>(userService.save(user), HttpStatus.OK);
+    public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
+        userRequest.setId(id);
+        return new ResponseEntity<>(userService.save(userRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{id}")

@@ -1,4 +1,4 @@
-package br.com.api.timesheet.resource.timesheetRegister;
+package br.com.api.timesheet.resource.timesheetregister;
 
 import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;

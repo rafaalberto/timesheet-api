@@ -2,14 +2,17 @@ package br.com.api.timesheet.resource.employee;
 
 import br.com.api.timesheet.enumeration.StatusEnum;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.Optional;
 
 @Builder
+@Data
 public class EmployeeRequest {
 
     private Integer page;
     private Integer size;
+    private Long id;
     private String name;
     private String recordNumber;
     private Long companyId;

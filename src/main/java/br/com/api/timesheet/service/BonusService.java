@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BonusService {
@@ -35,8 +36,9 @@ public class BonusService {
     public Bonus save(BonusRequest request) {
         Bonus bonus = new Bonus();
         request.getId().ifPresent(bonus::setId);
-        if(request.getEmployeeId().isPresent()) {
-            Employee employee = employeeService.findById(request.getEmployeeId().get());
+        Optional<Long> employeeId = request.getEmployeeId();
+        if(employeeId.isPresent()) {
+            Employee employee = employeeService.findById(employeeId.get());
             bonus.setEmployee(employee);
         }
         bonus.setMonthReference(request.getMonthReference());

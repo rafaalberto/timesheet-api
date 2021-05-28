@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class CompanyResource {
 
@@ -26,8 +25,7 @@ public class CompanyResource {
             @RequestParam(value = "page", required = false) final Integer page,
             @RequestParam(value = "size", required = false) final Integer size,
             @RequestParam(value = "document", required = false) final String document,
-            @RequestParam(value = "name", required = false) final String name,
-            @RequestParam(value = "profile", required = false) final String profile) {
+            @RequestParam(value = "name", required = false) final String name) {
 
         final CompanyRequest companyRequest = CompanyRequest.builder()
                 .page(page)
@@ -41,7 +39,6 @@ public class CompanyResource {
     }
 
     @GetMapping("/companies/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Company> findById(@PathVariable Long id) {
         Company company = companyService.findById(id);
         return ResponseEntity.ok(company);
@@ -49,14 +46,14 @@ public class CompanyResource {
 
     @PostMapping("/companies")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Company> create(@Valid @RequestBody Company company) {
-        return new ResponseEntity<>(companyService.save(company), HttpStatus.CREATED);
+    public ResponseEntity<Company> create(@Valid @RequestBody CompanyRequest companyRequest) {
+        return new ResponseEntity<>(companyService.save(companyRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/companies/{id}")
-    public ResponseEntity<Company> update(@PathVariable Long id, @Valid @RequestBody Company company) {
-        company.setId(id);
-        return new ResponseEntity<>(companyService.save(company), HttpStatus.OK);
+    public ResponseEntity<Company> update(@PathVariable Long id, @Valid @RequestBody CompanyRequest companyRequest) {
+        companyRequest.setId(id);
+        return new ResponseEntity<>(companyService.save(companyRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/companies/{id}")

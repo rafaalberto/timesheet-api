@@ -1,5 +1,6 @@
 package br.com.api.timesheet.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.br.CNPJ;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 
 @Entity
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = Company.TABLE_NAME)
 public class Company implements Serializable {
@@ -35,8 +37,4 @@ public class Company implements Serializable {
     @Size(min = 3, max = 50, message = "error-company-3")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
-
-    public void setName(String name) {
-        this.name = name.toUpperCase();
-    }
 }

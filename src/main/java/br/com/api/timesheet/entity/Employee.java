@@ -1,9 +1,9 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.OfficeHoursEnum;
-import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,10 +17,10 @@ import static java.text.NumberFormat.getCurrencyInstance;
 
 @Entity
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = Employee.TABLE_NAME)
 public class Employee implements Serializable {
-
 
     static final String TABLE_NAME = "employees";
     private static final String SEQUENCE_NAME = "seq_employees";
@@ -66,9 +66,5 @@ public class Employee implements Serializable {
 
     public String getCostHourFormatted() {
         return getCurrencyInstance(new Locale("pt", "BR")).format(costHour);
-    }
-
-    public void setName(String name) {
-        this.name = name.toUpperCase();
     }
 }

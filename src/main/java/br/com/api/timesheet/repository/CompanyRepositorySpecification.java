@@ -8,8 +8,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.HashSet;
+import java.util.Optional;
 
-public class CompanyRepositorySpecification {
+public abstract class CompanyRepositorySpecification {
+
+    private CompanyRepositorySpecification() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static Specification<Company> criteriaSpecification(CompanyRequest request) {
         return (root, query, criteriaBuilder) -> {
@@ -21,17 +26,19 @@ public class CompanyRepositorySpecification {
     }
 
     private static void setDocument(CompanyRequest request, Root<Company> root, CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
-        if (request.getDocument().isPresent()) {
+        Optional<String> document = request.getDocument();
+        if (document.isPresent()) {
             predicates.add(criteriaBuilder.like(
-                    (criteriaBuilder.lower(root.get("document"))), "%" + request.getDocument().get().toLowerCase() + "%")
+                    (criteriaBuilder.lower(root.get("document"))), "%" + document.get() + "%")
             );
         }
     }
 
     private static void setName(CompanyRequest request, Root<Company> root, CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
-        if (request.getName().isPresent()) {
+        Optional<String> name = request.getName();
+        if (name.isPresent()) {
             predicates.add(criteriaBuilder.like(
-                    (criteriaBuilder.lower(root.get("name"))), "%" + request.getName().get().toLowerCase() + "%")
+                    (criteriaBuilder.lower(root.get("name"))), "%" + name.get() + "%")
             );
         }
     }

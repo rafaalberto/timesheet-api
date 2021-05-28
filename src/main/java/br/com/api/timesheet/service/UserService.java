@@ -37,7 +37,14 @@ public class UserService {
                 .orElseThrow(() -> new BusinessException("error-user-9", HttpStatus.BAD_REQUEST));
     }
 
-    public User save(User user) {
+    public User save(UserRequest userRequest) {
+        User user = User.builder()
+                .id(userRequest.getId())
+                .name(userRequest.getName().orElse(""))
+                .username(userRequest.getUsername().orElse(""))
+                .password(userRequest.getPassword())
+                .profile(userRequest.getProfile().orElse(null))
+                .build();
         verifyIfUserExist(user);
         user.setPassword(BCryptUtil.encode(user.getPassword()));
         return userRepository.save(user);

@@ -36,7 +36,13 @@ public class PositionService {
                 .orElseThrow(() -> new BusinessException("error-position-9", HttpStatus.BAD_REQUEST));
     }
 
-    public Position save(Position position) {
+    public Position save(PositionRequest positionRequest) {
+        String title = positionRequest.getTitle().orElse("");
+        Position position = Position.builder()
+                .id(positionRequest.getId())
+                .title(title.toUpperCase())
+                .dangerousness(positionRequest.isDangerousness())
+                .build();
         verifyIfPositionExist(position);
         return positionRepository.save(position);
     }

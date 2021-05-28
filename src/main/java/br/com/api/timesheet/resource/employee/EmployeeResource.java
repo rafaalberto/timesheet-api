@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class EmployeeResource {
 
@@ -52,14 +52,14 @@ public class EmployeeResource {
 
     @PostMapping("/employees")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Employee> create(@Valid @RequestBody Employee employee) {
-        return new ResponseEntity<>(employeeService.save(employee), HttpStatus.CREATED);
+    public ResponseEntity<Employee> create(@Valid @RequestBody EmployeeRequest employeeRequest) {
+        return new ResponseEntity<>(employeeService.save(employeeRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/employees/{id}")
-    public ResponseEntity<Employee> update(@PathVariable Long id, @Valid @RequestBody Employee employee) {
-        employee.setId(id);
-        return new ResponseEntity<>(employeeService.save(employee), HttpStatus.OK);
+    public ResponseEntity<Employee> update(@PathVariable Long id, @Valid @RequestBody EmployeeRequest employeeRequest) {
+        employeeRequest.setId(id);
+        return new ResponseEntity<>(employeeService.save(employeeRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/employees/{id}")

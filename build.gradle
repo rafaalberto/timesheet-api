@@ -28,9 +28,7 @@ flyway {
 	password = 'postgres'
 }
 
-project.ext.exclusionsForJacoco = [
-        "**/config/**"
-]
+project.ext.exclusionsForJacoco = ["**/utils/Constants.java"]
 
 apply plugin: 'java'
 apply plugin: 'eclipse'

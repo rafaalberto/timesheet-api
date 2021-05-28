@@ -1,8 +1,7 @@
 package br.com.api.timesheet.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,10 +10,12 @@ import java.util.Locale;
 import static java.text.NumberFormat.getCurrencyInstance;
 
 @Entity
-@Data
+@Data @Builder @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = Bonus.TABLE_NAME)
 public class Bonus implements Serializable {
+
+    private static final long serialVersionUID = 4967859640922628146L;
 
     static final String TABLE_NAME = "bonuses";
     private static final String SEQUENCE_NAME = "seq_bonuses";

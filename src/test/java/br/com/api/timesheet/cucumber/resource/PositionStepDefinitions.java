@@ -3,6 +3,7 @@ package br.com.api.timesheet.cucumber.resource;
 import br.com.api.timesheet.cucumber.DatabaseActions;
 import br.com.api.timesheet.cucumber.http.HttpRequestStepDefinitions;
 import br.com.api.timesheet.entity.Position;
+import br.com.api.timesheet.resource.position.PositionRequest;
 import com.google.gson.JsonObject;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class PositionStepDefinitions extends HttpRequestStepDefinitions {
 
     @Autowired
-    private DatabaseActions databaseActions;
+    private final DatabaseActions databaseActions;
 
     public PositionStepDefinitions(DatabaseActions databaseActions) {
         this.databaseActions = databaseActions;
@@ -77,18 +78,18 @@ public class PositionStepDefinitions extends HttpRequestStepDefinitions {
         assertTrue(getResultActions().andReturn().getResponse().getContentAsString().contains(message));
     }
 
-    private Position getPosition(final DataTable dataTable) {
-        AtomicReference<Position> position = new AtomicReference<>(new Position());
+    private PositionRequest getPosition(final DataTable dataTable) {
+        AtomicReference<PositionRequest> position = new AtomicReference<>(new PositionRequest());
         List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
         data.forEach(row ->
-                position.set(Position.builder().title(row.get("Title")).dangerousness(false).build())
+                position.set(PositionRequest.builder().title(row.get("Title")).dangerousness(false).build())
         );
         return position.get();
     }
 
-    private static JsonObject buildRequest(final Position position) {
+    private static JsonObject buildRequest(final PositionRequest position) {
         final JsonObject request = new JsonObject();
-        request.addProperty("title", position.getTitle());
+        request.addProperty("title", position.getTitle().orElse(""));
         request.addProperty("dangerousness", position.isDangerousness());
         return request;
     }

@@ -10,7 +10,7 @@ import br.com.api.timesheet.entity.TimesheetRegister;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.TimesheetRegisterRepository;
-import br.com.api.timesheet.resource.timesheetRegister.TimesheetRequest;
+import br.com.api.timesheet.resource.timesheetregister.TimesheetRequest;
 import br.com.api.timesheet.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.OptionalDouble;
+import java.util.*;
 
 import static br.com.api.timesheet.enumeration.ReportTypeEnum.*;
 import static br.com.api.timesheet.utils.DateUtils.convertNanosToDecimalHours;
@@ -75,12 +72,15 @@ public class TimesheetRegisterService {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         LocalDateTime startDate = parse(request.getTimeIn(), formatter).withHour(0).withMinute(0).withSecond(0);
         LocalDateTime endDate = startDate.withHour(23).withMinute(59).withSecond(59);
-        List<TimesheetRegister> registers = timesheetRegisterRepository.findByEmployeeAndTimeIn(request.getEmployeeId().get(), request.getYearReference(), request.getMonthReference(),
-                startDate, endDate);
-
-        if(!registers.isEmpty()) {
-            throw new BusinessException("error-timesheet-2", HttpStatus.BAD_REQUEST);
+        Optional<Long> employeeId = request.getEmployeeId();
+        if(employeeId.isPresent()) {
+            List<TimesheetRegister> registers = timesheetRegisterRepository.findByEmployeeAndTimeIn(employeeId.get(), request.getYearReference(), request.getMonthReference(),
+                    startDate, endDate);
+            if(!registers.isEmpty()) {
+                throw new BusinessException("error-timesheet-2", HttpStatus.BAD_REQUEST);
+            }
         }
+
     }
 
     public TimesheetRegister findById(Long id) {
@@ -97,7 +97,7 @@ public class TimesheetRegisterService {
     }
 
     public Collection<TimesheetDailyReport> listDailyReport(Long employee, Integer year, Integer month, boolean asc) {
-        List<TimesheetDailyReport> dailyReport = new ArrayList();
+        List<TimesheetDailyReport> dailyReport = new ArrayList<>();
         List<TimesheetRegister> registers = asc ? timesheetRegisterRepository.findByEmployeeAndPeriodAsc(employee, year, month) :
                 timesheetRegisterRepository.findByEmployeeAndPeriodDesc(employee, year, month);
         setReport(dailyReport, registers);
@@ -148,7 +148,7 @@ public class TimesheetRegisterService {
 
         timesheetDocket.setItems(docketItems);
 
-        timesheetDocket.setTotal(timesheetDocket.getItems().stream().mapToDouble(items -> items.getTotalCost()).sum());
+        timesheetDocket.setTotal(timesheetDocket.getItems().stream().mapToDouble(TimesheetDocketItem::getTotalCost).sum());
 
         return timesheetDocket;
     }
@@ -175,16 +175,17 @@ public class TimesheetRegisterService {
                         !item.getTypeCode().equals(REGULAR_HOURS.getCode())
                                 && !item.getTypeCode().equals(WEEKLY_REST.getCode())
                                 && !item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode()))
-                        .mapToDouble(item -> item.getTotalCost()).sum();
+                        .mapToDouble(TimesheetDocketItem::getTotalCost).sum();
 
-        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
-        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
+        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(TimesheetDocketItem::getTotalCost).sum();
+        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(TimesheetDocketItem::getTotalCost).sum();
 
         if(regularHours > BigInteger.ZERO.intValue()){
             totalWeeklyRestComplement = totalWeeklyRestComplement / regularHours * weeklyRest;
-
-            docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode()))
-                    .findFirst().get().setTotalCost(totalWeeklyRestComplement);
+            Optional<TimesheetDocketItem> items = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST_COMPLEMENT.getCode())).findFirst();
+            if(items.isPresent()) {
+                items.get().setTotalCost(totalWeeklyRestComplement);
+            }
         }
     }
 
@@ -203,16 +204,17 @@ public class TimesheetRegisterService {
     }
 
     private double getFiftyPercentCost(Double regularPrice, Collection<Bonus> bonuses) {
-        Double bonusAmount = !bonuses.isEmpty() ? bonuses.stream().mapToDouble(bonus -> bonus.getCost()).sum() : Double.valueOf(BigInteger.ZERO.intValue());
+        Double bonusAmount = !bonuses.isEmpty() ? bonuses.stream().mapToDouble(Bonus::getCost).sum() : Double.valueOf(BigInteger.ZERO.intValue());
         return (regularPrice * TOTAL_HOURS_PER_MONTH + bonusAmount) / TOTAL_HOURS_PER_MONTH;
     }
 
     private TimesheetRegister getTimeSheetRegister(TimesheetRequest request) {
         DateTimeFormatter formatter = ofPattern(DateUtils.DATE_TIME_FORMAT);
         TimesheetRegister register = new TimesheetRegister();
-        request.getId().ifPresent(id -> register.setId(id));
-        if(request.getEmployeeId().isPresent()) {
-            Employee employee = employeeService.findById(request.getEmployeeId().get());
+        request.getId().ifPresent(register::setId);
+        Optional<Long> employeeId = request.getEmployeeId();
+        if(employeeId.isPresent()) {
+            Employee employee = employeeService.findById(employeeId.get());
             register.setEmployee(employee);
         }
         register.setMonthReference(request.getMonthReference());
@@ -241,49 +243,50 @@ public class TimesheetRegisterService {
     }
 
     private double fetchCostPerHour(Collection<TimesheetReport> report) {
-        OptionalDouble optionalDouble = report.stream().mapToDouble(r -> r.getCostHour()).max();
+        OptionalDouble optionalDouble = report.stream().mapToDouble(TimesheetReport::getCostHour).max();
         return optionalDouble.isPresent() ? optionalDouble.getAsDouble() : Double.valueOf(0);
     }
 
     private boolean fetchDangerousness(Collection<TimesheetReport> report) {
         if(!report.isEmpty()) {
-            return report.stream().findFirst().get().isDangerousness();
+            Optional<TimesheetReport> timesheetReport = report.stream().findFirst();
+            return timesheetReport.map(TimesheetReport::isDangerousness).orElse(false);
         }
         return false;
     }
 
     private long getTotalPaidNightTime(Collection<TimesheetReport> report) {
-        return report.stream().mapToLong(r -> r.getPaidNightTime()).sum();
+        return report.stream().mapToLong(TimesheetReport::getPaidNightTime).sum();
     }
 
     private long getTotalNightShift(Collection<TimesheetReport> report) {
-        return report.stream().mapToLong(r -> r.getNightShift()).sum();
+        return report.stream().mapToLong(TimesheetReport::getNightShift).sum();
     }
 
     private long getTotalSumula90(Collection<TimesheetReport> report) {
-        return report.stream().mapToLong(r -> r.getSumula90()).sum();
+        return report.stream().mapToLong(TimesheetReport::getSumula90).sum();
     }
 
     private long getTotalExtraHoursFull(Collection<TimesheetReport> report) {
         return report.stream()
                 .filter(r -> r.getType().equals(TimesheetTypeEnum.DAY_OFF) || r.getType().equals(TimesheetTypeEnum.HOLIDAY))
-                .mapToLong(r -> r.getExtraHours()).sum();
+                .mapToLong(TimesheetReport::getExtraHours).sum();
     }
 
     private long getTotalExtraHoursPart(Collection<TimesheetReport> report) {
         return report.stream()
                 .filter(r -> r.getType().equals(TimesheetTypeEnum.REGULAR))
-                .mapToLong(r -> r.getExtraHours()).sum();
+                .mapToLong(TimesheetReport::getExtraHours).sum();
     }
 
     private long getTotalWeeklyRest(Collection<TimesheetReport> report) {
-        return report.stream().mapToLong(r -> r.getWeeklyRest()).sum();
+        return report.stream().mapToLong(TimesheetReport::getWeeklyRest).sum();
     }
 
     private long getTotalHoursWorked(Collection<TimesheetReport> report) {
         return report.stream()
                 .filter(r -> r.getType().equals(TimesheetTypeEnum.REGULAR))
-                .mapToLong(r -> r.getHoursWorked()).sum();
+                .mapToLong(TimesheetReport::getHoursWorked).sum();
     }
 
     private Collection<Bonus> fetchBonuses(Long employeeId, Integer year, Integer month) {
@@ -298,8 +301,8 @@ public class TimesheetRegisterService {
     }
 
     private double getTotalDangerousness(Collection<TimesheetDocketItem> docketItems) {
-        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
-        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(item -> item.getTotalCost()).sum();
+        double regularHours = docketItems.stream().filter(item -> item.getTypeCode().equals(REGULAR_HOURS.getCode())).mapToDouble(TimesheetDocketItem::getTotalCost).sum();
+        double weeklyRest = docketItems.stream().filter(item -> item.getTypeCode().equals(WEEKLY_REST.getCode())).mapToDouble(TimesheetDocketItem::getTotalCost).sum();
         return (regularHours + weeklyRest) * 0.30;
     }
 

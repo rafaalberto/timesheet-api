@@ -36,7 +36,12 @@ public class CompanyService {
                 .orElseThrow(() -> new BusinessException("error-company-9", HttpStatus.BAD_REQUEST));
     }
 
-    public Company save(Company company) {
+    public Company save(CompanyRequest companyRequest) {
+        Company company = Company.builder()
+                .id(companyRequest.getId())
+                .name(companyRequest.getName().orElse(""))
+                .document(companyRequest.getDocument().orElse(null))
+                .build();
         verifyIfCompanyExist(company);
         return companyRepository.save(company);
     }

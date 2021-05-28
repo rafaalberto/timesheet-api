@@ -27,9 +27,9 @@ public enum OfficeHoursEnum {
 
     public static List<OfficeHours> fetchByPeriod(PeriodEnum period) {
         List<OfficeHours> officeHours = new ArrayList<>();
-        stream(values()).filter(hour -> hour.period.equals(period)).collect(toList()).forEach(officeHour -> {
-            officeHours.add(new OfficeHours(officeHour.toString(), officeHour.getDescription()));
-        });
+        stream(values()).filter(hour -> hour.period.equals(period)).collect(toList()).forEach(officeHour ->
+            officeHours.add(new OfficeHours(officeHour.toString(), officeHour.getDescription()))
+        );
         return officeHours;
     }
 }

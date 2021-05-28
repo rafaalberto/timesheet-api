@@ -1,7 +1,6 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.PeriodEnum;
-import br.com.api.timesheet.enumeration.StatusEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
 import br.com.api.timesheet.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -27,6 +26,8 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = TimesheetRegister.TABLE_NAME)
 public class TimesheetRegister implements Serializable {
+
+    private static final long serialVersionUID = 2503096874494106030L;
 
     static final String TABLE_NAME = "timesheet_register";
     private static final String SEQUENCE_NAME = "seq_timesheet_register";

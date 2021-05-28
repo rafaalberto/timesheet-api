@@ -53,7 +53,6 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException exception, Locale locale) {
-        final String errorCode = exception.getCode();
         final HttpStatus status = exception.getHttpStatus();
         final ErrorResponse errorResponse = ErrorResponse.of(status, toApiError(exception.getCode(), locale));
         return ResponseEntity.badRequest().body(errorResponse);

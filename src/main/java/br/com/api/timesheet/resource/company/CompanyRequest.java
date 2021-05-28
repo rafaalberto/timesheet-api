@@ -1,14 +1,17 @@
 package br.com.api.timesheet.resource.company;
 
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.Optional;
 
 @Builder
+@Data
 public class CompanyRequest {
 
     private Integer page;
     private Integer size;
+    private Long id;
     private String document;
     private String name;
 

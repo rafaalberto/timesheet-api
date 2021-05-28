@@ -1,7 +1,6 @@
 package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.entity.Employee;
-import br.com.api.timesheet.enumeration.OfficeHoursEnum;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.EmployeeRepository;
 import br.com.api.timesheet.repository.EmployeeRepositorySpecification;
@@ -25,14 +24,10 @@ public class EmployeeService {
 
     private CompanyService companyService;
 
-    private PositionService positionService;
-
     public EmployeeService(@Autowired EmployeeRepository employeeRepository,
-                           @Autowired CompanyService companyService,
-                           @Autowired PositionService positionService ) {
+                           @Autowired CompanyService companyService) {
         this.employeeRepository = employeeRepository;
         this.companyService = companyService;
-        this.positionService = positionService;
     }
 
     public Page<Employee> findAll(EmployeeRequest request) {
@@ -47,7 +42,18 @@ public class EmployeeService {
         return employee;
     }
 
-    public Employee save(Employee employee) {
+    public Employee save(EmployeeRequest employeeRequest) {
+        Employee employee = Employee.builder()
+                .id(employeeRequest.getId())
+                .company(companyService.findById(employeeRequest.getCompanyId().orElse(null)))
+                .costCenter(null)
+                .costHour(null)
+                .name(employeeRequest.getName().orElse(null))
+                .officeHour(null)
+                .recordNumber(employeeRequest.getRecordNumber().orElse(null))
+                .position(null)
+                .status(employeeRequest.getStatus().orElse(null))
+                .build();
         verifyIfEmployeeExist(employee);
         return employeeRepository.save(employee);
     }
