@@ -1,8 +1,7 @@
 package br.com.api.timesheet.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,11 @@ import java.util.stream.Stream;
 
 import static br.com.api.timesheet.exception.ErrorResponse.ApiError;
 
+@Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
     private static final String NO_MESSAGE_AVAILABLE = "No message available";
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiExceptionHandler.class);
 
     private final MessageSource apiErrorMessageSource;
 
@@ -63,7 +62,7 @@ public class ApiExceptionHandler {
         try {
             message = apiErrorMessageSource.getMessage(code, args, locale);
         } catch (NoSuchMessageException e) {
-            LOGGER.error("Could not find any message for {} code under {} locale", code, locale);
+            log.error("Could not find any message for {} code under {} locale", code, locale);
             message = NO_MESSAGE_AVAILABLE;
         }
 

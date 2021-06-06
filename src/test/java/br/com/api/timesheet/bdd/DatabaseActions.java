@@ -1,7 +1,7 @@
 package br.com.api.timesheet.bdd;
 
 import br.com.api.timesheet.entity.Position;
-import br.com.api.timesheet.unit.repository.PositionRepository;
+import br.com.api.timesheet.repository.PositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

@@ -4,7 +4,7 @@ import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
 import br.com.api.timesheet.dto.TimesheetReport;
 import br.com.api.timesheet.entity.TimesheetRegister;
-import br.com.api.timesheet.unit.service.TimesheetRegisterService;
+import br.com.api.timesheet.service.TimesheetRegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

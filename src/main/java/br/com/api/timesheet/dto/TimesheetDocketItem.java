@@ -4,8 +4,8 @@ import lombok.Data;
 
 import java.util.Locale;
 
-import static br.com.api.timesheet.unit.utils.DateUtils.TIME_FORMAT;
-import static br.com.api.timesheet.unit.utils.DateUtils.convertNanosToDecimalHours;
+import static br.com.api.timesheet.utils.DateUtils.TIME_FORMAT;
+import static br.com.api.timesheet.utils.DateUtils.convertNanosToDecimalHours;
 import static java.text.NumberFormat.getCurrencyInstance;
 import static java.time.Duration.ofNanos;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;

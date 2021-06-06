@@ -1,7 +1,7 @@
 package br.com.api.timesheet.resource.company;
 
 import br.com.api.timesheet.entity.Company;
-import br.com.api.timesheet.unit.service.CompanyService;
+import br.com.api.timesheet.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

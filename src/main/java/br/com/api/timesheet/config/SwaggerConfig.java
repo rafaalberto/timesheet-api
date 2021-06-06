@@ -1,6 +1,6 @@
 package br.com.api.timesheet.config;
 
-import br.com.api.timesheet.unit.utils.JwtUtil;
+import br.com.api.timesheet.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("User Admin API")
-                .description("Documentation about User Admin API").version("1.0").build();
+        return new ApiInfoBuilder().title("Timesheet API")
+                .description("Documentation about Timesheet API").version("1.0").build();
     }
 }

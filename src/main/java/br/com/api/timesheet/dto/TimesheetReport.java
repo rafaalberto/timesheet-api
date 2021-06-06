@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static br.com.api.timesheet.unit.utils.DateUtils.TIME_FORMAT;
+import static br.com.api.timesheet.utils.DateUtils.TIME_FORMAT;
 import static java.time.Duration.ofNanos;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 
