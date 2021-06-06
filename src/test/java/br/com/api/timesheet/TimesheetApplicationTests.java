@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        glue = "br.com.api.timesheet.cucumber",
+        glue = "br/com/api/timesheet/bdd",
         plugin = {"pretty"},
 //        tags = {"@test"},
         features = "src/test/resources")

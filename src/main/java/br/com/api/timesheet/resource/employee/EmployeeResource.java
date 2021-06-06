@@ -2,7 +2,7 @@ package br.com.api.timesheet.resource.employee;
 
 import br.com.api.timesheet.entity.Employee;
 import br.com.api.timesheet.enumeration.StatusEnum;
-import br.com.api.timesheet.service.EmployeeService;
+import br.com.api.timesheet.unit.service.EmployeeService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

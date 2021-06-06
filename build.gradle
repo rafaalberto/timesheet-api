@@ -28,7 +28,19 @@ flyway {
 	password = 'postgres'
 }
 
-project.ext.exclusionsForJacoco = ["**/utils/Constants.java"]
+project.ext.exclusionsForJacoco = [
+		"**/utils/Constants.java",
+		"**/BonusRequest.java",
+		"**/entity/**",
+		"**/security/**",
+		"**/converter/**",
+		"**/config/**",
+		"**/dto/**",
+		"**/resource/auth**",
+		"**/utils/JwtUtil.java",
+		"**Request.java",
+		"**UserDetailsServiceImpl.java"
+]
 
 apply plugin: 'java'
 apply plugin: 'eclipse'

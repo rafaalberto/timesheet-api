@@ -4,7 +4,7 @@ import br.com.api.timesheet.dto.OfficeHours;
 import br.com.api.timesheet.entity.Position;
 import br.com.api.timesheet.enumeration.OfficeHoursEnum;
 import br.com.api.timesheet.enumeration.PeriodEnum;
-import br.com.api.timesheet.service.PositionService;
+import br.com.api.timesheet.unit.service.PositionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

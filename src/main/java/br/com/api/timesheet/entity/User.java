@@ -3,9 +3,7 @@ package br.com.api.timesheet.entity;
 import br.com.api.timesheet.enumeration.ProfileEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +15,7 @@ import java.io.Serializable;
 @Data
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = User.TABLE_NAME)
 public class User implements Serializable {
 

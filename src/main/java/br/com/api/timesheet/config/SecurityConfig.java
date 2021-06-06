@@ -2,7 +2,7 @@ package br.com.api.timesheet.config;
 
 import br.com.api.timesheet.security.JwtAuthenticationFilter;
 import br.com.api.timesheet.security.JwtAuthorizationFilter;
-import br.com.api.timesheet.utils.JwtUtil;
+import br.com.api.timesheet.unit.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.headers().frameOptions().disable();
         }
 
+        http.cors().and().csrf().disable();
         http.authorizeRequests()
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated();

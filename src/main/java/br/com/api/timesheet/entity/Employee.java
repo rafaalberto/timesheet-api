@@ -3,9 +3,7 @@ package br.com.api.timesheet.entity;
 import br.com.api.timesheet.enumeration.OfficeHoursEnum;
 import br.com.api.timesheet.enumeration.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +16,8 @@ import static java.text.NumberFormat.getCurrencyInstance;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = Employee.TABLE_NAME)
 public class Employee implements Serializable {

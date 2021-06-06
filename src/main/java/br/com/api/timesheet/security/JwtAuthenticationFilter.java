@@ -3,7 +3,7 @@ package br.com.api.timesheet.security;
 import br.com.api.timesheet.config.ApiErrorConfig;
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.exception.BusinessException;
-import br.com.api.timesheet.utils.JwtUtil;
+import br.com.api.timesheet.unit.utils.JwtUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;

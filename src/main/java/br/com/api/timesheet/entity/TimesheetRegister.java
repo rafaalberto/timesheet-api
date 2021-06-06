@@ -2,10 +2,12 @@ package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import br.com.api.timesheet.utils.DateUtils;
+import br.com.api.timesheet.unit.utils.DateUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +17,7 @@ import java.time.LocalDateTime;
 
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.DAY_OFF;
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.HOLIDAY;
-import static br.com.api.timesheet.utils.DateUtils.*;
+import static br.com.api.timesheet.unit.utils.DateUtils.*;
 import static java.time.Duration.between;
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalTime.ofSecondOfDay;
@@ -24,6 +26,8 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = TimesheetRegister.TABLE_NAME)
 public class TimesheetRegister implements Serializable {
 

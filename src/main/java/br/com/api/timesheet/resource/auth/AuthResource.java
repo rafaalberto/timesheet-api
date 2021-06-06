@@ -1,6 +1,6 @@
 package br.com.api.timesheet.resource.auth;
 
-import br.com.api.timesheet.utils.JwtUtil;
+import br.com.api.timesheet.unit.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

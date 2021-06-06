@@ -1,6 +1,6 @@
 package br.com.api.timesheet.security;
 
-import br.com.api.timesheet.utils.JwtUtil;
+import br.com.api.timesheet.unit.utils.JwtUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
