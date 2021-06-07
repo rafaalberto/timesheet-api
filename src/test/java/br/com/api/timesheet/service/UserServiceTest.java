@@ -4,22 +4,28 @@ import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ProfileEnum;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.UserRepository;
-import br.com.api.timesheet.resource.UserRequest;
+import br.com.api.timesheet.resource.user.UserRequest;
 import br.com.api.timesheet.service.impl.UserServiceImpl;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 
-import java.util.Collections;
 import java.util.Optional;
+
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+import static org.springframework.data.domain.PageRequest.of;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -35,87 +41,117 @@ public class UserServiceTest {
 
     private UserRequest userRequest;
 
-    private User userDB;
+    private User user;
 
     @Before
     public void setUp() {
-        userRequest = UserRequest.builder()
-                .id(1L)
-                .username("rafaalberto")
-                .name("Rafael")
-                .profile(ProfileEnum.ROLE_ADMIN)
-                .password("123")
-                .build();
-        userDB = User.builder().id(1L)
-                .username("rafaalberto")
-                .name("Rafael")
-                .profile(ProfileEnum.ROLE_ADMIN)
-                .password("123").build();
+        userRequest = getUserRequestBuilder();
+        user = getUserBuilder();
     }
 
     @Test
     public void shouldFindAll() {
-        Page<User> usersPage = new PageImpl<>(Collections.singletonList(userDB), PageRequest.of(0, 10), 1);
-        UserRequest request = UserRequest.builder().build();
-        Mockito.when(userRepository.findAll(Mockito.any(Specification.class), Mockito.any(PageRequest.class))).thenReturn(usersPage);
-        Page<User> users = userService.findAll(request);
-        Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Specification.class), Mockito.any(PageRequest.class));
-        Assertions.assertThat(users.getTotalElements()).isEqualTo(1);
+        Page<User> usersPage = new PageImpl<>(singletonList(user), of(0, 10), 1);
+        when(userRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(usersPage);
+
+        Page<User> users = userService.findAll(userRequest);
+
+        verify(userRepository, times(1)).findAll(any(Specification.class), any(PageRequest.class));
+
+        assertThat(users.getTotalElements()).isEqualTo(1);
     }
 
     @Test
     public void shouldSave() {
-        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.empty());
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(userDB);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(userRepository.save(any(User.class))).thenReturn(user);
+
         userService.save(userRequest);
-        Mockito.verify(userRepository, Mockito.times(1)).save(userArgumentCaptor.capture());
-        Assertions.assertThat(userArgumentCaptor.getValue().getId()).isEqualTo(1);
+
+        verify(userRepository, times(1)).findByUsername(anyString());
+        verify(userRepository, times(1)).save(userArgumentCaptor.capture());
+
+        assertThat(userArgumentCaptor.getValue().getName()).isEqualTo("Rafael");
     }
 
     @Test
     public void shouldUpdate() {
-        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(User.builder().id(1L).username("josesilva").build()));
-        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(userDB);
+        User userUpdated = user;
+        userUpdated.setName("Rafa");
+
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(userUpdated);
+
         userService.save(userRequest);
-        Mockito.verify(userRepository, Mockito.times(1)).save(userArgumentCaptor.capture());
-        Assertions.assertThat(userArgumentCaptor.getValue().getId()).isEqualTo(1);
+
+        verify(userRepository, times(1)).findByUsername(anyString());
+        verify(userRepository, times(1)).save(userArgumentCaptor.capture());
+
+        assertThat(userRequest.getName().get()).contains("Rafael");
+        assertThat(user.getName()).isEqualTo("Rafa");
     }
 
     @Test
     public void shouldFindById() {
-        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(userDB));
-        User userFound = userService.findById(Mockito.anyLong());
-        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
-        Assertions.assertThat(userFound.getId()).isEqualTo(1);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
+        User userFound = userService.findById(anyLong());
+        verify(userRepository, times(1)).findById(anyLong());
+
+        assertThat(userFound.getId()).isEqualTo(1);
     }
 
     @Test(expected = BusinessException.class)
     public void shouldThrowWhenUserDoesNotExists() {
-        Mockito.when(userRepository.findById(Mockito.anyLong())).thenThrow(new BusinessException("error-user-9", HttpStatus.BAD_REQUEST));
+        when(userRepository.findById(anyLong())).thenThrow(new BusinessException("error-user-9", BAD_REQUEST));
+
         userService.findById(1L);
-        Mockito.verify(userRepository, Mockito.times(1)).findById(Mockito.anyLong());
+
+        verify(userRepository, times(1)).findById(anyLong());
     }
 
     @Test(expected = BusinessException.class)
     public void shouldThrowWhenUserAlreadyExists() {
-        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(User.builder().id(3L).username("rafaalberto").name("José").build()));
+        User userFound = user;
+        userFound.setId(2L);
+
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userFound));
         userService.save(userRequest);
-        Mockito.verify(userRepository, Mockito.times(1)).save(userDB);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
     public void shouldDelete() {
-        Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(userDB));
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         userService.delete(1L);
-        Mockito.verify(userRepository, Mockito.times(1)).delete(Mockito.any(User.class));
+        verify(userRepository, times(1)).delete(any(User.class));
     }
 
     @Test
     public void shouldFindByUsername() {
-        Mockito.when(userRepository.findByUsername(Mockito.anyString())).thenReturn(Optional.of(userDB));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         User userFound = userService.findByUsername("rafaalberto");
-        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(Mockito.anyString());
-        Assertions.assertThat(userFound.getUsername()).isEqualTo("rafaalberto");
+        verify(userRepository, times(1)).findByUsername(anyString());
+        assertThat(userFound.getUsername()).isEqualTo("rafaalberto");
     }
 
+    private UserRequest getUserRequestBuilder() {
+        return UserRequest.builder()
+                .id(1L)
+                .username("rafaalberto")
+                .name("Rafael")
+                .profile(ProfileEnum.ROLE_ADMIN)
+                .password("123456")
+                .build();
+    }
+
+    private User getUserBuilder() {
+        return User.builder()
+                .id(1L)
+                .username("rafaalberto")
+                .name("Rafael")
+                .profile(ProfileEnum.ROLE_ADMIN)
+                .password("123456")
+                .build();
+    }
 }

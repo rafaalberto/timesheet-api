@@ -27,14 +27,9 @@ public class Company implements Serializable {
     @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long id;
 
-    @CNPJ(message = "error-company-4")
-    @NotBlank(message = "error-company-1")
-    @Size(max = 18)
     @Column(name = "document", unique = true, nullable = false, length = 18)
     private String document;
 
-    @NotBlank(message = "error-company-2")
-    @Size(min = 3, max = 50, message = "error-company-3")
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 }

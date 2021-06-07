@@ -2,7 +2,7 @@ package br.com.api.timesheet.repository;
 
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ProfileEnum;
-import br.com.api.timesheet.resource.UserRequest;
+import br.com.api.timesheet.resource.user.UserRequest;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

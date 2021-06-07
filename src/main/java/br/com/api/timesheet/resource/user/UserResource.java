@@ -1,4 +1,4 @@
-package br.com.api.timesheet.resource;
+package br.com.api.timesheet.resource.user;
 
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.service.UserService;

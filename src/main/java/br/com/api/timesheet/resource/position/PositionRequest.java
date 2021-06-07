@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Optional;
 
 @Builder
@@ -13,9 +15,15 @@ import java.util.Optional;
 public class PositionRequest {
 
     private Integer page;
+
     private Integer size;
+
     private Long id;
+
+    @NotBlank(message = "error-position-1")
+    @Size(min = 3, max = 50, message = "error-position-2")
     private String title;
+
     private boolean dangerousness;
 
     public Optional<Integer> getPage() {

@@ -1,7 +1,7 @@
 package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.entity.User;
-import br.com.api.timesheet.resource.UserRequest;
+import br.com.api.timesheet.resource.user.UserRequest;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
