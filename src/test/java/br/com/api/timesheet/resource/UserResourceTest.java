@@ -44,6 +44,18 @@ public class UserResourceTest {
         Page<User> result = new PageImpl(singletonList(getUserBuilder()), of(0, 10), 1);
         when(userService.findAll(any(UserRequest.class))).thenReturn(result);
 
+        mockMvc.perform(get("/users?page=0&size=10")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(userService, times(1)).findAll(any(UserRequest.class));
+    }
+
+    @Test
+    public void shouldFindAllByProfile() throws Exception {
+        Page<User> result = new PageImpl(singletonList(getUserBuilder()), of(0, 10), 1);
+        when(userService.findAll(any(UserRequest.class))).thenReturn(result);
+
         mockMvc.perform(get("/users?page=0&size=10&profile=ROLE_ADMIN")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
