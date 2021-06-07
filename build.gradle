@@ -39,7 +39,8 @@ project.ext.exclusionsForJacoco = [
 		"**/resource/auth**",
 		"**/utils/JwtUtil.java",
 		"**Request.java",
-		"**UserDetailsServiceImpl.java"
+		"**UserDetailsServiceImpl.java",
+		"**TimesheetApiApplication.java"
 ]
 
 apply plugin: 'java'
