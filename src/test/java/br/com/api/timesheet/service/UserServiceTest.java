@@ -116,22 +116,28 @@ public class UserServiceTest {
         userFound.setId(2L);
 
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userFound));
+
         userService.save(userRequest);
+
         verify(userRepository, times(1)).save(user);
     }
 
     @Test
     public void shouldDelete() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+
         userService.delete(1L);
+
         verify(userRepository, times(1)).delete(any(User.class));
     }
 
     @Test
     public void shouldFindByUsername() {
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+
         User userFound = userService.findByUsername("rafaalberto");
         verify(userRepository, times(1)).findByUsername(anyString());
+
         assertThat(userFound.getUsername()).isEqualTo("rafaalberto");
     }
 

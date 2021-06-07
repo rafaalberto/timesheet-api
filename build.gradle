@@ -99,3 +99,5 @@ dependencies {
 	testImplementation("io.cucumber:cucumber-junit:${cucumberVersion}")
 	testImplementation("io.cucumber:cucumber-spring:${cucumberVersion}")
 }
+
+test.finalizedBy jacocoTestReport
