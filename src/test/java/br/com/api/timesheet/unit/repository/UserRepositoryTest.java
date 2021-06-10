@@ -1,6 +1,7 @@
-package br.com.api.timesheet.repository;
+package br.com.api.timesheet.unit.repository;
 
 import br.com.api.timesheet.entity.User;
+import br.com.api.timesheet.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

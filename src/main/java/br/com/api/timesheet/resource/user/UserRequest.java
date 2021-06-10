@@ -1,8 +1,10 @@
 package br.com.api.timesheet.resource.user;
 
 import br.com.api.timesheet.enumeration.ProfileEnum;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,8 @@ import java.util.Optional;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRequest {
 
     private Integer page;

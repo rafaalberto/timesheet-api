@@ -1,5 +1,6 @@
-package br.com.api.timesheet.utils;
+package br.com.api.timesheet.unit.utils;
 
+import br.com.api.timesheet.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
