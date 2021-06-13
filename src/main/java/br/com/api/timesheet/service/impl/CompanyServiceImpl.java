@@ -3,7 +3,7 @@ package br.com.api.timesheet.service.impl;
 import br.com.api.timesheet.entity.Company;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.CompanyRepository;
-import br.com.api.timesheet.repository.CompanyRepositorySpecification;
+import br.com.api.timesheet.repository.specification.CompanyRepositorySpecification;
 import br.com.api.timesheet.resource.company.CompanyRequest;
 import br.com.api.timesheet.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;

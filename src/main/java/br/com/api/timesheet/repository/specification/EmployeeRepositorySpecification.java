@@ -1,4 +1,4 @@
-package br.com.api.timesheet.repository;
+package br.com.api.timesheet.repository.specification;
 
 import br.com.api.timesheet.entity.Employee;
 import br.com.api.timesheet.enumeration.StatusEnum;
@@ -9,7 +9,7 @@ import javax.persistence.criteria.*;
 import java.util.HashSet;
 import java.util.Optional;
 
-public class EmployeeRepositorySpecification {
+public abstract class EmployeeRepositorySpecification {
 
     private EmployeeRepositorySpecification() {
         throw new IllegalStateException("Utility class");

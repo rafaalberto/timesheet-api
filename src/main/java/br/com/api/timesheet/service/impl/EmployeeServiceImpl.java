@@ -3,7 +3,7 @@ package br.com.api.timesheet.service.impl;
 import br.com.api.timesheet.entity.Employee;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.EmployeeRepository;
-import br.com.api.timesheet.repository.EmployeeRepositorySpecification;
+import br.com.api.timesheet.repository.specification.EmployeeRepositorySpecification;
 import br.com.api.timesheet.resource.employee.EmployeeRequest;
 import br.com.api.timesheet.service.CompanyService;
 import br.com.api.timesheet.service.EmployeeService;

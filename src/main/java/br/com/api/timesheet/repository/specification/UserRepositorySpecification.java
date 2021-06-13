@@ -1,4 +1,4 @@
-package br.com.api.timesheet.repository;
+package br.com.api.timesheet.repository.specification;
 
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ProfileEnum;

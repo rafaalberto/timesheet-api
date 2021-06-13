@@ -1,6 +1,5 @@
 package br.com.api.timesheet.bdd.resource;
 
-import br.com.api.timesheet.bdd.DatabaseActions;
 import br.com.api.timesheet.bdd.http.HttpRequestStepDefinitions;
 import br.com.api.timesheet.entity.User;
 import com.google.gson.JsonElement;
@@ -9,9 +8,7 @@ import com.google.gson.JsonParser;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Before;
 import org.junit.Ignore;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -25,19 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Ignore
 public class UserStepDefinitions extends HttpRequestStepDefinitions {
 
-    @Autowired
-    private final DatabaseActions databaseActions;
-
     private Long userId;
-
-    public UserStepDefinitions(DatabaseActions databaseActions) {
-        this.databaseActions = databaseActions;
-    }
-
-    @Before
-    public void setUp() {
-        databaseActions.clear();
-    }
 
     @When("I request to create a user")
     public void i_request_to_create_a_user() throws Exception {
@@ -57,9 +42,7 @@ public class UserStepDefinitions extends HttpRequestStepDefinitions {
     public void i_have_a_user_stored_with_username(String username) throws Exception {
         mvcPerform(get("/users?username=" + username + "&profile=ROLE_ADMIN&name=Rafael")
                 .contentType(APPLICATION_JSON));
-        String response = getResultActions().andReturn().getResponse().getContentAsString();
-        JsonElement usersElement = new JsonParser().parse(response).getAsJsonObject().get("content");
-        final List<User> users = Arrays.asList(gson.fromJson(usersElement, User[].class));
+        final List<User> users = getUsersResponse();
         userId = users.get(0).getId();
     }
 
@@ -74,9 +57,7 @@ public class UserStepDefinitions extends HttpRequestStepDefinitions {
     public void i_should_see_user_updated_successfully() throws Exception {
         mvcPerform(get("/users?id=" + userId)
                 .contentType(APPLICATION_JSON));
-        String response = getResultActions().andReturn().getResponse().getContentAsString();
-        JsonElement usersElement = new JsonParser().parse(response).getAsJsonObject().get("content");
-        final List<User> users = Arrays.asList(gson.fromJson(usersElement, User[].class));
+        final List<User> users = getUsersResponse();
         assertThat(users.get(0).getUsername()).isEqualTo("usertest");
     }
 
@@ -90,9 +71,7 @@ public class UserStepDefinitions extends HttpRequestStepDefinitions {
     public void i_should_see_a_user_deleted_successfully() throws Exception {
         mvcPerform(get("/users?id=" + userId)
                 .contentType(APPLICATION_JSON));
-        String response = getResultActions().andReturn().getResponse().getContentAsString();
-        JsonElement usersElement = new JsonParser().parse(response).getAsJsonObject().get("content");
-        final List<User> users = Arrays.asList(gson.fromJson(usersElement, User[].class));
+        final List<User> users = getUsersResponse();
         assertTrue(users.isEmpty());
     }
 
@@ -105,4 +84,9 @@ public class UserStepDefinitions extends HttpRequestStepDefinitions {
         return request;
     }
 
+    private List<User> getUsersResponse() throws UnsupportedEncodingException {
+        String response = getResultActions().andReturn().getResponse().getContentAsString();
+        JsonElement usersElement = new JsonParser().parse(response).getAsJsonObject().get("content");
+        return Arrays.asList(gson.fromJson(usersElement, User[].class));
+    }
 }
