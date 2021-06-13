@@ -2,6 +2,7 @@ package br.com.api.timesheet.security;
 
 import br.com.api.timesheet.config.ApiErrorConfig;
 import br.com.api.timesheet.entity.User;
+import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.utils.JwtUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new BusinessException("error-position-8", HttpStatus.BAD_REQUEST);
         }
     }
 

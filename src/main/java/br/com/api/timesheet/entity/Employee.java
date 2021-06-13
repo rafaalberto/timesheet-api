@@ -1,15 +1,11 @@
 package br.com.api.timesheet.entity;
 
 import br.com.api.timesheet.enumeration.OfficeHoursEnum;
-import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.StatusEnum;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Locale;
 
@@ -17,10 +13,12 @@ import static java.text.NumberFormat.getCurrencyInstance;
 
 @Entity
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = Employee.TABLE_NAME)
 public class Employee implements Serializable {
-
 
     static final String TABLE_NAME = "employees";
     private static final String SEQUENCE_NAME = "seq_employees";
@@ -30,12 +28,8 @@ public class Employee implements Serializable {
     @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long id;
 
-    @NotBlank(message = "error-employee-1")
-    @Size(min = 5, max = 50, message = "error-employee-2")
-    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @NotBlank(message = "error-employee-3")
     @Column(name = "record_number", nullable = false, length = 10)
     private String recordNumber;
 
@@ -66,9 +60,5 @@ public class Employee implements Serializable {
 
     public String getCostHourFormatted() {
         return getCurrencyInstance(new Locale("pt", "BR")).format(costHour);
-    }
-
-    public void setName(String name) {
-        this.name = name.toUpperCase();
     }
 }

@@ -1,11 +1,13 @@
-package br.com.api.timesheet.utils;
+package br.com.api.timesheet.unit.utils;
 
+import br.com.api.timesheet.utils.DateUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +32,12 @@ public class DateUtilsTest {
         formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
     }
 
+    @Test(expected = java.lang.IllegalAccessException.class)
+    public void shouldThrowExceptionWhenAccessPrivateConstructor() throws Exception {
+        Constructor constructor = DateUtils.class.getDeclaredConstructor();
+        constructor.newInstance();
+    }
+
     @Test
     public void shouldVerifyIfIsNightShift() {
         assertTrue(isNightShift(parse("2019-01-01 04:30", formatter), parse("2019-01-01 05:30", formatter)));
@@ -41,12 +49,12 @@ public class DateUtilsTest {
     }
 
     @Test
-    public void shoudCalculateNightShift() {
-        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 22:00", formatter), parse("2019-01-02 06:35", formatter))).toString()).isEqualTo("07:00");
-        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 20:00", formatter), parse("2019-01-01 23:15", formatter))).toString()).isEqualTo("01:15");
-        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 21:00", formatter), parse("2019-01-02 04:00", formatter))).toString()).isEqualTo("06:00");
-        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 01:00", formatter), parse("2019-01-01 05:35", formatter))).toString()).isEqualTo("04:00");
-        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 21:50", formatter), parse("2019-01-02 00:00", formatter))).toString()).isEqualTo("02:00");
+    public void shouldCalculateNightShift() {
+        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 22:00", formatter), parse("2019-01-02 06:35", formatter))).toString()).hasToString("07:00");
+        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 20:00", formatter), parse("2019-01-01 23:15", formatter))).toString()).hasToString("01:15");
+        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 21:00", formatter), parse("2019-01-02 04:00", formatter))).toString()).hasToString("06:00");
+        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 01:00", formatter), parse("2019-01-01 05:35", formatter))).toString()).hasToString("04:00");
+        assertThat(ofSecondOfDay(calculateNightShift(parse("2019-01-01 21:50", formatter), parse("2019-01-02 00:00", formatter))).toString()).hasToString("02:00");
     }
 
 

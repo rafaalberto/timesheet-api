@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class PositionResource {
 
@@ -51,15 +51,14 @@ public class PositionResource {
 
     @PostMapping(value = "/positions", produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Position> create(@Valid @RequestBody Position position) {
-        log.info("create request");
-        return new ResponseEntity<>(positionService.save(position), HttpStatus.CREATED);
+    public ResponseEntity<Position> create(@Valid @RequestBody PositionRequest positionRequest) {
+        return new ResponseEntity<>(positionService.save(positionRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("/positions/{id}")
-    public ResponseEntity<Position> update(@PathVariable Long id, @Valid @RequestBody Position position) {
-        position.setId(id);
-        return new ResponseEntity<>(positionService.save(position), HttpStatus.OK);
+    public ResponseEntity<Position> update(@PathVariable Long id, @Valid @RequestBody PositionRequest positionRequest) {
+        positionRequest.setId(id);
+        return new ResponseEntity<>(positionService.save(positionRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/positions/{id}")

@@ -1,8 +1,9 @@
-package br.com.api.timesheet.service;
+package br.com.api.timesheet.service.impl;
 
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.security.UserSpringSecurity;
+import br.com.api.timesheet.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

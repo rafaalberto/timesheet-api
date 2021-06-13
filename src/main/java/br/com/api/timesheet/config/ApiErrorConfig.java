@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+@java.lang.SuppressWarnings("squid:S1118")
 @Configuration
 public class ApiErrorConfig {
 

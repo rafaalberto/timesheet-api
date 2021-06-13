@@ -1,4 +1,4 @@
-package br.com.api.timesheet.repository;
+package br.com.api.timesheet.repository.specification;
 
 import br.com.api.timesheet.entity.Position;
 import br.com.api.timesheet.resource.position.PositionRequest;
@@ -8,8 +8,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.HashSet;
+import java.util.Optional;
 
-public class PositionRepositorySpecification {
+public abstract class PositionRepositorySpecification {
+
+    private PositionRepositorySpecification() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static Specification<Position> criteriaSpecification(PositionRequest request) {
         return (root, query, criteriaBuilder) -> {
@@ -20,9 +25,10 @@ public class PositionRepositorySpecification {
     }
 
     private static void setTitle(PositionRequest request, Root<Position> root, CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
-        if (request.getTitle().isPresent()) {
+        Optional<String> title = request.getTitle();
+        if (title.isPresent()) {
             predicates.add(criteriaBuilder.like(
-                    (criteriaBuilder.lower(root.get("title"))), "%" + request.getTitle().get().toLowerCase() + "%")
+                    (criteriaBuilder.lower(root.get("title"))), "%" + title.get().toLowerCase() + "%")
             );
         }
     }

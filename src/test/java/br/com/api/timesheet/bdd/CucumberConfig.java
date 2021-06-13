@@ -1,4 +1,4 @@
-package br.com.api.timesheet.cucumber;
+package br.com.api.timesheet.bdd;
 
 import br.com.api.timesheet.TimesheetApiApplication;
 import org.junit.runner.RunWith;

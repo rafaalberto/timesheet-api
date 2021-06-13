@@ -13,17 +13,65 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.postgresql:postgresql:42.2.5")
 	}
 }
+
+plugins {
+	id "org.flywaydb.flyway" version "5.2.4"
+	id "org.sonarqube" version "3.0"
+}
+
+flyway {
+	url = 'jdbc:postgresql://localhost:5432/timesheet'
+	user = 'postgres'
+	password = 'postgres'
+}
+
+project.ext.exclusionsForJacoco = [
+		"**/utils/Constants.java",
+		"**/BonusRequest.java",
+		"**/entity/**",
+		"**/security/**",
+		"**/converter/**",
+		"**/config/**",
+		"**/dto/**",
+		"**/resource/auth**",
+		"**/utils/JwtUtil.java",
+		"**Request.java",
+		"**UserDetailsServiceImpl.java",
+		"**TimesheetApiApplication.java"
+]
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'jacoco'
+
+sonarqube {
+	properties {
+		property 'sonar.sourceEncoding', "UTF-8"
+		property 'sonar.projectName', "${project.name}"
+		property 'sonar.projectKey', "${project.name}"
+		property 'sonar.host.url', "http://localhost:9000"
+		property 'sonar.login', "145b721ea399ef6313d5c52192688b8c11370b62"
+		property 'sonar.jacoco.reportPaths', "${buildDir}/jacoco/test.exec"
+		property 'sonar.coverage.exclusions', project.ext.exclusionsForJacoco
+	}
+}
+
+jacocoTestReport {
+	reports {
+		html.enabled true
+		xml.enabled true
+		csv.enabled false
+		html.destination file("$buildDir/jacocoHtml")
+	}
+}
 
 group = 'br.com.timesheet'
 version = '1.0.0-SNAPSHOT'
-sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
@@ -51,3 +99,5 @@ dependencies {
 	testImplementation("io.cucumber:cucumber-junit:${cucumberVersion}")
 	testImplementation("io.cucumber:cucumber-spring:${cucumberVersion}")
 }
+
+test.finalizedBy jacocoTestReport

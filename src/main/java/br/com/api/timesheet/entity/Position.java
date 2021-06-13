@@ -3,8 +3,6 @@ package br.com.api.timesheet.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -23,8 +21,6 @@ public class Position implements Serializable {
     @SequenceGenerator(name = SEQUENCE_NAME, sequenceName = SEQUENCE_NAME, allocationSize = 1)
     private Long id;
 
-    @NotBlank(message = "error-position-1")
-    @Size(min = 3, max = 50, message = "error-position-2")
     @Column(name = "title", nullable = false, length = 50)
     private String title;
 

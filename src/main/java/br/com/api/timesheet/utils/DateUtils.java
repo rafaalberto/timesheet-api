@@ -13,6 +13,10 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class DateUtils {
 
+    private DateUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
     public static final String DATE_FORMAT_PT_BR = "dd/MM/yyyy";
     public static final String TIME_FORMAT = "HH:mm";
@@ -30,11 +34,10 @@ public class DateUtils {
     private static final double TIME_IN_MINUTES = 60.0;
 
     public static boolean isNightShift(LocalDateTime startPeriod, LocalDateTime endPeriod) {
-        LocalDateTime startNightShift = of(startPeriod.toLocalDate(), LocalTime.parse(START_TIME_NIGHT_SHIFT, ofPattern(DateUtils.TIME_FORMAT)));
-        LocalDateTime endNightShift = of(startPeriod.toLocalDate(), LocalTime.parse(END_TIME_NIGHT_SHIFT, ofPattern(DateUtils.TIME_FORMAT)));
+        LocalDateTime startNightShift = of(startPeriod.toLocalDate(), LocalTime.parse(START_TIME_NIGHT_SHIFT, ofPattern(TIME_FORMAT)));
+        LocalDateTime endNightShift = of(endPeriod.toLocalDate(), LocalTime.parse(END_TIME_NIGHT_SHIFT, ofPattern(TIME_FORMAT)));
 
-        return startPeriod.isAfter(startNightShift) || startPeriod.isBefore(endNightShift) ||
-                endPeriod.isAfter(startNightShift) || endPeriod.isBefore(endNightShift);
+        return startPeriod.isAfter(startNightShift) || startPeriod.isBefore(endNightShift) || endPeriod.isAfter(startNightShift);
     }
 
     public static long calculateNightShift(LocalDateTime startDateTime, LocalDateTime endDateTime) {
@@ -50,7 +53,7 @@ public class DateUtils {
     }
 
     public static Duration calculatePaidNightTime(LocalTime workedNightShift) {
-        LocalTime fullNightShift = LocalTime.parse(FULL_NIGHT_SHIFT_TIME, ofPattern(DateUtils.TIME_FORMAT));
+        LocalTime fullNightShift = LocalTime.parse(FULL_NIGHT_SHIFT_TIME, ofPattern(TIME_FORMAT));
         double paidNightTime = ((double) workedNightShift.toSecondOfDay() / (double) fullNightShift.toSecondOfDay()) * MINUTES * SECONDS;
         return Duration.ofSeconds((long) paidNightTime);
     }
@@ -58,7 +61,7 @@ public class DateUtils {
     public static double convertNanosToDecimalHours(long timeInNanos) {
         long timeInMinutes = TimeUnit.NANOSECONDS.toMinutes(timeInNanos);
         double timeInDecimalHours = timeInMinutes / TIME_IN_MINUTES;
-        BigDecimal decimalHoursRounded = new BigDecimal(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal decimalHoursRounded = BigDecimal.valueOf(timeInDecimalHours).setScale(2, RoundingMode.HALF_UP);
         return decimalHoursRounded.doubleValue();
     }
 

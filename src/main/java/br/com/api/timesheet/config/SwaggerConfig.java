@@ -41,7 +41,7 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("User Admin API")
-                .description("Documentation about User Admin API").version("1.0").build();
+        return new ApiInfoBuilder().title("Timesheet API")
+                .description("Documentation about Timesheet API").version("1.0").build();
     }
 }

@@ -1,4 +1,4 @@
-package br.com.api.timesheet.resource.timesheetRegister;
+package br.com.api.timesheet.resource.timesheetregister;
 
 import br.com.api.timesheet.dto.TimesheetDailyReport;
 import br.com.api.timesheet.dto.TimesheetDocket;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:8080")
 @RestController
 public class TimesheetRegisterResource {
 
