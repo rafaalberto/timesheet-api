@@ -10,12 +10,12 @@ import java.util.List;
 
 public interface BonusRepository extends JpaRepository<Bonus, Long> {
 
-    @Query("select bonus FROM Bonus bonus " +
-            "where bonus.employee.id = :employee " +
-            "and bonus.yearReference = :year " +
-            "and bonus.monthReference = :month " +
-            "order by bonus.description ASC")
-    @Transactional(readOnly = true)
-    List<Bonus> findByEmployeeAndPeriod(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
+  @Query("select bonus FROM Bonus bonus " +
+          "where bonus.employee.id = :employee " +
+          "and bonus.yearReference = :year " +
+          "and bonus.monthReference = :month " +
+          "order by bonus.description ASC")
+  @Transactional(readOnly = true)
+  List<Bonus> findByEmployeeAndPeriod(@Param("employee") Long employee, @Param("year") Integer year, @Param("month") Integer month);
 }
 

@@ -13,44 +13,46 @@ import java.util.Optional;
 @Data
 public class EmployeeRequest {
 
-    private Integer page;
+  private Integer page;
 
-    private Integer size;
+  private Integer size;
 
-    private Long id;
+  private Long id;
 
-    @NotBlank(message = "error-employee-1")
-    @Size(min = 5, max = 50, message = "error-employee-2")
-    @Column(name = "name", nullable = false, length = 50)
-    private String name;
+  @NotBlank(message = "error-employee-1")
+  @Size(min = 5, max = 50, message = "error-employee-2")
+  @Column(name = "name", nullable = false, length = 50)
+  private String name;
 
-    @NotBlank(message = "error-employee-3")
-    private String recordNumber;
+  @NotBlank(message = "error-employee-3")
+  private String recordNumber;
 
-    private Long companyId;
+  private Long companyId;
 
-    private StatusEnum status;
+  private StatusEnum status;
 
-    public Optional<Integer> getPage() {
-        return Optional.ofNullable(page);
-    }
+  public Optional<Integer> getPage() {
+    return Optional.ofNullable(page);
+  }
 
-    public Optional<Integer> getSize() {
-        return Optional.ofNullable(size);
-    }
+  public Optional<Integer> getSize() {
+    return Optional.ofNullable(size);
+  }
 
-    public Optional<String> getName() {
-        return Optional.ofNullable(name);
-    }
+  public Optional<String> getName() {
+    return Optional.ofNullable(name);
+  }
 
-    public Optional<String> getRecordNumber() {
-        return Optional.ofNullable(recordNumber);
-    }
+  public Optional<String> getRecordNumber() {
+    return Optional.ofNullable(recordNumber);
+  }
 
-    public Optional<Long> getCompanyId() {
-        return Optional.ofNullable(companyId);
-    }
+  public Optional<Long> getCompanyId() {
+    return Optional.ofNullable(companyId);
+  }
 
-    public Optional<StatusEnum> getStatus() { return Optional.ofNullable(status); }
+  public Optional<StatusEnum> getStatus() {
+    return Optional.ofNullable(status);
+  }
 
 }

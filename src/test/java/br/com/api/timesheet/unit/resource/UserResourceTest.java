@@ -30,96 +30,94 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class UserResourceTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired
+  Gson gson;
+  @Autowired
+  private MockMvc mockMvc;
+  @MockBean
+  private UserService userService;
 
-    @MockBean
-    private UserService userService;
+  @Test
+  public void shouldFindAll() throws Exception {
+    Page<User> result = new PageImpl(singletonList(getUserBuilder()), of(0, 10), 1);
+    when(userService.findAll(any(UserRequest.class))).thenReturn(result);
 
-    @Autowired
-    Gson gson;
+    mockMvc.perform(get("/users?page=0&size=10")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
 
-    @Test
-    public void shouldFindAll() throws Exception {
-        Page<User> result = new PageImpl(singletonList(getUserBuilder()), of(0, 10), 1);
-        when(userService.findAll(any(UserRequest.class))).thenReturn(result);
+    verify(userService, times(1)).findAll(any(UserRequest.class));
+  }
 
-        mockMvc.perform(get("/users?page=0&size=10")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+  @Test
+  public void shouldFindAllByProfile() throws Exception {
+    Page<User> result = new PageImpl(singletonList(getUserBuilder()), of(0, 10), 1);
+    when(userService.findAll(any(UserRequest.class))).thenReturn(result);
 
-        verify(userService, times(1)).findAll(any(UserRequest.class));
-    }
+    mockMvc.perform(get("/users?page=0&size=10&profile=ROLE_ADMIN")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
 
-    @Test
-    public void shouldFindAllByProfile() throws Exception {
-        Page<User> result = new PageImpl(singletonList(getUserBuilder()), of(0, 10), 1);
-        when(userService.findAll(any(UserRequest.class))).thenReturn(result);
+    verify(userService, times(1)).findAll(any(UserRequest.class));
+  }
 
-        mockMvc.perform(get("/users?page=0&size=10&profile=ROLE_ADMIN")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+  @Test
+  public void shouldFindById() throws Exception {
+    when(userService.findById(anyLong())).thenReturn(getUserBuilder());
 
-        verify(userService, times(1)).findAll(any(UserRequest.class));
-    }
+    mockMvc.perform(get("/users/1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username", is("rafaalberto")));
 
-    @Test
-    public void shouldFindById() throws Exception {
-        when(userService.findById(anyLong())).thenReturn(getUserBuilder());
+    verify(userService).findById(anyLong());
+  }
 
-        mockMvc.perform(get("/users/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("rafaalberto")));
+  @Test
+  public void shouldCreate() throws Exception {
+    when(userService.save(any(UserRequest.class))).thenReturn(getUserBuilder());
 
-        verify(userService).findById(anyLong());
-    }
+    mockMvc.perform(post("/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(gson.toJson(getUserBuilder())))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.username", is("rafaalberto")));
 
-    @Test
-    public void shouldCreate() throws Exception {
-        when(userService.save(any(UserRequest.class))).thenReturn(getUserBuilder());
+    verify(userService).save(any(UserRequest.class));
+  }
 
-        mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(getUserBuilder())))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.username", is("rafaalberto")));
+  @Test
+  public void shouldUpdate() throws Exception {
+    User userUpdated = getUserBuilder();
+    userUpdated.setUsername("rafael");
 
-        verify(userService).save(any(UserRequest.class));
-    }
+    when(userService.save(any(UserRequest.class))).thenReturn(userUpdated);
 
-    @Test
-    public void shouldUpdate() throws Exception {
-        User userUpdated = getUserBuilder();
-        userUpdated.setUsername("rafael");
+    mockMvc.perform(put("/users/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(gson.toJson(userUpdated)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username", is("rafael")));
 
-        when(userService.save(any(UserRequest.class))).thenReturn(userUpdated);
+    verify(userService).save(any(UserRequest.class));
+  }
 
-        mockMvc.perform(put("/users/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(gson.toJson(userUpdated)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is("rafael")));
+  @Test
+  public void shouldDelete() throws Exception {
+    doNothing().when(userService).delete(anyLong());
 
-        verify(userService).save(any(UserRequest.class));
-    }
+    mockMvc.perform(delete("/users/1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+  }
 
-    @Test
-    public void shouldDelete() throws Exception {
-        doNothing().when(userService).delete(anyLong());
-
-        mockMvc.perform(delete("/users/1")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
-    }
-
-    private User getUserBuilder() {
-        return User.builder()
-                .id(1L)
-                .username("rafaalberto")
-                .name("Rafael")
-                .profile(ProfileEnum.ROLE_ADMIN)
-                .password("12345")
-                .build();
-    }
+  private User getUserBuilder() {
+    return User.builder()
+            .id(1L)
+            .username("rafaalberto")
+            .name("Rafael")
+            .profile(ProfileEnum.ROLE_ADMIN)
+            .password("12345")
+            .build();
+  }
 }

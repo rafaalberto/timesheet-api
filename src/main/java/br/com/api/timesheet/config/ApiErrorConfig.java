@@ -9,12 +9,18 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 @Configuration
 public class ApiErrorConfig {
 
-    @Bean
-    public static MessageSource apiErrorMessageSource(){
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:/api-errors");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+  /**
+   * Message configuration.
+   * @return
+   */
+
+  @Bean
+  public static MessageSource apiErrorMessageSource() {
+    ReloadableResourceBundleMessageSource messageSource =
+            new ReloadableResourceBundleMessageSource();
+    messageSource.setBasename("classpath:/api-errors");
+    messageSource.setDefaultEncoding("UTF-8");
+    return messageSource;
+  }
 
 }

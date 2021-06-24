@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PositionRepository extends CrudRepository<Position, Long>, JpaSpecificationExecutor<Position> {
 
-    @Transactional(readOnly = true)
-    Optional<Position> findByTitle(String title);
+  @Transactional(readOnly = true)
+  Optional<Position> findByTitle(String title);
 }
 

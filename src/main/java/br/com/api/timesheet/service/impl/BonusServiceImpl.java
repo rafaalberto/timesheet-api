@@ -17,38 +17,38 @@ import java.util.Optional;
 @Service
 public class BonusServiceImpl implements BonusService {
 
-    @Autowired
-    private BonusRepository bonusRepository;
+  @Autowired
+  private BonusRepository bonusRepository;
 
-    @Autowired
-    private EmployeeService employeeService;
+  @Autowired
+  private EmployeeService employeeService;
 
-    public List<Bonus> findByEmployeeAndPeriod(Long employee, Integer year, Integer month) {
-        return bonusRepository.findByEmployeeAndPeriod(employee, year, month);
+  public List<Bonus> findByEmployeeAndPeriod(Long employee, Integer year, Integer month) {
+    return bonusRepository.findByEmployeeAndPeriod(employee, year, month);
+  }
+
+  public Bonus findById(Long id) {
+    return bonusRepository.findById(id)
+            .orElseThrow(() -> new BusinessException("error-Bonus-9", HttpStatus.BAD_REQUEST));
+  }
+
+  public Bonus save(BonusRequest request) {
+    Bonus bonus = new Bonus();
+    request.getId().ifPresent(bonus::setId);
+    Optional<Long> employeeId = request.getEmployeeId();
+    if (employeeId.isPresent()) {
+      Employee employee = employeeService.findById(employeeId.get());
+      bonus.setEmployee(employee);
     }
+    bonus.setMonthReference(request.getMonthReference());
+    bonus.setYearReference(request.getYearReference());
+    bonus.setCode(request.getCode());
+    bonus.setDescription(request.getDescription());
+    bonus.setCost(request.getCost());
+    return bonusRepository.save(bonus);
+  }
 
-    public Bonus findById(Long id) {
-        return bonusRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("error-Bonus-9", HttpStatus.BAD_REQUEST));
-    }
-
-    public Bonus save(BonusRequest request) {
-        Bonus bonus = new Bonus();
-        request.getId().ifPresent(bonus::setId);
-        Optional<Long> employeeId = request.getEmployeeId();
-        if(employeeId.isPresent()) {
-            Employee employee = employeeService.findById(employeeId.get());
-            bonus.setEmployee(employee);
-        }
-        bonus.setMonthReference(request.getMonthReference());
-        bonus.setYearReference(request.getYearReference());
-        bonus.setCode(request.getCode());
-        bonus.setDescription(request.getDescription());
-        bonus.setCost(request.getCost());
-        return bonusRepository.save(bonus);
-    }
-
-    public void delete(Long id) {
-        bonusRepository.delete(findById(id));
-    }
+  public void delete(Long id) {
+    bonusRepository.delete(findById(id));
+  }
 }

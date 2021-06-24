@@ -19,37 +19,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class UserRepositoryTest {
 
-    private static final String DEFAULT_USERNAME = "rafaalberto";
+  private static final String DEFAULT_USERNAME = "rafaalberto";
+  User user;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Before
+  public void setUp() {
+    user = getUserBuilder();
+    userRepository.save(user);
+  }
 
-    User user;
+  @Test
+  public void shouldFindByUsername() {
+    user = userRepository.findByUsername(DEFAULT_USERNAME).orElse(null);
+    assert user != null;
+    assertThat(user.getUsername()).isEqualTo(DEFAULT_USERNAME);
+  }
 
-    @Before
-    public void setUp() {
-        user = getUserBuilder();
-        userRepository.save(user);
-    }
+  @After
+  public void tearDown() {
+    userRepository.deleteAll();
+  }
 
-    @Test
-    public void shouldFindByUsername() {
-        user = userRepository.findByUsername(DEFAULT_USERNAME).orElse(null);
-        assert user != null;
-        assertThat(user.getUsername()).isEqualTo(DEFAULT_USERNAME);
-    }
-
-    @After
-    public void tearDown() {
-        userRepository.deleteAll();
-    }
-
-    private User getUserBuilder() {
-        return User.builder()
-                .id(1L)
-                .username(DEFAULT_USERNAME)
-                .name("Rafael")
-                .password("123456")
-                .profile(ROLE_ADMIN).build();
-    }
+  private User getUserBuilder() {
+    return User.builder()
+            .id(1L)
+            .username(DEFAULT_USERNAME)
+            .name("Rafael")
+            .password("123456")
+            .profile(ROLE_ADMIN).build();
+  }
 }

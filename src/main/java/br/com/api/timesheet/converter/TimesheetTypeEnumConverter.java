@@ -14,18 +14,18 @@ import static java.util.stream.Collectors.toMap;
 @Converter(autoApply = true)
 public class TimesheetTypeEnumConverter implements AttributeConverter<TimesheetTypeEnum, String> {
 
-    private static final Map<String, TimesheetTypeEnum> typeConversions =
-            ImmutableMap.copyOf(Stream
-                    .of(TimesheetTypeEnum.values())
-                    .collect(toMap(TimesheetTypeEnum::getCode, identity())));
+  private static final Map<String, TimesheetTypeEnum> typeConversions =
+          ImmutableMap.copyOf(Stream
+                  .of(TimesheetTypeEnum.values())
+                  .collect(toMap(TimesheetTypeEnum::getCode, identity())));
 
-    @Override
-    public String convertToDatabaseColumn(TimesheetTypeEnum attribute) {
-        return attribute != null ? attribute.getCode() : null;
-    }
+  @Override
+  public String convertToDatabaseColumn(TimesheetTypeEnum attribute) {
+    return attribute != null ? attribute.getCode() : null;
+  }
 
-    @Override
-    public TimesheetTypeEnum convertToEntityAttribute(String dbData) {
-        return dbData != null ? typeConversions.get(dbData) : null;
-    }
+  @Override
+  public TimesheetTypeEnum convertToEntityAttribute(String dbData) {
+    return dbData != null ? typeConversions.get(dbData) : null;
+  }
 }

@@ -14,18 +14,18 @@ import static java.util.stream.Collectors.toMap;
 @Converter(autoApply = true)
 public class ProfileEnumConverter implements AttributeConverter<ProfileEnum, String> {
 
-    private static final Map<String, ProfileEnum> typeConversions =
-            ImmutableMap.copyOf(Stream
-                    .of(ProfileEnum.values())
-                    .collect(toMap(ProfileEnum::getCode, identity())));
+  private static final Map<String, ProfileEnum> typeConversions =
+          ImmutableMap.copyOf(Stream
+                  .of(ProfileEnum.values())
+                  .collect(toMap(ProfileEnum::getCode, identity())));
 
-    @Override
-    public String convertToDatabaseColumn(ProfileEnum attribute) {
-        return attribute != null ? attribute.getCode() : null;
-    }
+  @Override
+  public String convertToDatabaseColumn(ProfileEnum attribute) {
+    return attribute != null ? attribute.getCode() : null;
+  }
 
-    @Override
-    public ProfileEnum convertToEntityAttribute(String dbData) {
-        return dbData != null ? typeConversions.get(dbData) : null;
-    }
+  @Override
+  public ProfileEnum convertToEntityAttribute(String dbData) {
+    return dbData != null ? typeConversions.get(dbData) : null;
+  }
 }

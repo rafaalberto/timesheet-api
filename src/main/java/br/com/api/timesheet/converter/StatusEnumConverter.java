@@ -14,18 +14,18 @@ import static java.util.stream.Collectors.toMap;
 @Converter(autoApply = true)
 public class StatusEnumConverter implements AttributeConverter<StatusEnum, String> {
 
-    private static final Map<String, StatusEnum> typeConversions =
-            ImmutableMap.copyOf(Stream
-                    .of(StatusEnum.values())
-                    .collect(toMap(StatusEnum::getCode, identity())));
+  private static final Map<String, StatusEnum> typeConversions =
+          ImmutableMap.copyOf(Stream
+                  .of(StatusEnum.values())
+                  .collect(toMap(StatusEnum::getCode, identity())));
 
-    @Override
-    public String convertToDatabaseColumn(StatusEnum attribute) {
-        return attribute != null ? attribute.getCode() : null;
-    }
+  @Override
+  public String convertToDatabaseColumn(StatusEnum attribute) {
+    return attribute != null ? attribute.getCode() : null;
+  }
 
-    @Override
-    public StatusEnum convertToEntityAttribute(String dbData) {
-        return dbData != null ? typeConversions.get(dbData) : null;
-    }
+  @Override
+  public StatusEnum convertToEntityAttribute(String dbData) {
+    return dbData != null ? typeConversions.get(dbData) : null;
+  }
 }

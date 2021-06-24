@@ -30,134 +30,134 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-    @InjectMocks
-    private UserServiceImpl userService;
+  @InjectMocks
+  private UserServiceImpl userService;
 
-    @Mock
-    private UserRepository userRepository;
+  @Mock
+  private UserRepository userRepository;
 
-    @Captor
-    private ArgumentCaptor<User> userArgumentCaptor;
+  @Captor
+  private ArgumentCaptor<User> userArgumentCaptor;
 
-    private UserRequest userRequest;
+  private UserRequest userRequest;
 
-    private User user;
+  private User user;
 
-    @Before
-    public void setUp() {
-        userRequest = getUserRequestBuilder();
-        user = getUserBuilder();
-    }
+  @Before
+  public void setUp() {
+    userRequest = getUserRequestBuilder();
+    user = getUserBuilder();
+  }
 
-    @Test
-    public void shouldFindAll() {
-        Page<User> usersPage = new PageImpl<>(singletonList(user), of(0, 10), 1);
-        when(userRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(usersPage);
+  @Test
+  public void shouldFindAll() {
+    Page<User> usersPage = new PageImpl<>(singletonList(user), of(0, 10), 1);
+    when(userRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(usersPage);
 
-        Page<User> users = userService.findAll(userRequest);
+    Page<User> users = userService.findAll(userRequest);
 
-        verify(userRepository, times(1)).findAll(any(Specification.class), any(PageRequest.class));
+    verify(userRepository, times(1)).findAll(any(Specification.class), any(PageRequest.class));
 
-        assertThat(users.getTotalElements()).isEqualTo(1);
-    }
+    assertThat(users.getTotalElements()).isEqualTo(1);
+  }
 
-    @Test
-    public void shouldSave() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-        when(userRepository.save(any(User.class))).thenReturn(user);
+  @Test
+  public void shouldSave() {
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+    when(userRepository.save(any(User.class))).thenReturn(user);
 
-        userService.save(userRequest);
+    userService.save(userRequest);
 
-        verify(userRepository, times(1)).findByUsername(anyString());
-        verify(userRepository, times(1)).save(userArgumentCaptor.capture());
+    verify(userRepository, times(1)).findByUsername(anyString());
+    verify(userRepository, times(1)).save(userArgumentCaptor.capture());
 
-        assertThat(userArgumentCaptor.getValue().getName()).isEqualTo("Rafael");
-    }
+    assertThat(userArgumentCaptor.getValue().getName()).isEqualTo("Rafael");
+  }
 
-    @Test
-    public void shouldUpdate() {
-        User userUpdated = user;
-        userUpdated.setName("Rafa");
+  @Test
+  public void shouldUpdate() {
+    User userUpdated = user;
+    userUpdated.setName("Rafa");
 
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenReturn(userUpdated);
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+    when(userRepository.save(any(User.class))).thenReturn(userUpdated);
 
-        userService.save(userRequest);
+    userService.save(userRequest);
 
-        verify(userRepository, times(1)).findByUsername(anyString());
-        verify(userRepository, times(1)).save(userArgumentCaptor.capture());
+    verify(userRepository, times(1)).findByUsername(anyString());
+    verify(userRepository, times(1)).save(userArgumentCaptor.capture());
 
-        assertThat(userRequest.getName().get()).contains("Rafael");
-        assertThat(user.getName()).isEqualTo("Rafa");
-    }
+    assertThat(userRequest.getName().get()).contains("Rafael");
+    assertThat(user.getName()).isEqualTo("Rafa");
+  }
 
-    @Test
-    public void shouldFindById() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+  @Test
+  public void shouldFindById() {
+    when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        User userFound = userService.findById(anyLong());
-        verify(userRepository, times(1)).findById(anyLong());
+    User userFound = userService.findById(anyLong());
+    verify(userRepository, times(1)).findById(anyLong());
 
-        assertThat(userFound.getId()).isEqualTo(1);
-    }
+    assertThat(userFound.getId()).isEqualTo(1);
+  }
 
-    @Test(expected = BusinessException.class)
-    public void shouldThrowWhenUserDoesNotExists() {
-        when(userRepository.findById(anyLong())).thenThrow(new BusinessException("error-user-9", BAD_REQUEST));
+  @Test(expected = BusinessException.class)
+  public void shouldThrowWhenUserDoesNotExists() {
+    when(userRepository.findById(anyLong())).thenThrow(new BusinessException("error-user-9", BAD_REQUEST));
 
-        userService.findById(1L);
+    userService.findById(1L);
 
-        verify(userRepository, times(1)).findById(anyLong());
-    }
+    verify(userRepository, times(1)).findById(anyLong());
+  }
 
-    @Test(expected = BusinessException.class)
-    public void shouldThrowWhenUserAlreadyExists() {
-        User userFound = user;
-        userFound.setId(2L);
+  @Test(expected = BusinessException.class)
+  public void shouldThrowWhenUserAlreadyExists() {
+    User userFound = user;
+    userFound.setId(2L);
 
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userFound));
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(userFound));
 
-        userService.save(userRequest);
+    userService.save(userRequest);
 
-        verify(userRepository, times(1)).save(user);
-    }
+    verify(userRepository, times(1)).save(user);
+  }
 
-    @Test
-    public void shouldDelete() {
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+  @Test
+  public void shouldDelete() {
+    when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        userService.delete(1L);
+    userService.delete(1L);
 
-        verify(userRepository, times(1)).delete(any(User.class));
-    }
+    verify(userRepository, times(1)).delete(any(User.class));
+  }
 
-    @Test
-    public void shouldFindByUsername() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+  @Test
+  public void shouldFindByUsername() {
+    when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
 
-        User userFound = userService.findByUsername("rafaalberto");
-        verify(userRepository, times(1)).findByUsername(anyString());
+    User userFound = userService.findByUsername("rafaalberto");
+    verify(userRepository, times(1)).findByUsername(anyString());
 
-        assertThat(userFound.getUsername()).isEqualTo("rafaalberto");
-    }
+    assertThat(userFound.getUsername()).isEqualTo("rafaalberto");
+  }
 
-    private UserRequest getUserRequestBuilder() {
-        return UserRequest.builder()
-                .id(1L)
-                .username("rafaalberto")
-                .name("Rafael")
-                .profile(ProfileEnum.ROLE_ADMIN)
-                .password("123456")
-                .build();
-    }
+  private UserRequest getUserRequestBuilder() {
+    return UserRequest.builder()
+            .id(1L)
+            .username("rafaalberto")
+            .name("Rafael")
+            .profile(ProfileEnum.ROLE_ADMIN)
+            .password("123456")
+            .build();
+  }
 
-    private User getUserBuilder() {
-        return User.builder()
-                .id(1L)
-                .username("rafaalberto")
-                .name("Rafael")
-                .profile(ProfileEnum.ROLE_ADMIN)
-                .password("123456")
-                .build();
-    }
+  private User getUserBuilder() {
+    return User.builder()
+            .id(1L)
+            .username("rafaalberto")
+            .name("Rafael")
+            .profile(ProfileEnum.ROLE_ADMIN)
+            .password("123456")
+            .build();
+  }
 }

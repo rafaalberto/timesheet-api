@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ProfileEnum {
 
-    ROLE_ADMIN("AD", "Administrador"),
-    ROLE_USER("US", "Usuário");
+  ROLE_ADMIN("AD", "Administrador"),
+  ROLE_USER("US", "Usuário");
 
-    private final String code;
-    private final String description;
+  private final String code;
+  private final String description;
 }

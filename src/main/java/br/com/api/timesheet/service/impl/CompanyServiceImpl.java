@@ -21,37 +21,37 @@ import static br.com.api.timesheet.utils.Constants.DEFAULT_SIZE;
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
-    @Autowired
-    private CompanyRepository companyRepository;
+  @Autowired
+  private CompanyRepository companyRepository;
 
-    public Page<Company> findAll(CompanyRequest request) {
-        final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
-        return companyRepository.findAll(CompanyRepositorySpecification.criteriaSpecification(request), pageable);
-    }
+  public Page<Company> findAll(CompanyRequest request) {
+    final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
+    return companyRepository.findAll(CompanyRepositorySpecification.criteriaSpecification(request), pageable);
+  }
 
-    public Company findById(Long id) {
-        return companyRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("error-company-9", HttpStatus.BAD_REQUEST));
-    }
+  public Company findById(Long id) {
+    return companyRepository.findById(id)
+            .orElseThrow(() -> new BusinessException("error-company-9", HttpStatus.BAD_REQUEST));
+  }
 
-    public Company save(CompanyRequest companyRequest) {
-        Company company = Company.builder()
-                .id(companyRequest.getId())
-                .name(companyRequest.getName().orElse(""))
-                .document(companyRequest.getDocument().orElse(null))
-                .build();
-        verifyIfCompanyExist(company);
-        return companyRepository.save(company);
-    }
+  public Company save(CompanyRequest companyRequest) {
+    Company company = Company.builder()
+            .id(companyRequest.getId())
+            .name(companyRequest.getName().orElse(""))
+            .document(companyRequest.getDocument().orElse(null))
+            .build();
+    verifyIfCompanyExist(company);
+    return companyRepository.save(company);
+  }
 
-    public void delete(Long id) {
-        companyRepository.delete(findById(id));
-    }
+  public void delete(Long id) {
+    companyRepository.delete(findById(id));
+  }
 
-    private void verifyIfCompanyExist(final Company company) {
-        Optional<Company> companyDB = companyRepository.findByDocument(company.getDocument());
-        if (companyDB.isPresent() && !companyDB.get().getId().equals(company.getId())) {
-            throw new BusinessException("error-company-8", HttpStatus.BAD_REQUEST);
-        }
+  private void verifyIfCompanyExist(final Company company) {
+    Optional<Company> companyDB = companyRepository.findByDocument(company.getDocument());
+    if (companyDB.isPresent() && !companyDB.get().getId().equals(company.getId())) {
+      throw new BusinessException("error-company-8", HttpStatus.BAD_REQUEST);
     }
+  }
 }

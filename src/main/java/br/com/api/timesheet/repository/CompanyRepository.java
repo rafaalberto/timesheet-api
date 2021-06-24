@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
 
-    @Transactional(readOnly = true)
-    Optional<Company> findByDocument(String document);
+  @Transactional(readOnly = true)
+  Optional<Company> findByDocument(String document);
 }
 

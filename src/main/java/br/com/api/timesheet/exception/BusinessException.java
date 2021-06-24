@@ -8,6 +8,6 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public class BusinessException extends RuntimeException {
 
-    private final String code;
-    private final HttpStatus httpStatus;
+  private final String code;
+  private final HttpStatus httpStatus;
 }

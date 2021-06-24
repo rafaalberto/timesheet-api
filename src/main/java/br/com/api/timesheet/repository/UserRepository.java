@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-    @Transactional(readOnly = true)
-    Optional<User> findByUsername(String username);
+  @Transactional(readOnly = true)
+  Optional<User> findByUsername(String username);
 }
 

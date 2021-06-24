@@ -21,41 +21,41 @@ import static br.com.api.timesheet.utils.Constants.DEFAULT_SIZE;
 @Service
 public class PositionServiceImpl implements PositionService {
 
-    @Autowired
-    private PositionRepository positionRepository;
+  @Autowired
+  private PositionRepository positionRepository;
 
-    public Page<Position> findAll(PositionRequest request) {
-        final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
-        return positionRepository.findAll(PositionRepositorySpecification.criteriaSpecification(request), pageable);
-    }
+  public Page<Position> findAll(PositionRequest request) {
+    final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
+    return positionRepository.findAll(PositionRepositorySpecification.criteriaSpecification(request), pageable);
+  }
 
-    public Position findById(Long id) {
-        return positionRepository.findById(id)
-                .orElseThrow(() -> new BusinessException("error-position-9", HttpStatus.BAD_REQUEST));
-    }
+  public Position findById(Long id) {
+    return positionRepository.findById(id)
+            .orElseThrow(() -> new BusinessException("error-position-9", HttpStatus.BAD_REQUEST));
+  }
 
-    public Position save(PositionRequest positionRequest) {
-        String title = positionRequest.getTitle().orElse("");
-        Position position = Position.builder()
-                .id(positionRequest.getId())
-                .title(title.toUpperCase())
-                .dangerousness(positionRequest.isDangerousness())
-                .build();
-        verifyIfPositionExist(position);
-        return positionRepository.save(position);
-    }
+  public Position save(PositionRequest positionRequest) {
+    String title = positionRequest.getTitle().orElse("");
+    Position position = Position.builder()
+            .id(positionRequest.getId())
+            .title(title.toUpperCase())
+            .dangerousness(positionRequest.isDangerousness())
+            .build();
+    verifyIfPositionExist(position);
+    return positionRepository.save(position);
+  }
 
-    public void delete(Long id) {
-        positionRepository.delete(findById(id));
+  public void delete(Long id) {
+    positionRepository.delete(findById(id));
+  }
+
+  private void verifyIfPositionExist(final Position position) {
+    if (Optional.ofNullable(position.getId()).isPresent()) {
+      findById(position.getId());
     }
-    
-    private void verifyIfPositionExist(final Position position) {
-        if(Optional.ofNullable(position.getId()).isPresent()) {
-            findById(position.getId());
-        }
-        Optional<Position> positionDB = positionRepository.findByTitle(position.getTitle());
-        if (positionDB.isPresent() && !positionDB.get().getId().equals(position.getId())) {
-            throw new BusinessException("error-position-8", HttpStatus.BAD_REQUEST);
-        }
+    Optional<Position> positionDB = positionRepository.findByTitle(position.getTitle());
+    if (positionDB.isPresent() && !positionDB.get().getId().equals(position.getId())) {
+      throw new BusinessException("error-position-8", HttpStatus.BAD_REQUEST);
     }
+  }
 }

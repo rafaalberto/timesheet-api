@@ -9,6 +9,6 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 @AllArgsConstructor
 public class AuthResponse {
 
-    private String token;
-    private boolean isValid;
+  private String token;
+  private boolean isValid;
 }

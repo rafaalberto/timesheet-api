@@ -13,39 +13,39 @@ import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
 @Data
 public class TimesheetDocketItem {
 
-    private String typeCode;
-    private String typeDescription;
-    private long totalHours;
-    private double costPerHour;
-    private double totalCost;
+  private String typeCode;
+  private String typeDescription;
+  private long totalHours;
+  private double costPerHour;
+  private double totalCost;
 
-    public TimesheetDocketItem(String typeCode, String typeDescription, long totalHours, double costPerHour) {
-        this.typeCode = typeCode;
-        this.typeDescription = typeDescription;
-        this.totalHours = totalHours;
-        this.costPerHour = costPerHour;
-        this.totalCost = convertNanosToDecimalHours(totalHours) * costPerHour;
-    }
+  public TimesheetDocketItem(String typeCode, String typeDescription, long totalHours, double costPerHour) {
+    this.typeCode = typeCode;
+    this.typeDescription = typeDescription;
+    this.totalHours = totalHours;
+    this.costPerHour = costPerHour;
+    this.totalCost = convertNanosToDecimalHours(totalHours) * costPerHour;
+  }
 
-    public TimesheetDocketItem(String typeCode, String typeDescription, double totalCost, long totalHours) {
-        this.typeCode = typeCode;
-        this.typeDescription = typeDescription;
-        this.totalCost = totalCost;
-        this.totalHours = totalHours;
-    }
+  public TimesheetDocketItem(String typeCode, String typeDescription, double totalCost, long totalHours) {
+    this.typeCode = typeCode;
+    this.typeDescription = typeDescription;
+    this.totalCost = totalCost;
+    this.totalHours = totalHours;
+  }
 
-    public TimesheetDocketItem(String typeCode, String typeDescription, double totalCost) {
-        this.typeCode = typeCode;
-        this.typeDescription = typeDescription;
-        this.totalCost = totalCost;
-    }
+  public TimesheetDocketItem(String typeCode, String typeDescription, double totalCost) {
+    this.typeCode = typeCode;
+    this.typeDescription = typeDescription;
+    this.totalCost = totalCost;
+  }
 
-    public String getTotalHoursFormatted() {
-        return formatDuration(ofNanos(totalHours).toMillis(), TIME_FORMAT);
-    }
+  public String getTotalHoursFormatted() {
+    return formatDuration(ofNanos(totalHours).toMillis(), TIME_FORMAT);
+  }
 
-    public String getTotalCostFormatted() {
-        return getCurrencyInstance(new Locale("pt", "BR")).format(getTotalCost());
-    }
+  public String getTotalCostFormatted() {
+    return getCurrencyInstance(new Locale("pt", "BR")).format(getTotalCost());
+  }
 
 }

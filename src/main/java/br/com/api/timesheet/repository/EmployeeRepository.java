@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSpecificationExecutor<Employee> {
 
-    @Transactional(readOnly = true)
-    Optional<Employee> findByRecordNumber(String recordNumber);
+  @Transactional(readOnly = true)
+  Optional<Employee> findByRecordNumber(String recordNumber);
 }
 
