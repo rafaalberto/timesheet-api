@@ -2,7 +2,6 @@ package br.com.api.timesheet.service;
 
 import br.com.api.timesheet.entity.Bonus;
 import br.com.api.timesheet.resource.bonus.BonusRequest;
-
 import java.util.List;
 
 public interface BonusService {

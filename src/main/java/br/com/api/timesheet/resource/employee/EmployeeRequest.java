@@ -1,13 +1,12 @@
 package br.com.api.timesheet.resource.employee;
 
 import br.com.api.timesheet.enumeration.StatusEnum;
-import lombok.Builder;
-import lombok.Data;
-
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Optional;
+import lombok.Builder;
+import lombok.Data;
 
 @Builder
 @Data

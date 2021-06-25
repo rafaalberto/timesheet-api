@@ -1,13 +1,12 @@
 package br.com.api.timesheet.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.Setter;
+import static java.text.NumberFormat.getCurrencyInstance;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import java.util.Locale;
-
-import static java.text.NumberFormat.getCurrencyInstance;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

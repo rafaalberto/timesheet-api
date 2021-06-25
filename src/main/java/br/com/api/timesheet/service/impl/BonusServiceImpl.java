@@ -7,12 +7,11 @@ import br.com.api.timesheet.repository.BonusRepository;
 import br.com.api.timesheet.resource.bonus.BonusRequest;
 import br.com.api.timesheet.service.BonusService;
 import br.com.api.timesheet.service.EmployeeService;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BonusServiceImpl implements BonusService {
@@ -32,6 +31,11 @@ public class BonusServiceImpl implements BonusService {
             .orElseThrow(() -> new BusinessException("error-Bonus-9", HttpStatus.BAD_REQUEST));
   }
 
+  /**
+   * Save bonus.
+   * @param request - request
+   * @return
+   */
   public Bonus save(BonusRequest request) {
     Bonus bonus = new Bonus();
     request.getId().ifPresent(bonus::setId);

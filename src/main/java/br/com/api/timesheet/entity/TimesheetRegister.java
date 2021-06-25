@@ -1,27 +1,39 @@
 package br.com.api.timesheet.entity;
 
-import br.com.api.timesheet.enumeration.PeriodEnum;
-import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import br.com.api.timesheet.utils.DateUtils;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.DAY_OFF;
 import static br.com.api.timesheet.enumeration.TimesheetTypeEnum.HOLIDAY;
-import static br.com.api.timesheet.utils.DateUtils.*;
+import static br.com.api.timesheet.utils.DateUtils.calculateNightShift;
+import static br.com.api.timesheet.utils.DateUtils.calculatePaidNightTime;
+import static br.com.api.timesheet.utils.DateUtils.isNightShift;
 import static java.time.Duration.between;
 import static java.time.Duration.ofSeconds;
 import static java.time.LocalTime.ofSecondOfDay;
 import static org.apache.commons.lang3.time.DurationFormatUtils.formatDuration;
+
+import br.com.api.timesheet.enumeration.PeriodEnum;
+import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
+import br.com.api.timesheet.utils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
@@ -134,6 +146,9 @@ public class TimesheetRegister implements Serializable {
     return formatDuration(paidNightTime.toMillis(), DateUtils.TIME_FORMAT);
   }
 
+  /**
+   * Calculate hours.
+   */
   @PrePersist
   @PreUpdate
   public void calculateHours() {
@@ -143,8 +158,10 @@ public class TimesheetRegister implements Serializable {
     long secondPeriod = between(lunchEnd, timeOut).getSeconds();
     hoursWorked = ofSeconds(firstPeriod + secondPeriod);
 
-    long extraHoursDuration = hoursWorked != null ? hoursWorked.getSeconds() - hoursJourney.getSeconds() : BigDecimal.ZERO.intValue();
-    extraHours = extraHoursDuration > BigDecimal.ZERO.intValue() ? ofSeconds(extraHoursDuration) : ofSeconds(BigDecimal.ZERO.intValue());
+    long extraHoursDuration = hoursWorked != null
+            ? hoursWorked.getSeconds() - hoursJourney.getSeconds() : BigDecimal.ZERO.intValue();
+    extraHours = extraHoursDuration > BigDecimal.ZERO.intValue()
+            ? ofSeconds(extraHoursDuration) : ofSeconds(BigDecimal.ZERO.intValue());
 
     if (extraHours.compareTo(hoursAdjustment) >= BigDecimal.ZERO.intValue()) {
       extraHours = extraHours.minus(hoursAdjustment);
@@ -157,11 +174,14 @@ public class TimesheetRegister implements Serializable {
       extraHours = hoursWorked;
     }
 
-    firstPeriod = isNightShift(timeIn, lunchStart) ? calculateNightShift(timeIn, lunchStart) : BigDecimal.ZERO.longValue();
-    secondPeriod = isNightShift(lunchEnd, timeOut) ? calculateNightShift(lunchEnd, timeOut) : BigDecimal.ZERO.longValue();
+    firstPeriod = isNightShift(timeIn, lunchStart)
+            ? calculateNightShift(timeIn, lunchStart) : BigDecimal.ZERO.longValue();
+    secondPeriod = isNightShift(lunchEnd, timeOut)
+            ? calculateNightShift(lunchEnd, timeOut) : BigDecimal.ZERO.longValue();
     nightShift = ofSeconds(firstPeriod + secondPeriod);
 
-    paidNightTime = nightShift.getSeconds() > BigDecimal.ZERO.intValue() ? calculatePaidNightTime(ofSecondOfDay(nightShift.getSeconds()))
+    paidNightTime = nightShift.getSeconds() > BigDecimal.ZERO.intValue()
+            ? calculatePaidNightTime(ofSecondOfDay(nightShift.getSeconds()))
             : ofSeconds(BigDecimal.ZERO.intValue());
   }
 

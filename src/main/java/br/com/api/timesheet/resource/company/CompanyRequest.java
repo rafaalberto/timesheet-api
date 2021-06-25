@@ -1,12 +1,11 @@
 package br.com.api.timesheet.resource.company;
 
+import java.util.Optional;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.br.CNPJ;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.Optional;
 
 @Builder
 @Data

@@ -1,13 +1,12 @@
 package br.com.api.timesheet.security;
 
 import br.com.api.timesheet.enumeration.ProfileEnum;
+import java.util.Collection;
+import java.util.Collections;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.Collections;
 
 @Getter
 public class UserSpringSecurity implements UserDetails {
@@ -17,6 +16,13 @@ public class UserSpringSecurity implements UserDetails {
   private String name;
   private Collection<? extends GrantedAuthority> authorities;
 
+  /**
+   * Security.
+   * @param username - username
+   * @param password - password
+   * @param name - name
+   * @param profile - profile
+   */
   public UserSpringSecurity(String username, String password, String name, ProfileEnum profile) {
     this.username = username;
     this.password = password;

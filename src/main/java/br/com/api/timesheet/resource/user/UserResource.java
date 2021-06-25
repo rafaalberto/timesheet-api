@@ -1,17 +1,25 @@
 package br.com.api.timesheet.resource.user;
 
+import static br.com.api.timesheet.enumeration.ProfileEnum.valueOf;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.service.UserService;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
-import static br.com.api.timesheet.enumeration.ProfileEnum.valueOf;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:8080")
 @RestController
@@ -23,6 +31,15 @@ public class UserResource {
     this.userService = userService;
   }
 
+  /**
+   * Find all users.
+   * @param page - page
+   * @param size - size
+   * @param username - username
+   * @param name - name
+   * @param profile - profile
+   * @return
+   */
   @GetMapping("/users")
   public ResponseEntity<Page<User>> findAll(
           @RequestParam(value = "page", required = false) final Integer page,
@@ -56,7 +73,8 @@ public class UserResource {
   }
 
   @PutMapping("/users/{id}")
-  public ResponseEntity<User> update(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
+  public ResponseEntity<User> update(@PathVariable Long id,
+      @Valid @RequestBody UserRequest userRequest) {
     userRequest.setId(id);
     return new ResponseEntity<>(userService.save(userRequest), HttpStatus.OK);
   }

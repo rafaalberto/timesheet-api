@@ -1,5 +1,8 @@
 package br.com.api.timesheet.unit.repository;
 
+import static br.com.api.timesheet.enumeration.ProfileEnum.ROLE_ADMIN;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.repository.UserRepository;
 import org.junit.After;
@@ -10,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static br.com.api.timesheet.enumeration.ProfileEnum.ROLE_ADMIN;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)

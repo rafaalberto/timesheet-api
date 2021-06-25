@@ -1,8 +1,7 @@
 package br.com.api.timesheet.resource.bonus;
 
-import lombok.Data;
-
 import java.util.Optional;
+import lombok.Data;
 
 @Data
 public class BonusRequest {

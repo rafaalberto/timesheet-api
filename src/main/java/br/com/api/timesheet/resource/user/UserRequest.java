@@ -1,15 +1,14 @@
 package br.com.api.timesheet.resource.user;
 
 import br.com.api.timesheet.enumeration.ProfileEnum;
+import java.util.Optional;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Optional;
 
 @Data
 @Builder

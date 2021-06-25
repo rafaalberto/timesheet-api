@@ -3,10 +3,9 @@ package br.com.api.timesheet.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Component
 public class JwtUtil {
@@ -17,6 +16,11 @@ public class JwtUtil {
   @Value("${jwt.expiration}")
   private Long expiration;
 
+  /**
+   * Used to generate tokens.
+   * @param username - username
+   * @return
+   */
   public String generateToken(String username) {
     return Jwts.builder()
             .setSubject(username)
@@ -24,6 +28,11 @@ public class JwtUtil {
             .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
   }
 
+  /**
+   * Used to validate tokens.
+   * @param token - token
+   * @return
+   */
   public boolean isValidToken(String token) {
     Claims claims = getClaims(token);
     if (claims != null) {
@@ -37,6 +46,11 @@ public class JwtUtil {
     return false;
   }
 
+  /**
+   * Used to get username.
+   * @param token - token
+   * @return
+   */
   public String getUsername(String token) {
     Claims claims = getClaims(token);
     if (claims != null) {

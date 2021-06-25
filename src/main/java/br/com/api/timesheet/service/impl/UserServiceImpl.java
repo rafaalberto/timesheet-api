@@ -1,5 +1,8 @@
 package br.com.api.timesheet.service.impl;
 
+import static br.com.api.timesheet.utils.Constants.DEFAULT_PAGE;
+import static br.com.api.timesheet.utils.Constants.DEFAULT_SIZE;
+
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.UserRepository;
@@ -14,9 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import static br.com.api.timesheet.utils.Constants.DEFAULT_PAGE;
-import static br.com.api.timesheet.utils.Constants.DEFAULT_SIZE;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,9 +26,16 @@ public class UserServiceImpl implements UserService {
     this.userRepository = userRepository;
   }
 
+  /**
+   * Find all users.
+   * @param request - request
+   * @return
+   */
   public Page<User> findAll(UserRequest request) {
-    final Pageable pageable = PageRequest.of(request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
-    return userRepository.findAll(UserRepositorySpecification.criteriaSpecification(request), pageable);
+    final Pageable pageable = PageRequest.of(
+            request.getPage().orElse(DEFAULT_PAGE), request.getSize().orElse(DEFAULT_SIZE));
+    return userRepository.findAll(
+            UserRepositorySpecification.criteriaSpecification(request), pageable);
   }
 
   public User findById(Long id) {
@@ -36,6 +43,11 @@ public class UserServiceImpl implements UserService {
             .orElseThrow(() -> new BusinessException("error-user-9", HttpStatus.BAD_REQUEST));
   }
 
+  /**
+   * Save user.
+   * @param userRequest - request
+   * @return
+   */
   public User save(UserRequest userRequest) {
     User user = User.builder()
             .id(userRequest.getId())

@@ -2,9 +2,8 @@ package br.com.api.timesheet.resource.timesheetregister;
 
 import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.enumeration.TimesheetTypeEnum;
-import lombok.Data;
-
 import java.util.Optional;
+import lombok.Data;
 
 @Data
 public class TimesheetRequest {

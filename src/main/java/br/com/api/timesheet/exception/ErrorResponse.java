@@ -1,14 +1,13 @@
 package br.com.api.timesheet.exception;
 
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import java.util.Collections;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-
-import java.util.Collections;
-import java.util.List;
-
-import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 
 @JsonAutoDetect(fieldVisibility = ANY)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

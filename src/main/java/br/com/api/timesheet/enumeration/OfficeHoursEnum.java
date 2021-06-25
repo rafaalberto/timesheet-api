@@ -1,16 +1,15 @@
 package br.com.api.timesheet.enumeration;
 
-import br.com.api.timesheet.dto.OfficeHours;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static br.com.api.timesheet.enumeration.PeriodEnum.ENTRESSAFRA;
 import static br.com.api.timesheet.enumeration.PeriodEnum.SAFRA;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toList;
+
+import br.com.api.timesheet.dto.OfficeHours;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
@@ -25,10 +24,17 @@ public enum OfficeHoursEnum {
   private final String description;
   private final PeriodEnum period;
 
+  /**
+   * Return office hours.
+   * @param period - period
+   * @return
+   */
   public static List<OfficeHours> fetchByPeriod(PeriodEnum period) {
     List<OfficeHours> officeHours = new ArrayList<>();
-    stream(values()).filter(hour -> hour.period.equals(period)).collect(toList()).forEach(officeHour ->
-            officeHours.add(new OfficeHours(officeHour.toString(), officeHour.getDescription()))
+    stream(values()).filter(hour -> hour.period.equals(period))
+            .collect(toList()).forEach(officeHour ->
+            officeHours.add(new OfficeHours(officeHour.toString(),
+                    officeHour.getDescription()))
     );
     return officeHours;
   }

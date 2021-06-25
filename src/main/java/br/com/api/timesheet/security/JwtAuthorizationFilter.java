@@ -1,6 +1,11 @@
 package br.com.api.timesheet.security;
 
 import br.com.api.timesheet.utils.JwtUtil;
+import java.io.IOException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,27 +14,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
   private JwtUtil jwtUtil;
 
   private UserDetailsService userDetailsService;
 
+  /**
+   * Authorization filter.
+   * @param authenticationManager - manager
+   * @param jwtUtil - jwt util
+   * @param userDetailsService - service
+   */
   public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
-                                JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+      JwtUtil jwtUtil, UserDetailsService userDetailsService) {
     super(authenticationManager);
     this.jwtUtil = jwtUtil;
     this.userDetailsService = userDetailsService;
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+  protected void doFilterInternal(HttpServletRequest request,
+      HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
     String header = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (header != null && header.startsWith("Bearer ")) {
       UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));

@@ -1,15 +1,14 @@
 package br.com.api.timesheet.converter;
 
-import br.com.api.timesheet.enumeration.PeriodEnum;
-import com.google.common.collect.ImmutableMap;
-
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
+
+import br.com.api.timesheet.enumeration.PeriodEnum;
+import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+import java.util.stream.Stream;
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
 @Converter(autoApply = true)
 public class TypeEnumConverter implements AttributeConverter<PeriodEnum, String> {

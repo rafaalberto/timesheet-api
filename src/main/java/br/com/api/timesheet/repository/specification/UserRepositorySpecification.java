@@ -3,13 +3,12 @@ package br.com.api.timesheet.repository.specification;
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ProfileEnum;
 import br.com.api.timesheet.resource.user.UserRequest;
-import org.springframework.data.jpa.domain.Specification;
-
+import java.util.HashSet;
+import java.util.Optional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.HashSet;
-import java.util.Optional;
+import org.springframework.data.jpa.domain.Specification;
 
 public abstract class UserRepositorySpecification {
 
@@ -17,6 +16,11 @@ public abstract class UserRepositorySpecification {
     throw new IllegalStateException("Utility class");
   }
 
+  /**
+   * Criteria specification.
+   * @param request - request
+   * @return
+   */
   public static Specification<User> criteriaSpecification(UserRequest request) {
     return (root, query, criteriaBuilder) -> {
       final HashSet<Predicate> predicates = new HashSet<>();
@@ -27,25 +31,30 @@ public abstract class UserRepositorySpecification {
     };
   }
 
-  private static void setName(UserRequest request, Root<User> root, CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
+  private static void setName(UserRequest request, Root<User> root,
+      CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
     Optional<String> name = request.getName();
     if (name.isPresent()) {
       predicates.add(criteriaBuilder.like(
-              (criteriaBuilder.lower(root.get("name"))), "%" + name.get().toLowerCase() + "%")
+              (criteriaBuilder.lower(root.get("name"))), "%"
+                      + name.get().toLowerCase() + "%")
       );
     }
   }
 
-  private static void setUsername(UserRequest request, Root<User> root, CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
+  private static void setUsername(UserRequest request, Root<User> root,
+      CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
     Optional<String> username = request.getUsername();
     if (username.isPresent()) {
       predicates.add(criteriaBuilder.like(
-              (criteriaBuilder.lower(root.get("username"))), "%" + username.get().toLowerCase() + "%")
+              (criteriaBuilder.lower(root.get("username"))), "%"
+                      + username.get().toLowerCase() + "%")
       );
     }
   }
 
-  private static void setProfile(UserRequest request, Root<User> root, CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
+  private static void setProfile(UserRequest request, Root<User> root,
+      CriteriaBuilder criteriaBuilder, HashSet<Predicate> predicates) {
     Optional<ProfileEnum> profile = request.getProfile();
     if (profile.isPresent()) {
       predicates.add(criteriaBuilder.equal(root.get("profile"), profile.get()));

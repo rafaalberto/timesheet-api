@@ -5,15 +5,23 @@ import br.com.api.timesheet.entity.Position;
 import br.com.api.timesheet.enumeration.OfficeHoursEnum;
 import br.com.api.timesheet.enumeration.PeriodEnum;
 import br.com.api.timesheet.service.PositionService;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @CrossOrigin(origins = "http://localhost:8080")
@@ -26,6 +34,13 @@ public class PositionResource {
     this.positionService = positionService;
   }
 
+  /**
+   * Find all positions.
+   * @param page - page
+   * @param size - size
+   * @param title - title
+   * @return
+   */
   @GetMapping("/positions")
   public ResponseEntity<Page<Position>> findAll(
           @RequestParam(value = "page", required = false) final Integer page,
@@ -42,6 +57,11 @@ public class PositionResource {
     return ResponseEntity.ok(positions);
   }
 
+  /**
+   * Find position by id.
+   * @param id - id
+   * @return
+   */
   @GetMapping("/positions/{id}")
   public ResponseEntity<Position> findById(@PathVariable Long id) {
     log.info("findById request");
@@ -56,7 +76,8 @@ public class PositionResource {
   }
 
   @PutMapping("/positions/{id}")
-  public ResponseEntity<Position> update(@PathVariable Long id, @Valid @RequestBody PositionRequest positionRequest) {
+  public ResponseEntity<Position> update(@PathVariable Long id,
+      @Valid @RequestBody PositionRequest positionRequest) {
     positionRequest.setId(id);
     return new ResponseEntity<>(positionService.save(positionRequest), HttpStatus.OK);
   }

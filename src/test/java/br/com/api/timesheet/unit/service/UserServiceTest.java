@@ -1,11 +1,23 @@
 package br.com.api.timesheet.unit.service;
 
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.data.domain.PageRequest.of;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import br.com.api.timesheet.entity.User;
 import br.com.api.timesheet.enumeration.ProfileEnum;
 import br.com.api.timesheet.exception.BusinessException;
 import br.com.api.timesheet.repository.UserRepository;
 import br.com.api.timesheet.resource.user.UserRequest;
 import br.com.api.timesheet.service.impl.UserServiceImpl;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +30,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.Optional;
-
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
-import static org.springframework.data.domain.PageRequest.of;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
@@ -52,11 +56,13 @@ public class UserServiceTest {
   @Test
   public void shouldFindAll() {
     Page<User> usersPage = new PageImpl<>(singletonList(user), of(0, 10), 1);
-    when(userRepository.findAll(any(Specification.class), any(PageRequest.class))).thenReturn(usersPage);
+    when(userRepository.findAll(any(Specification.class), any(PageRequest.class)))
+            .thenReturn(usersPage);
 
     Page<User> users = userService.findAll(userRequest);
 
-    verify(userRepository, times(1)).findAll(any(Specification.class), any(PageRequest.class));
+    verify(userRepository, times(1))
+            .findAll(any(Specification.class), any(PageRequest.class));
 
     assertThat(users.getTotalElements()).isEqualTo(1);
   }
@@ -103,7 +109,8 @@ public class UserServiceTest {
 
   @Test(expected = BusinessException.class)
   public void shouldThrowWhenUserDoesNotExists() {
-    when(userRepository.findById(anyLong())).thenThrow(new BusinessException("error-user-9", BAD_REQUEST));
+    when(userRepository.findById(anyLong())).thenThrow(
+            new BusinessException("error-user-9", BAD_REQUEST));
 
     userService.findById(1L);
 
@@ -160,4 +167,5 @@ public class UserServiceTest {
             .password("123456")
             .build();
   }
+
 }
