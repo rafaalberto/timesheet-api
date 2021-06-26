@@ -4,12 +4,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public interface BCryptUtil {
 
-    static String encode(String password) {
-        BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
-        if(password != null){
-            password = bCryptEncoder.encode(password);
-        }
-        return password;
+  /**
+   * Encode.
+   * @param password - password
+   * @return
+   */
+  static String encode(String password) {
+    BCryptPasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
+    if (password != null) {
+      password = bcryptEncoder.encode(password);
     }
+    return password;
+  }
 
 }

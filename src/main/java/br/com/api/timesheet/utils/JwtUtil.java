@@ -3,53 +3,67 @@ package br.com.api.timesheet.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+  @Value("${jwt.secret}")
+  private String secret;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
+  @Value("${jwt.expiration}")
+  private Long expiration;
 
-    public String generateToken(String username) {
-        return Jwts.builder()
-                .setSubject(username)
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+  /**
+   * Used to generate tokens.
+   * @param username - username
+   * @return
+   */
+  public String generateToken(String username) {
+    return Jwts.builder()
+            .setSubject(username)
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(SignatureAlgorithm.HS512, secret.getBytes()).compact();
+  }
+
+  /**
+   * Used to validate tokens.
+   * @param token - token
+   * @return
+   */
+  public boolean isValidToken(String token) {
+    Claims claims = getClaims(token);
+    if (claims != null) {
+      String username = claims.getSubject();
+      Date expirationDate = claims.getExpiration();
+      Date now = new Date(System.currentTimeMillis());
+      if (username != null && expirationDate != null && now.before(expirationDate)) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    public boolean isValidToken(String token){
-        Claims claims = getClaims(token);
-        if (claims != null) {
-            String username = claims.getSubject();
-            Date expirationDate = claims.getExpiration();
-            Date now = new Date(System.currentTimeMillis());
-            if (username != null && expirationDate != null && now.before(expirationDate)) {
-                return true;
-            }
-        }
-        return false;
+  /**
+   * Used to get username.
+   * @param token - token
+   * @return
+   */
+  public String getUsername(String token) {
+    Claims claims = getClaims(token);
+    if (claims != null) {
+      return claims.getSubject();
     }
+    return null;
+  }
 
-    public String getUsername(String token) {
-        Claims claims = getClaims(token);
-        if (claims != null) {
-            return claims.getSubject();
-        }
-        return null;
+  private Claims getClaims(String token) {
+    try {
+      return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
+    } catch (Exception e) {
+      return null;
     }
-
-    private Claims getClaims(String token) {
-        try {
-            return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token).getBody();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+  }
 }

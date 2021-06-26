@@ -11,25 +11,28 @@ import org.springframework.web.context.WebApplicationContext;
 
 public abstract class HttpRequestStepDefinitions extends CucumberConfig {
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+  @Autowired
+  protected Gson gson;
+  @Autowired
+  private WebApplicationContext webApplicationContext;
+  private ResultActions resultActions;
 
-    @Autowired
-    protected Gson gson;
+  /**
+   * MockMvc.
+   * @param request - request
+   * @return
+   */
+  public ResultActions mvcPerform(MockHttpServletRequestBuilder request) throws Exception {
+    MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    setResultActions(mockMvc.perform(request));
+    return resultActions;
+  }
 
-    private ResultActions resultActions;
+  public ResultActions getResultActions() {
+    return resultActions;
+  }
 
-    public ResultActions mvcPerform(MockHttpServletRequestBuilder request) throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        setResultActions(mockMvc.perform(request));
-        return resultActions;
-    }
-
-    public void setResultActions(ResultActions resultActions) {
-        this.resultActions = resultActions;
-    }
-
-    public ResultActions getResultActions() {
-        return resultActions;
-    }
+  public void setResultActions(ResultActions resultActions) {
+    this.resultActions = resultActions;
+  }
 }

@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         glue = "br/com/api/timesheet/bdd",
         plugin = {"pretty"},
-//        tags = {"@test"},
+        //tags = {"@test"},
         features = "src/test/resources")
 public class TimesheetApplicationTests {
 

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthResource {
 
-    @Autowired
-    JwtUtil jwtUtil;
+  @Autowired
+  JwtUtil jwtUtil;
 
-    @GetMapping("/auth/token/validate/{token}")
-    public ResponseEntity<AuthResponse> validate(@PathVariable String token) {
-        return ResponseEntity.ok(new AuthResponse(token, jwtUtil.isValidToken(token)));
-    }
+  @GetMapping("/auth/token/validate/{token}")
+  public ResponseEntity<AuthResponse> validate(@PathVariable String token) {
+    return ResponseEntity.ok(new AuthResponse(token, jwtUtil.isValidToken(token)));
+  }
 
 }

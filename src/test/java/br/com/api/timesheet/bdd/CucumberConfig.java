@@ -12,7 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TimesheetApiApplication.class, loader = SpringBootContextLoader.class)
+@ContextConfiguration(classes = TimesheetApiApplication.class,
+        loader = SpringBootContextLoader.class)
 @ActiveProfiles("test")
 @Configuration
 @SpringBootTest(classes = {TimesheetApiApplication.class, CucumberConfig.class})

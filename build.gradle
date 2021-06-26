@@ -1,46 +1,46 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.1.RELEASE'
-		flywayVersion = '5.2.4'
-		swaggerVersion = '2.9.2'
-		jjwtVersion = '0.9.0'
-		springSecurityTest = '5.1.3.RELEASE'
-		commonsLangVersion = '3.8.1'
-		cucumberVersion = '4.7.4'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("org.postgresql:postgresql:42.2.5")
-	}
+  ext {
+    springBootVersion = '2.1.1.RELEASE'
+    flywayVersion = '5.2.4'
+    swaggerVersion = '2.9.2'
+    jjwtVersion = '0.9.0'
+    springSecurityTest = '5.1.3.RELEASE'
+    commonsLangVersion = '3.8.1'
+    cucumberVersion = '4.7.4'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    classpath("org.postgresql:postgresql:42.2.5")
+  }
 }
 
 plugins {
-	id "org.flywaydb.flyway" version "5.2.4"
-	id "org.sonarqube" version "3.0"
+  id "org.flywaydb.flyway" version "5.2.4"
+  id "org.sonarqube" version "3.0"
 }
 
 flyway {
-	url = 'jdbc:postgresql://localhost:5432/timesheet'
-	user = 'postgres'
-	password = 'postgres'
+  url = 'jdbc:postgresql://localhost:5432/timesheet'
+  user = 'postgres'
+  password = 'postgres'
 }
 
 project.ext.exclusionsForJacoco = [
-		"**/utils/Constants.java",
-		"**/BonusRequest.java",
-		"**/entity/**",
-		"**/security/**",
-		"**/converter/**",
-		"**/config/**",
-		"**/dto/**",
-		"**/resource/auth**",
-		"**/utils/JwtUtil.java",
-		"**Request.java",
-		"**UserDetailsServiceImpl.java",
-		"**TimesheetApiApplication.java"
+        "**/utils/Constants.java",
+        "**/BonusRequest.java",
+        "**/entity/**",
+        "**/security/**",
+        "**/converter/**",
+        "**/config/**",
+        "**/dto/**",
+        "**/resource/auth**",
+        "**/utils/JwtUtil.java",
+        "**Request.java",
+        "**UserDetailsServiceImpl.java",
+        "**TimesheetApiApplication.java"
 ]
 
 apply plugin: 'java'
@@ -48,56 +48,73 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
 
 sonarqube {
-	properties {
-		property 'sonar.sourceEncoding', "UTF-8"
-		property 'sonar.projectName', "${project.name}"
-		property 'sonar.projectKey', "${project.name}"
-		property 'sonar.host.url', "http://localhost:9000"
-		property 'sonar.login', "145b721ea399ef6313d5c52192688b8c11370b62"
-		property 'sonar.jacoco.reportPaths', "${buildDir}/jacoco/test.exec"
-		property 'sonar.coverage.exclusions', project.ext.exclusionsForJacoco
-	}
+  properties {
+    property 'sonar.sourceEncoding', "UTF-8"
+    property 'sonar.projectName', "${project.name}"
+    property 'sonar.projectKey', "${project.name}"
+    property 'sonar.host.url', "http://localhost:9000"
+    property 'sonar.login', "145b721ea399ef6313d5c52192688b8c11370b62"
+    property 'sonar.jacoco.reportPaths', "${buildDir}/jacoco/test.exec"
+    property 'sonar.coverage.exclusions', project.ext.exclusionsForJacoco
+  }
 }
 
 jacocoTestReport {
-	reports {
-		html.enabled true
-		xml.enabled true
-		csv.enabled false
-		html.destination file("$buildDir/jacocoHtml")
-	}
+  reports {
+    html.enabled true
+    xml.enabled true
+    csv.enabled false
+    html.destination file("$buildDir/jacocoHtml")
+  }
+}
+
+checkstyle {
+  configFile = file("${rootDir}/checkstyle.xml")
+  maxErrors = 0
+  maxWarnings = 0
+  ignoreFailures = false
+  toolVersion "8.28"
+}
+
+task skipCheckstyle() {
+  doLast {
+    gradle.startParameter.excludedTaskNames += [
+            "checkstyleMain", "checkstyleTest"
+    ]
+  }
 }
 
 group = 'br.com.timesheet'
 version = '1.0.0-SNAPSHOT'
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 
 dependencies {
-	implementation('org.springframework.boot:spring-boot-starter-web')
-	runtimeOnly('org.springframework.boot:spring-boot-devtools')
-	runtimeOnly('org.postgresql:postgresql')
-	implementation('com.h2database:h2')
-	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
-	implementation('com.google.guava:guava:27.0-jre')
-	implementation('org.springframework.boot:spring-boot-starter-security')
-	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
-	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
-	implementation("org.flywaydb:flyway-core:${flywayVersion}")
-	implementation("io.jsonwebtoken:jjwt:${jjwtVersion}")
-	implementation("org.apache.commons:commons-lang3:${commonsLangVersion}")
-	compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
-	compileOnly('org.projectlombok:lombok')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	testImplementation("org.springframework.security:spring-security-test:${springSecurityTest}")
-	testImplementation("io.cucumber:cucumber-java:${cucumberVersion}")
-	testImplementation("io.cucumber:cucumber-junit:${cucumberVersion}")
-	testImplementation("io.cucumber:cucumber-spring:${cucumberVersion}")
+  implementation('org.springframework.boot:spring-boot-starter-web')
+  runtimeOnly('org.springframework.boot:spring-boot-devtools')
+  runtimeOnly('org.postgresql:postgresql')
+  implementation('com.h2database:h2')
+  implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+  implementation('com.google.guava:guava:27.0-jre')
+  implementation('org.springframework.boot:spring-boot-starter-security')
+  implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+  implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+  implementation("org.flywaydb:flyway-core:${flywayVersion}")
+  implementation("io.jsonwebtoken:jjwt:${jjwtVersion}")
+  implementation("org.apache.commons:commons-lang3:${commonsLangVersion}")
+  compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+  compileOnly('org.projectlombok:lombok')
+  testImplementation('org.springframework.boot:spring-boot-starter-test')
+  testImplementation("org.springframework.security:spring-security-test:${springSecurityTest}")
+  testImplementation("io.cucumber:cucumber-java:${cucumberVersion}")
+  testImplementation("io.cucumber:cucumber-junit:${cucumberVersion}")
+  testImplementation("io.cucumber:cucumber-spring:${cucumberVersion}")
 }
 
 test.finalizedBy jacocoTestReport

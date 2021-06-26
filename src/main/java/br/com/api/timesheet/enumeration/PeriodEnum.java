@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PeriodEnum {
 
-    SAFRA("S", "Safra"),
-    ENTRESSAFRA("E", "Entressafra");
+  SAFRA("S", "Safra"),
+  ENTRESSAFRA("E", "Entressafra");
 
-    private final String code;
-    private final String description;
+  private final String code;
+  private final String description;
 }
