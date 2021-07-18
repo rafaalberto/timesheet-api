@@ -92,4 +92,12 @@ public class PositionResource {
   public ResponseEntity<List<OfficeHours>> findByPeriod(@PathVariable String period) {
     return ResponseEntity.ok(OfficeHoursEnum.fetchByPeriod(PeriodEnum.valueOf(period)));
   }
+
+  @PutMapping("/positions/{id}/title")
+  public ResponseEntity<Position> updateTitle(@PathVariable Long id,
+                                         @Valid @RequestBody PositionRequest positionRequest) {
+    positionRequest.setId(id);
+    return new ResponseEntity<>(positionService.updateTitle(positionRequest), HttpStatus.OK);
+  }
+
 }

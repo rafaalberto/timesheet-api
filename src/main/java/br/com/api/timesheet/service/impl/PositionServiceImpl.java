@@ -10,21 +10,33 @@ import br.com.api.timesheet.repository.specification.PositionRepositorySpecifica
 import br.com.api.timesheet.resource.position.PositionRequest;
 import br.com.api.timesheet.service.PositionService;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class PositionServiceImpl implements PositionService {
 
   @Autowired
   private PositionRepository positionRepository;
 
+  @PersistenceContext
+  private EntityManager entityManager;
+
   /**
    * Find all positions.
+   *
    * @param request - request
    * @return
    */
@@ -37,6 +49,7 @@ public class PositionServiceImpl implements PositionService {
 
   /**
    * Find position by id.
+   *
    * @param id - id
    * @return
    */
@@ -47,6 +60,7 @@ public class PositionServiceImpl implements PositionService {
 
   /**
    * Save position.
+   *
    * @param positionRequest - request
    * @return
    */
@@ -63,6 +77,25 @@ public class PositionServiceImpl implements PositionService {
 
   public void delete(Long id) {
     positionRepository.delete(findById(id));
+  }
+
+  @Override
+  @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRES_NEW)
+  public Position updateTitle(PositionRequest positionRequest) {
+    try {
+      Optional<Position> positionBD = positionRepository.findByIdLock(positionRequest.getId());
+
+      Position position = positionBD.get();
+
+      entityManager.refresh(position);
+
+      position.setTitle(positionRequest.getTitle().get());
+      position = positionRepository.save(position);
+      return position;
+    } catch (PessimisticLockingFailureException e) {
+      log.error("lock exception = {}", e.getMessage());
+    }
+    return null;
   }
 
   private void verifyIfPositionExist(final Position position) {

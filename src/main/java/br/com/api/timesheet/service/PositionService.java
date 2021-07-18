@@ -12,4 +12,6 @@ public interface PositionService {
   Position save(PositionRequest positionRequest);
 
   void delete(Long id);
+
+  Position updateTitle(PositionRequest positionRequest);
 }
