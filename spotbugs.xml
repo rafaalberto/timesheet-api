@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<FindBugsFilter>
+  <Match>
+    <Bug pattern="DM_DEFAULT_ENCODING,EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="br.com.api.timesheet.resource.auth.AuthResponse" />
+  </Match>
+</FindBugsFilter>
