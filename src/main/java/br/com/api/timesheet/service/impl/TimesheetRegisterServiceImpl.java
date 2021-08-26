@@ -262,7 +262,7 @@ public class TimesheetRegisterServiceImpl implements TimesheetRegisterService {
   }
 
   private double getFiftyPercentCost(Double regularPrice, Collection<Bonus> bonuses) {
-    Double bonusAmount = !bonuses.isEmpty() ? bonuses.stream().mapToDouble(Bonus::getCost).sum()
+    double bonusAmount = !bonuses.isEmpty() ? bonuses.stream().mapToDouble(Bonus::getCost).sum()
             : Double.valueOf(BigInteger.ZERO.intValue());
     return (regularPrice * TOTAL_HOURS_PER_MONTH + bonusAmount) / TOTAL_HOURS_PER_MONTH;
   }
