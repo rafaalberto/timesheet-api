@@ -23,8 +23,14 @@ plugins {
   id "org.sonarqube" version "3.0"
 }
 
-flyway {
+task migrateLocal(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
   url = 'jdbc:postgresql://localhost:5432/timesheet'
+  user = 'postgres'
+  password = 'postgres'
+}
+
+task migrateQA(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+  url = 'jdbc:postgresql://localhost:5432/timesheet-qa'
   user = 'postgres'
   password = 'postgres'
 }
@@ -112,7 +118,6 @@ version = '1.0.0-SNAPSHOT'
 repositories {
   mavenCentral()
 }
-
 
 dependencies {
   implementation('org.springframework.boot:spring-boot-starter-web')
