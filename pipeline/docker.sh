@@ -17,5 +17,9 @@ fi
 echo "*** Docker create image ***"
 sudo docker build -t timesheet-api .
 
+docker logout
+docker login --username rafaalberto17 --password=raf17prog89alb03
+docker pull rafaalberto17/timesheet:timesheet
+
 echo "*** Docker create container ***"
-sudo docker run -d --name timesheet-api -e APP_OPTIONS='--spring.profiles.active=local' -p 8080:8080 --network=host timesheet-api:latest
+sudo docker run -d --name timesheet-api -e APP_OPTIONS='--spring.profiles.active=local' -p 8080:8080 --network=host rafaalberto17/timesheet:timesheet
