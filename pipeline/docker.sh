@@ -18,7 +18,7 @@ echo "*** Docker create image ***"
 docker build -t timesheet-api .
 
 docker logout
-docker login --username rafaalberto17 --password=raf17prog89alb03
+docker login --username rafaalberto17 --password=**********
 docker pull rafaalberto17/timesheet:timesheet
 
 echo "*** Docker create container ***"
